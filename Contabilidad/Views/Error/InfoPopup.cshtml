@@ -1,0 +1,16 @@
+﻿@if (!ReferenceEquals(ViewBag.MessageErr, null))
+{
+    @(Html.DevExtreme().Popup()
+                        .ID("InfoPopup")
+                        .Width("auto")
+                        .Height("auto")
+                        .ShowTitle(true)
+                        .Title("Información")
+                        .Visible(true)
+                        .DragEnabled(false)
+                        .CloseOnOutsideClick(true)
+                        .ContentTemplate(@<text>
+                            @Html.Raw(ViewBag.MessageErr.Replace(Environment.NewLine, "<br />"))
+                        </text>)
+    )
+}

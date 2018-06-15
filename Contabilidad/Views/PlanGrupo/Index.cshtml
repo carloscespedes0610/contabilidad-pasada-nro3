@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Contabilidad.Models.VM.clsPlanGrupoVM>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <div class="box-header with-border">
+        <h3 class="box-title">Grupos de Cuentas</h3>
+
+        <div class="box-tools pull-right">
+            <div class="has-feedback">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        <span class="fa fa-caret-down"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="@Url.Action("CreateMain", "PlanGrupo", new { id = 1 })">Tesorería</a></li>
+                        <li class="divider"></li>
+                        <li><a href="@Url.Action("CreateMain", "PlanGrupo", new { id = 4 })">Cuentas Corrientes Deudoras</a></li>
+                        <li><a href="@Url.Action("CreateMain", "PlanGrupo", new { id = 5 })">Cuentas por Cobrar</a></li>
+                        <li><a href="#">Créditos por Cobrar</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Cuentas Corrientes Acreedoras</a></li>
+                        <li><a href="#">Cuentas por Pagar</a></li>
+                        <li><a href="#">Créditos por Pagar</a></li>
+                    </ul>
+                </div>
+                <a class="btn btn-default btn-sm" href="@Url.Action("Index", "PlanGrupo")" data-toggle="tooltip" title="Actualizar"> <i class="fa fa-refresh"></i></a>
+                <a class="btn btn-default btn-sm" href="@Url.Action("ReportList", "PlanGrupo")" data-toggle="tooltip" title="Imprimir"> <i class="fa fa-print"></i></a>
+                <a class="btn btn-default btn-sm" href="#" onclick="onExport();" data-toggle="tooltip" title="Exportar"> <i class="dx-icon-exportxlsx"></i></a>
+            </div>
+        </div>
+    </div>
+
+    @(Html.DevExtreme().DataGrid<Contabilidad.Models.VM.clsPlanGrupoVM>()
+                .ID("grid")
+                .DataSource(Model, "PlanGrupoId")
+                .AllowColumnResizing(true)
+                .ShowColumnLines(false)
+                .ShowRowLines(true)
+                .ShowBorders(true)
+                .FilterRow(filterRow => filterRow.Visible(true).ApplyFilter(GridApplyFilterMode.Auto))
+                .Sorting(sorting => sorting.Mode(GridSortingMode.Multiple))
+                .Paging(p => p.PageSize(10))
+                .Width("100%")
+                .RowAlternationEnabled(true)
+                .Selection(s => s.Mode(SelectionMode.Single))
+                .OnCellPrepared("onCellPrepared")
+                .Export(e => e.Enabled(false).FileName("PlanGrupo").ExcelWrapTextEnabled(false))
+                .Columns(columns =>
+                {
+                    columns.AddFor(m => m.PlanGrupoCod).Width(100);
+                    columns.AddFor(m => m.PlanGrupoDes).Width(150);
+                    columns.AddFor(m => m.PlanGrupoTipoDes).Width(150);
+                    columns.AddFor(m => m.PlanGrupoTipoDetDes).Width(150);
+                    columns.AddFor(m => m.MonedaDes);
+                    columns.AddFor(m => m.VerificaMto);
+                    columns.AddFor(m => m.EstadoDes);
+
+                    columns.Add().DataField("Edit").Caption("").Width(30).AllowFiltering(false).CellTemplate(Html.ActionLink(" ", "EditMain", new { id = "PlanGrupoId", TipoDetId = "PlanGrupoTipoDetId" }, new { @class = "dx-icon-edit" }).ToHtmlString().Replace("PlanGrupoId", "<%= data.PlanGrupoId %>").Replace("PlanGrupoTipoDetId", "<%= data.PlanGrupoTipoDetId %>"));
+                    columns.Add().DataField("Delete").Caption("").Width(30).AllowFiltering(false).CellTemplate(Html.ActionLink(" ", "Delete", new { id = "PlanGrupoId" }, new { @class = "dx-icon-trash" }).ToHtmlString().Replace("PlanGrupoId", "<%= data.PlanGrupoId %>"));
+                    columns.Add().DataField("Details").Caption("").Width(30).AllowFiltering(false).CellTemplate(Html.ActionLink(" ", "Details", new { id = "PlanGrupoId" }, new { @class = "fa fa-info-circle" }).ToHtmlString().Replace("PlanGrupoId", "<%= data.PlanGrupoId %>"));
+                })
+    )
+</section>
+
+<script>
+    function onExport() {
+        $("#grid").dxDataGrid("instance").exportToExcel(false);
+    }
+
+    function onCellPrepared(e) {
+        if (e.rowType === "header") {
+            e.cellElement.addClass("columnHeaderCSS");
+            e.cellElement.find("input").addClass("columnHeaderCSS");
+        }
+    }
+</script>

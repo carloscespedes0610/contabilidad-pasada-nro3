@@ -1,0 +1,146 @@
+﻿@model Contabilidad.Models.VM.clsPlanGrupoFormVM
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Editar Grupo de Cuentas - Cuentas Corrientes Deudoras</h3>
+                </div>
+
+                <div class="box-body">
+                    @using (Html.BeginForm())
+                    {
+                        using (Html.DevExtreme().ValidationGroup())
+                        {
+                            @Html.AntiForgeryToken();
+
+                            @Html.HiddenFor(m => m.PlanGrupoId);
+                            @Html.HiddenFor(m => m.NroCuentas);
+
+                            @(Html.DevExtreme().Form<Contabilidad.Models.VM.clsPlanGrupoFormVM>()
+                                        .ShowValidationSummary(true)
+                                        .Items(items =>
+                                        {
+                                            items.AddGroup()
+                                            .ColCount(2)
+                                            .Items(groupItems =>
+                                            {
+                                                groupItems.AddSimpleFor(m => m.PlanGrupoCod).Editor(e => e.TextBox().Width("50%")).IsRequired(true);
+                                                groupItems.AddSimpleFor(m => m.PlanGrupoDes).Editor(e => e.TextBox()).IsRequired(true);
+                                                groupItems.AddSimpleFor(m => m.PlanGrupoEsp).Editor(e => e.TextBox()).ColSpan(2);
+                                                groupItems.AddSimpleFor(m => m.PlanGrupoTipoId).Editor(e => e.SelectBox().ID("PlanGrupoTipo").DataSource(ViewBag.PlanGrupoTipoId).ValueExpr("PlanGrupoTipoId").DisplayExpr("PlanGrupoTipoDes").SearchEnabled(true).ShowClearButton(true).OnValueChanged("onValueChanged")).IsRequired(true);
+                                                groupItems.AddSimpleFor(m => m.PlanGrupoTipoDetId).Editor(e => e.SelectBox().ID("PlanGrupoTipoDet").DataSource(ViewBag.PlanGrupoTipoDetId).ValueExpr("PlanGrupoTipoDetId").DisplayExpr("PlanGrupoTipoDetDes").SearchEnabled(true).ShowClearButton(true)).IsRequired(true);
+                                                groupItems.AddSimpleFor(m => m.MonedaId).Editor(e => e.SelectBox().DataSource(ViewBag.MonedaId).ValueExpr("MonedaId").DisplayExpr("MonedaDes").SearchEnabled(true).ShowClearButton(true)).IsRequired(true);
+                                                groupItems.AddSimpleFor(m => m.VerificaMto).Editor(e => e.CheckBox());
+                                                groupItems.AddSimpleFor(m => m.EstadoId).Editor(e => e.SelectBox().DataSource(ViewBag.EstadoId).ValueExpr("EstadoId").DisplayExpr("EstadoDes").SearchEnabled(true).ShowClearButton(true).ReadOnly(true)).IsRequired(true);
+                                            });
+
+                                            items.AddEmpty();
+
+                                            items.AddSimple().Template(@<text>
+                                                @(Html.DevExtreme().DataGrid<Contabilidad.Models.VM.clsPlanGrupoDetVM>()
+                                                            .ID("grid")
+                                                            .Paging(paging => paging.Enabled(false))
+                                                            .Editing(editing =>
+                                                    {
+                                                        editing.Mode(GridEditMode.Row);
+                                                        editing.AllowAdding(true);
+                                                        editing.AllowDeleting(true);
+                                                        editing.AllowUpdating(true);
+                                                    })
+                                                            .DataSource(d => d.WebApi()
+                                                                .Controller("PlanGrupoDetVM")
+                                                                .Key("PlanGrupoDetId")
+                                                                .InsertAction(true)
+                                                                .UpdateAction(true)
+                                                                .DeleteAction(true)
+                                                                .LoadParams(new { id = Model.PlanGrupoId })
+                                                            )
+                                                            .ShowBorders(true)
+                                                            .Columns(columns =>
+                                                    {
+                                                        columns.AddFor(m => m.Orden).DataType(GridColumnDataType.Number).Width("10%").Alignment(HorizontalAlignment.Center);
+                                                        columns.AddFor(m => m.PlanGrupoDetDes).Width("20%");
+                                                        columns.AddFor(m => m.PlanId).Width("40%")
+                                                            .Lookup(lookup => lookup
+                                                                .DataSource(ViewBag.PlanId)
+                                                                .DisplayExpr("PlanDes")
+                                                                .ValueExpr("PlanId")
+                                                            );
+                                                        columns.AddFor(m => m.SucursalId).Width("30%")
+                                                            .Lookup(lookup => lookup
+                                                                .DataSource(ViewBag.SucursalId)
+                                                                .DisplayExpr("SucursalDes")
+                                                                .ValueExpr("SucursalId")
+                                                            );
+                                                    })
+                                                            //.OnContentReady("OnContentReady")
+                                                            .OnCellPrepared("OnCellPrepared")
+                                                            .OnInitNewRow("OnInitNewRow")
+                                                )
+                                            </text>);
+
+                                    items.AddEmpty();
+                                })
+                                .FormData(Model)
+                            )
+
+                            <div Class="box-footer">
+                                <Button type="submit" Class="btn btn-primary"><i Class="fa fa-floppy-o"></i></Button>
+                                <a href="@Url.Action("Index", "PlanGrupo")" Class="btn btn-default"><i Class="fa fa-reply"></i></a>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@(Html.Partial("~/views/Error/InfoPopup.cshtml"))
+
+<script>
+    function onValueChanged(e) {
+        $("#PlanGrupoTipoDet").dxSelectBox("instance").getDataSource().filter(["PlanGrupoTipoId", "=", e.value]);
+        $("#PlanGrupoTipoDet").dxSelectBox("instance").getDataSource().reload();
+    }
+
+    function OnContentReady(e) {
+        moveEditColumnToLeft(e.component);
+    }
+
+    function moveEditColumnToLeft(dataGrid) {
+        dataGrid.columnOption("command:edit", {
+            visibleIndex: -1,
+            width: 50
+        });
+    }
+
+    function OnCellPrepared(e) {
+        if (e.rowType === "data" && e.column.command === "edit") {
+            var isEditing = e.row.isEditing,
+                $links = e.cellElement.find(".dx-link");
+
+            $links.text("");
+
+            if (isEditing) {
+                $links.filter(".dx-link-save").addClass("dx-icon-save");
+                $links.filter(".dx-link-cancel").addClass("dx-icon-revert");
+            } else {
+                $links.filter(".dx-link-edit").addClass("dx-icon-edit");
+                $links.filter(".dx-link-delete").addClass("dx-icon-trash");
+            }
+        }
+    }
+
+    function OnInitNewRow(e) {
+        e.data.PlanGrupoId = 0;
+        e.data.PlanFlujoId = 0;
+        e.data.CenCosId = 0;
+        e.data.EstadoId = 0;
+    }
+</script>

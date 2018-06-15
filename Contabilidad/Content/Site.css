@@ -1,0 +1,28 @@
+﻿
+.columnHeaderCSS {
+    font-weight: bold;
+    color: #000000;
+    background-color: #e5e5e5 !important;
+}
+
+.dx-rtl .dx-datagrid-rowsview .dx-selection.dx-row > td:not(.dx-focused).dx-datagrid-group-space,
+.dx-rtl .dx-datagrid-rowsview .dx-selection.dx-row:hover > td:not(.dx-focused).dx-datagrid-group-space {
+    border-left-color: rgba(51, 122, 183, 0.3);
+}
+
+.dx-datagrid-rowsview .dx-selection.dx-row:not(.dx-row-lines) > td,
+.dx-datagrid-rowsview .dx-selection.dx-row:hover:not(.dx-row-lines) > td {
+    border-bottom: 1px solid rgba(51, 122, 183, 0.3);
+    border-top: 1px solid rgba(51, 122, 183, 0.3);
+}
+
+.dx-datagrid-rowsview .dx-selection.dx-row > td.dx-datagrid-group-space,
+.dx-datagrid-rowsview .dx-selection.dx-row:hover > td.dx-datagrid-group-space {
+    border-right-color: rgba(51, 122, 183, 0.3);
+}
+
+.dx-datagrid-rowsview .dx-selection.dx-row > td,
+.dx-datagrid-rowsview .dx-selection.dx-row:hover > td {
+    background-color: rgba(51, 122, 183, 0.3);
+    color: #232323;
+}

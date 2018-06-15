@@ -1,0 +1,61 @@
+﻿@model Contabilidad.Models.VM.clsCenCosVM
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Editar Centro de Costo</h3>
+                </div>
+
+                <div class="box-body">
+                    @using (Html.BeginForm())
+                    {
+                        using (Html.DevExtreme().ValidationGroup())
+                        {
+                            @Html.AntiForgeryToken();
+                            @Html.HiddenFor(m => m.CenCosId);
+
+                            @(Html.DevExtreme().Form<Contabilidad.Models.VM.clsCenCosVM>()
+                                .ID("formContainer")
+                                .ShowValidationSummary(true)
+                                .Items(items =>
+                                {
+                                    items.AddGroup()
+                                    .ColCount(12)
+                                    .Items(groupItems =>
+                                    {
+                                        groupItems.AddSimpleFor(m => m.CenCosGrupoId).Editor(e => e.SelectBox().ID("dxCenCosGrupo").DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("CenCosGrupoList").Key("CenCosGrupoId")).ValueExpr("CenCosGrupoId").DisplayExpr("CenCosGrupoDes").SearchEnabled(true).ShowClearButton(true)).IsRequired(true).ColSpan(11);
+                                        groupItems.AddSimple().Template(@<text> @(Html.DevExtreme().Button().Icon("plus").OnClick("onClick")) </text>).ColSpan(1);
+                                    });
+
+                                    items.AddGroup()
+                                    .Items(groupItems =>
+                                    {
+                                        groupItems.AddSimpleFor(m => m.CenCosCod).Editor(e => e.TextBox().ID("CenCosCod").Width("50%")).IsRequired(true);
+                                        groupItems.AddSimpleFor(m => m.CenCosDes).Editor(e => e.TextBox()).IsRequired(true).HelpText("This field is generated automatically");
+                                        groupItems.AddSimpleFor(m => m.CenCosEsp).Editor(e => e.TextBox());
+                                        groupItems.AddSimpleFor(m => m.EstadoId).Editor(e => e.SelectBox().DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("EstadoList").Key("EstadoId")).ValueExpr("EstadoId").DisplayExpr("EstadoDes").SearchEnabled(true).ShowClearButton(true)).IsRequired(true);
+                                        groupItems.AddEmpty();
+                                    });
+                                })
+                            .FormData(Model)
+                            )
+
+                            <div Class="box-footer">
+                                <Button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o"></i></Button>
+                                <a href="@Url.Action("Index", "CenCos")" class="btn btn-default"><i class="fa fa-reply"></i></a>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@(Html.Partial("~/views/CenCosGrupo/Popup.cshtml"))
+@(Html.Partial("~/views/Error/InfoPopup.cshtml"))

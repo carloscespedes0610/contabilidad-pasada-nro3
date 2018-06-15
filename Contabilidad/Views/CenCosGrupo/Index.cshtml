@@ -1,0 +1,58 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <div class="box-header with-border">
+        <h3 class="box-title">Grupos de Centros de Costos</h3>
+
+        <div class="box-tools pull-right">
+            <div class="has-feedback">
+                <a class="btn btn-default btn-sm" href="@Url.Action("Create", "CenCosGrupo")" data-toggle="tooltip" title="Nuevo"> <i class="glyphicon glyphicon-plus"></i></a>
+                <a class="btn btn-default btn-sm" href="@Url.Action("Index", "CenCosGrupo")" data-toggle="tooltip" title="Actualizar"> <i class="fa fa-refresh"></i></a>
+                <a class="btn btn-default btn-sm" href="@Url.Action("ReportList", "CenCosGrupo")" data-toggle="tooltip" title="Imprimir"> <i class="fa fa-print"></i></a>
+                <a class="btn btn-default btn-sm" href="#" onclick="onExport();" data-toggle="tooltip" title="Exportar"> <i class="dx-icon-exportxlsx"></i></a>
+            </div>
+        </div>
+    </div>
+
+    @(Html.DevExtreme().DataGrid<Contabilidad.Models.VM.clsCenCosGrupoVM>()
+        .ID("grid")
+        .DataSource(d => d.Mvc().Controller("CenCosGrupo").LoadAction("CenCosGrupoGrid").Key("CenCosGrupoId"))
+        .AllowColumnResizing(true)
+        .ShowColumnLines(false)
+        .ShowRowLines(true)
+        .ShowBorders(true)
+        .FilterRow(filterRow => filterRow.Visible(true).ApplyFilter(GridApplyFilterMode.Auto))
+        .Sorting(sorting => sorting.Mode(GridSortingMode.Multiple))
+        .Paging(p => p.PageSize(10))
+        .Width("100%")
+        .RowAlternationEnabled(true)
+        .Selection(s => s.Mode(SelectionMode.Single))
+        .OnCellPrepared("onCellPrepared")
+        .Export(e => e.Enabled(false).FileName("CenCosGrupo").ExcelWrapTextEnabled(false))
+        .Columns(columns =>
+        {
+            columns.AddFor(m => m.CenCosGrupoCod).Width("10%");
+            columns.AddFor(m => m.CenCosGrupoDes).Width("30%");
+            columns.AddFor(m => m.CenCosGrupoEsp).Width("20%");
+            columns.AddFor(m => m.EstadoDes).Width("10%");
+            columns.Add().DataField("Edit").Caption("").Width(30).AllowFiltering(false).CellTemplate(Html.ActionLink(" ", "Edit", new { id = "CenCosGrupoId" }, new { @class = "dx-icon-edit" }).ToHtmlString().Replace("CenCosGrupoId", "<%= data.CenCosGrupoId %>"));
+            columns.Add().DataField("Delete").Caption("").Width(30).AllowFiltering(false).CellTemplate(Html.ActionLink(" ", "Delete", new { id = "CenCosGrupoId" }, new { @class = "dx-icon-trash" }).ToHtmlString().Replace("CenCosGrupoId", "<%= data.CenCosGrupoId %>"));
+            columns.Add().DataField("Details").Caption("").Width(30).AllowFiltering(false).CellTemplate(Html.ActionLink(" ", "Details", new { id = "CenCosGrupoId" }, new { @class = "fa fa-info-circle" }).ToHtmlString().Replace("CenCosGrupoId", "<%= data.CenCosGrupoId %>"));
+        })
+    )
+</section>
+
+<script>
+    function onExport() {
+        $("#grid").dxDataGrid("instance").exportToExcel(false);
+    }
+
+    function onCellPrepared(e) {
+        if (e.rowType === "header") {
+            e.cellElement.addClass("columnHeaderCSS");
+            e.cellElement.find("input").addClass("columnHeaderCSS");
+        }
+    }
+</script>

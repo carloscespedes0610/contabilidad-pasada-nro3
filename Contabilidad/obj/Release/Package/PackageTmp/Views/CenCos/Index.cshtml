@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Contabilidad.Models.VM.clsCenCosVM>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <div class="box-header with-border">
+        <h3 class="box-title">Centros de Costos</h3>
+
+        <div class="box-tools pull-right">
+            <div class="has-feedback">
+                <a class="btn btn-default btn-sm" href="#" onclick="PassArrayData();" data-toggle="tooltip" title="Exportar"> <i class="dx-icon-exportxlsx"></i></a>
+                <a class="btn btn-default btn-sm" href="#" onclick="PassArrayKey();" data-toggle="tooltip" title="Exportar"> <i class="dx-icon-exportxlsx"></i></a>
+                <a class="btn btn-default btn-sm" href="#" onclick="ViewBagDemo();" data-toggle="tooltip" title="Exportar"> <i class="dx-icon-exportxlsx"></i></a>
+                <a class="btn btn-default btn-sm" href="@Url.Action("Create", "CenCos")" data-toggle="tooltip" title="Nuevo"> <i class="glyphicon glyphicon-plus"></i></a>
+                <a class="btn btn-default btn-sm" href="@Url.Action("Index", "CenCos")" data-toggle="tooltip" title="Actualizar"> <i class="fa fa-refresh"></i></a>
+                <a class="btn btn-default btn-sm" href="@Url.Action("ReportList", "CenCos")" data-toggle="tooltip" title="Imprimir"> <i class="fa fa-print"></i></a>
+                <a class="btn btn-default btn-sm" href="#" onclick="onExport();" data-toggle="tooltip" title="Exportar"> <i class="dx-icon-exportxlsx"></i></a>
+            </div>
+        </div>
+    </div>
+
+    @(Html.DevExtreme().DataGrid<Contabilidad.Models.VM.clsCenCosVM>()
+                .ID("grid")
+                .DataSource(Model, "CenCosId")
+                .AllowColumnResizing(true)
+                .ShowColumnLines(false)
+                .ShowRowLines(true)
+                .ShowBorders(true)
+                .FilterRow(filterRow => filterRow.Visible(true).ApplyFilter(GridApplyFilterMode.Auto))
+                .Sorting(sorting => sorting.Mode(GridSortingMode.Multiple))
+                .Paging(p => p.PageSize(10))
+                .Width("100%")
+                .RowAlternationEnabled(true)
+                .Selection(s => s.Mode(SelectionMode.Single))
+                .OnCellPrepared("onCellPrepared")
+                .Export(e => e.Enabled(false).FileName("CenCos").ExcelWrapTextEnabled(false))
+                .Columns(columns =>
+                {
+                    columns.AddFor(m => m.CenCosGrupoDes).Width("30%");
+                    columns.AddFor(m => m.CenCosCod).Width("10%");
+                    columns.AddFor(m => m.CenCosDes).Width("30%");
+                    columns.AddFor(m => m.CenCosEsp).Width("20%");
+                    columns.AddFor(m => m.EstadoDes).Width("10%");
+
+                    columns.Add().DataField("Edit").Caption("").Width(30).AllowFiltering(false).CellTemplate(Html.ActionLink(" ", "Edit", new { id = "CenCosId" }, new { @class = "dx-icon-edit" }).ToHtmlString().Replace("CenCosId", "<%= data.CenCosId %>"));
+                    columns.Add().DataField("Delete").Caption("").Width(30).AllowFiltering(false).CellTemplate(Html.ActionLink(" ", "Delete", new { id = "CenCosId" }, new { @class = "dx-icon-trash" }).ToHtmlString().Replace("CenCosId", "<%= data.CenCosId %>"));
+                    columns.Add().DataField("Details").Caption("").Width(30).AllowFiltering(false).CellTemplate(Html.ActionLink(" ", "Details", new { id = "CenCosId" }, new { @class = "fa fa-info-circle" }).ToHtmlString().Replace("CenCosId", "<%= data.CenCosId %>"));
+                })
+    )
+</section>
+
+<script>
+    function onExport() {
+        $("#grid").dxDataGrid("instance").exportToExcel(false);
+    }
+
+    function onCellPrepared(e) {
+        if (e.rowType === "header") {
+            e.cellElement.addClass("columnHeaderCSS");
+            e.cellElement.find("input").addClass("columnHeaderCSS");
+        }
+    }
+
+</script>

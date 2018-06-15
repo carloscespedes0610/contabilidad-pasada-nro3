@@ -1,0 +1,112 @@
+﻿@model IEnumerable<Contabilidad.Models.VM.clsPlanVM>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <div class="box-header with-border">
+        <h3 class="box-title">Plan de Cuentas</h3>
+
+        <div class="box-tools pull-right">
+            <div class="has-feedback">
+                <a class="btn btn-default btn-sm" href="#" onclick="showViewCreate();" data-toggle="tooltip" title="Nuevo"> <i class="glyphicon glyphicon-plus"></i></a>
+                <a class="btn btn-default btn-sm" href="@Url.Action("Index", "Plan")" data-toggle="tooltip" title="Actualizar"> <i class="fa fa-refresh"></i></a>
+                <a class="btn btn-default btn-sm" href="@Url.Action("ReportList", "Plan")" data-toggle="tooltip" title="Imprimir"> <i class="fa fa-print"></i></a>
+                <a class="btn btn-default btn-sm" href="#" onclick="onExport();" data-toggle="tooltip" title="Exportar"> <i class="dx-icon-exportxlsx"></i></a>
+            </div>
+        </div>
+    </div>
+
+    @(Html.DevExtreme().TreeList<Contabilidad.Models.VM.clsPlanVM>()
+        .ID("grid")
+        .DataSource(Model, "PlanId")
+        .KeyExpr("PlanId")
+        .ParentIdExpr("PlanPadreId")
+        .ShowColumnLines(false)
+        .ShowRowLines(true)
+        .ShowBorders(true)
+        .Width("100%")
+        .RowAlternationEnabled(true)
+        .FilterRow(filterRow => filterRow.Visible(true))
+        .Selection(s => s.Mode(SelectionMode.Single))
+        .OnCellPrepared("onCellPrepared")
+        .Columns(columns =>
+        {
+            columns.AddFor(m => m.PlanCod).Width(200);
+            columns.AddFor(m => m.PlanDes).Width(300);
+            columns.AddFor(m => m.TipoPlanDes);
+            columns.AddFor(m => m.MonedaDes);
+            columns.AddFor(m => m.Orden).Alignment(HorizontalAlignment.Left);
+            columns.AddFor(m => m.EstadoDes);
+
+            columns.Add().DataField("Create").Caption("").Width(30).AllowFiltering(false).CellTemplate(Html.ActionLink(" ", "Create", new { id = "PlanId" }, new { @class = "dx-icon-plus" }).ToHtmlString().Replace("PlanId", "<%= data.PlanId %>"));
+            columns.Add().DataField("Edit").Caption("").Width(30).AllowFiltering(false).CellTemplate(Html.ActionLink(" ", "Edit", new { id = "PlanId" }, new { @class = "dx-icon-edit" }).ToHtmlString().Replace("PlanId", "<%= data.PlanId %>"));
+            columns.Add().DataField("Delete").Caption("").Width(30).AllowFiltering(false).CellTemplate(Html.ActionLink(" ", "Delete", new { id = "PlanId" }, new { @class = "dx-icon-trash" }).ToHtmlString().Replace("PlanId", "<%= data.PlanId %>"));
+            columns.Add().DataField("Details").Caption("").Width(30).AllowFiltering(false).CellTemplate(Html.ActionLink(" ", "Details", new { id = "PlanId" }, new { @class = "fa fa-info-circle" }).ToHtmlString().Replace("PlanId", "<%= data.PlanId %>"));
+        })
+        .SelectedRowKeys(new[] { ViewBag.PlanIdDef })
+        .ExpandedRowKeys(new[] { ViewBag.PlanIdDef })
+        //.AutoExpandAll(true)
+    )
+</section>
+
+@if (!ReferenceEquals(ViewBag.MessageErr, null))
+{
+    @(Html.DevExtreme().Popup()
+                        .ID("info-popup")
+                        .Width("auto")
+                        .Height("auto")
+                        .ShowTitle(true)
+                        .Title("Información")
+                        .Visible(true)
+                        .DragEnabled(false)
+                        .CloseOnOutsideClick(true)
+                        .ContentTemplate(@<text>
+                            @Html.Raw(ViewBag.MessageErr.Replace(Environment.NewLine, "<br />"))
+                        </text>)
+    )
+}
+
+<script>
+    function onCellPrepared(e) {
+        if (e.rowType === "header") {
+            e.cellElement.addClass("columnHeaderCSS");
+            e.cellElement.find("input").addClass("columnHeaderCSS");
+        }
+    }
+
+    function showConfirm() {
+        var result = DevExpress.ui.dialog.confirm("Are you sure?", "Confirm changes");
+
+        result.done(function (dialogResult) {
+            if (dialogResult)
+                DevExpress.ui.notify("Confirmed", "success", 2000);
+            else
+                DevExpress.ui.notify("Canceled", "error", 2000);
+        });
+    }
+
+    function showViewCreate() {
+        var id = getRowSelectedId();
+
+        if (id >= 1) {
+            var url = "@Url.Action("Create", "Plan", new { id="param-id" })";
+            url = url.replace("param-id", id);
+            window.location.href = url;
+        }
+        else
+            DevExpress.ui.dialog.alert('Nivel inválido para crear una cuenta', 'Alerta');
+    }
+
+    function getRowSelectedId() {
+        var grid = $("#grid").dxTreeList("instance");
+        var selectedRowsData = grid.getSelectedRowsData();
+        var Id = 0;
+
+        if (selectedRowsData.length > 0) 
+            Id = selectedRowsData[0].PlanId;
+
+        return Id;
+    }
+
+</script>

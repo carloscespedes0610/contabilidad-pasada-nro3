@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<EmpresaList>
+  <Empresa EmpresaId="1" EmpresaDes="Jausi" DataSource="(local)" InitialCatalog="Jausi" />
+  <Empresa EmpresaId="2" EmpresaDes="Cimbols" DataSource="(local)" InitialCatalog="Cimbols" />
+  <Empresa EmpresaId="3" EmpresaDes="SYS" DataSource="(local)" InitialCatalog="SYS" />
+</EmpresaList>

@@ -1,0 +1,89 @@
+﻿@model Contabilidad.Models.VM.clsLoginVM
+
+@{
+    Layout = null;
+    ViewBag.Title = "Login";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>DelfinNet</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="icon" href="@Url.Content("~/content/favicon.ico")" />
+
+    @*<script type="text/javascript" src="~/Scripts/jquery-2.2.3.js"></script>*@
+
+    @Styles.Render("~/Content/bundle")
+    @Styles.Render("~/Content/DevExtremeBundle")
+
+    @Scripts.Render("~/Scripts/bundle")
+    @Scripts.Render("~/Scripts/DevExtremeBundle")
+</head>
+<body class="hold-transition login-page">
+    <div class="login-box">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="login-box-body">
+                <div class="login-logo">
+                    @*<a href="#"><b>JAUSI</b> ERP</a>*@
+                    <img src="~/Content/dist/img/DelfinNetLogo.png" style="width:80%">
+                </div>
+                <!-- /.login-logo -->
+
+                <div class="form-group has-feedback">
+                    @Html.EditorFor(model => model.UsuarioCod, new { htmlAttributes = new { @class = "form-control", @placeholder = "Usuario" } })
+                    @Html.ValidationMessageFor(model => model.UsuarioCod, "", new { @class = "text-danger" })
+                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                </div>
+
+                <div class="form-group has-feedback">
+                    @Html.EditorFor(model => model.UsuarioPass, new { htmlAttributes = new { @class = "form-control", @placeholder = "Contraseña" } })
+                    @Html.ValidationMessageFor(model => model.UsuarioPass, "", new { @class = "text-danger" })
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+
+                <div class="form-group has-feedback">
+                    @Html.DropDownList("EmpresaId", null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.EmpresaId, "", new { @class = "text-danger" })
+                    <span class="glyphicon glyphicon-home form-control-feedback"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-6">
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-xs-6">
+                        <input type="submit" value="Iniciar Sesión" class="btn btn-primary btn-block btn-flat" />
+                    </div>
+                    <!-- /.col -->
+                </div>
+
+                @if (!ReferenceEquals(ViewBag.MessageErr, null))
+                {
+                    @(Html.DevExtreme().Popup()
+                        .ID("info-popup")
+                        .Width("auto")
+                        .Height("auto")
+                        .ShowTitle(true)
+                        .Title("Información")
+                        .Visible(true)
+                        .DragEnabled(false)
+                        .CloseOnOutsideClick(true)
+                        .ContentTemplate(@<text>
+                                            @Html.Raw(ViewBag.MessageErr.Replace(Environment.NewLine, "<br />"))
+                                        </text>)
+                    )
+                }
+            </div>
+        }
+    </div>
+    <!-- /.login-box -->
+</body>
+</html>
+

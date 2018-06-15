@@ -1,0 +1,52 @@
+﻿@model Contabilidad.Models.VM.clsCenCosVM
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Eliminar Centro de Costo</h3>
+                </div>
+
+                <div class="box-body">
+                    @using (Html.BeginForm())
+                    {
+                        using (Html.DevExtreme().ValidationGroup())
+                        {
+                            @Html.AntiForgeryToken();
+                            @Html.HiddenFor(m => m.CenCosId);
+
+                            @(Html.DevExtreme().Form<Contabilidad.Models.VM.clsCenCosVM>()
+                                        .ShowValidationSummary(true)
+                                        .Items(items =>
+                                        {
+                                            items.AddGroup()
+                                            .Items(groupItems =>
+                                            {
+                                                groupItems.AddSimpleFor(m => m.CenCosGrupoId).Editor(e => e.SelectBox().ID("dxCenCosGrupo").DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("CenCosGrupoList").Key("CenCosGrupoId")).ValueExpr("CenCosGrupoId").DisplayExpr("CenCosGrupoDes").SearchEnabled(true).ShowClearButton(true).Disabled(true)).IsRequired(true);
+                                                groupItems.AddSimpleFor(m => m.CenCosCod).Editor(e => e.TextBox().Width("50%").Disabled(true));
+                                                groupItems.AddSimpleFor(m => m.CenCosDes).Editor(e => e.TextBox().Disabled(true));
+                                                groupItems.AddSimpleFor(m => m.CenCosEsp).Editor(e => e.TextBox().Disabled(true));
+                                                groupItems.AddSimpleFor(m => m.EstadoId).Editor(e => e.SelectBox().DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("EstadoList").Key("EstadoId")).ValueExpr("EstadoId").DisplayExpr("EstadoDes").SearchEnabled(true).ShowClearButton(true).Disabled(true)).IsRequired(true);
+                                                groupItems.AddEmpty();
+                                            });
+                                        })
+                                        .FormData(Model)
+                            )
+
+                            <div Class="box-footer">
+                                <button type="submit" class="btn btn-primary"><i class="fa fa-trash-o"></i></button>
+                                <a href="@Url.Action("Index", "CenCos")" Class="btn btn-default"><i Class="fa fa-reply"></i></a>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@(Html.Partial("~/views/Error/InfoPopup.cshtml"))

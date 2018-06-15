@@ -1,0 +1,80 @@
+﻿@model Contabilidad.Models.VM.clsPlanGrupoFormVM
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Información Grupo de Cuentas</h3>
+                </div>
+
+                <div class="box-body">
+                    @using (Html.BeginForm())
+                    {
+                        using (Html.DevExtreme().ValidationGroup())
+                        {
+                            @Html.AntiForgeryToken();
+
+                            @Html.HiddenFor(m => m.PlanGrupoVM.PlanGrupoId);
+                            @Html.HiddenFor(m => m.PlanGrupoVM.NroCuentas);
+                            @Html.HiddenFor(m => m.PlanGrupoDetVM[0].PlanGrupoDetId);
+                            @Html.HiddenFor(m => m.PlanGrupoDetVM[0].PlanGrupoId);
+                            @Html.HiddenFor(m => m.PlanGrupoDetVM[0].PlanFlujoId);
+                            @Html.HiddenFor(m => m.PlanGrupoDetVM[0].PlanGrupoId);
+                            @Html.HiddenFor(m => m.PlanGrupoDetVM[0].Orden);
+                            @Html.HiddenFor(m => m.PlanGrupoDetVM[0].EstadoId);
+
+                            @(Html.DevExtreme().Form<Contabilidad.Models.VM.clsPlanGrupoFormVM>()
+                                        .ShowValidationSummary(true)
+                                        .Items(items =>
+                                        {
+                                            items.AddGroup()
+                                            .Items(groupItems =>
+                                            {
+                                                groupItems.AddSimpleFor(m => m.PlanGrupoVM.PlanGrupoCod).Editor(e => e.TextBox().Width("50%").Disabled(true));
+                                                groupItems.AddSimpleFor(m => m.PlanGrupoVM.PlanGrupoDes).Editor(e => e.TextBox().Disabled(true));
+                                                groupItems.AddSimpleFor(m => m.PlanGrupoVM.PlanGrupoEsp).Editor(e => e.TextBox().Disabled(true));
+                                                groupItems.AddSimpleFor(m => m.PlanGrupoVM.PlanGrupoTipoId).Editor(e => e.SelectBox().ID("PlanGrupoTipo").DataSource(ViewBag.PlanGrupoTipoId).ValueExpr("PlanGrupoTipoId").DisplayExpr("PlanGrupoTipoDes").SearchEnabled(true).ShowClearButton(true).OnValueChanged("onValueChanged").Disabled(true));
+                                                groupItems.AddSimpleFor(m => m.PlanGrupoVM.PlanGrupoTipoDetId).Editor(e => e.SelectBox().ID("PlanGrupoTipoDet").DataSource(ViewBag.PlanGrupoTipoDetId).ValueExpr("PlanGrupoTipoDetId").DisplayExpr("PlanGrupoTipoDetDes").SearchEnabled(true).ShowClearButton(true).Disabled(true));
+                                                groupItems.AddSimpleFor(m => m.PlanGrupoVM.NroCuentas).Editor(e => e.NumberBox().ShowSpinButtons(true).Step(1).Width("50%").Disabled(true));
+                                                groupItems.AddSimpleFor(m => m.PlanGrupoVM.MonedaId).Editor(e => e.SelectBox().DataSource(ViewBag.MonedaId).ValueExpr("MonedaId").DisplayExpr("MonedaDes").SearchEnabled(true).ShowClearButton(true).Disabled(true));
+                                                groupItems.AddSimpleFor(m => m.PlanGrupoVM.VerificaMto).Editor(e => e.CheckBox().Disabled(true));
+                                                groupItems.AddSimpleFor(m => m.PlanGrupoVM.EstadoId).Editor(e => e.SelectBox().DataSource(ViewBag.EstadoId).ValueExpr("EstadoId").DisplayExpr("EstadoDes").SearchEnabled(true).ShowClearButton(true).Disabled(true));
+                                            });
+
+                                            items.AddEmpty();
+
+                                            items.AddGroup()
+                                            .Caption("Datos de la Cuenta Contable")
+                                            .Items(groupItems =>
+                                            {
+                                                groupItems.AddSimpleFor(m => m.PlanGrupoDetVM[0].PlanId).Editor(e => e.SelectBox().DataSource(ViewBag.PlanId).ValueExpr("PlanId").DisplayExpr("PlanDes").SearchEnabled(true).ShowClearButton(true).Disabled(true));
+                                                groupItems.AddSimpleFor(m => m.PlanGrupoDetVM[0].SucursalId).Editor(e => e.SelectBox().DataSource(ViewBag.SucursalId).ValueExpr("SucursalId").DisplayExpr("SucursalDes").SearchEnabled(true).ShowClearButton(true).Disabled(true));
+                                            });
+                                        })
+                                        .FormData(Model)
+                            )
+
+                            <div Class="box-footer">
+                                <a href="@Url.Action("Edit", "PlanGrupo", new { id = Model.PlanGrupoVM.PlanGrupoId} )" Class="btn btn-primary"><i Class="fa fa-edit"></i></a>
+                                <a href="@Url.Action("Index", "PlanGrupo")" Class="btn btn-default"><i Class="fa fa-reply"></i></a>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@(Html.Partial("~/views/Error/InfoPopup.cshtml"))
+
+<script>
+    function onValueChanged(e) {
+        $("#PlanGrupoTipoDet").dxSelectBox("instance").getDataSource().filter(["PlanGrupoTipoId", "=", e.value]);
+        $("#PlanGrupoTipoDet").dxSelectBox("instance").getDataSource().reload();
+    }
+</script>

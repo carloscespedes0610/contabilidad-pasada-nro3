@@ -1,0 +1,15 @@
+﻿<div class="dx-field-value">
+    @(Html.DevExtreme().TextArea()
+                .ID("customer-textarea")
+                .Height(90)
+    )
+</div>
+
+<div align="center">
+    @(Html.DevExtreme().Button()
+                                    .ID("btnSave")
+                                    .Text("Salva")
+                                    .Type(DevExtreme.AspNet.Mvc.ButtonType.Success)
+                                    .UseSubmitBehavior(true)
+    )
+</div>

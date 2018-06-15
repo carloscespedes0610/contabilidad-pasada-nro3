@@ -1,0 +1,108 @@
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\Contabilidad.dll.config
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\Contabilidad.dll
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\Contabilidad.pdb
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\Antlr3.Runtime.dll
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\DevExtreme.AspNet.Data.dll
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\DevExtreme.AspNet.Mvc.dll
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\Microsoft.Web.Infrastructure.dll
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\Newtonsoft.Json.dll
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\System.Net.Http.Formatting.dll
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\System.Web.Helpers.dll
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\System.Web.Http.dll
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\System.Web.Http.WebHost.dll
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\System.Web.Mvc.dll
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\System.Web.Optimization.dll
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\System.Web.Razor.dll
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\System.Web.WebPages.Deployment.dll
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\System.Web.WebPages.dll
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\System.Web.WebPages.Razor.dll
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\WebGrease.dll
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\Antlr3.Runtime.pdb
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\DevExtreme.AspNet.Mvc.xml
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\Newtonsoft.Json.xml
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\System.Net.Http.Formatting.xml
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\System.Web.Helpers.xml
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\System.Web.Http.xml
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\System.Web.Http.WebHost.xml
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\System.Web.Mvc.xml
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\System.Web.Optimization.xml
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\System.Web.Razor.xml
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\System.Web.WebPages.xml
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\System.Web.WebPages.Deployment.xml
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\bin\System.Web.WebPages.Razor.xml
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\obj\Debug\Contabilidad.csproj.CoreCompileInputs.cache
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\obj\Debug\Contabilidad.dll
+F:\Proyectos 2018\Contabilidad\Contabilidad\Contabilidad\obj\Debug\Contabilidad.pdb
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\Contabilidad.dll.config
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\Contabilidad.dll
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\Contabilidad.pdb
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\Antlr3.Runtime.dll
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\DevExtreme.AspNet.Data.dll
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\DevExtreme.AspNet.Mvc.dll
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\Newtonsoft.Json.dll
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\System.Net.Http.Formatting.dll
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\System.Web.Helpers.dll
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\System.Web.Http.dll
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\System.Web.Http.WebHost.dll
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\System.Web.Mvc.dll
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\System.Web.Optimization.dll
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\System.Web.Razor.dll
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\System.Web.WebPages.Deployment.dll
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\System.Web.WebPages.dll
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\System.Web.WebPages.Razor.dll
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\WebGrease.dll
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\Antlr3.Runtime.pdb
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\DevExtreme.AspNet.Mvc.xml
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\Newtonsoft.Json.xml
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\System.Net.Http.Formatting.xml
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\System.Web.Helpers.xml
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\System.Web.Http.xml
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\System.Web.Http.WebHost.xml
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\System.Web.Mvc.xml
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\System.Web.Optimization.xml
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\System.Web.Razor.xml
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\System.Web.WebPages.xml
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\System.Web.WebPages.Deployment.xml
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\bin\System.Web.WebPages.Razor.xml
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\obj\Debug\Contabilidad.csproj.CoreCompileInputs.cache
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\obj\Debug\Contabilidad.dll
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\obj\Debug\Contabilidad.pdb
+C:\Users\USER\Documents\Visual Studio 2017\Projects\C-Sharp\Contabilidad\Contabilidad\obj\Debug\Contabilidad.csprojResolveAssemblyReference.cache
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\Contabilidad.dll.config
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\Contabilidad.dll
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\Contabilidad.pdb
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\Antlr3.Runtime.dll
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\DevExtreme.AspNet.Data.dll
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\DevExtreme.AspNet.Mvc.dll
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\Microsoft.Web.Infrastructure.dll
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\Newtonsoft.Json.dll
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\System.Net.Http.Formatting.dll
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\System.Web.Helpers.dll
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\System.Web.Http.dll
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\System.Web.Http.WebHost.dll
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\System.Web.Mvc.dll
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\System.Web.Optimization.dll
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\System.Web.Razor.dll
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\System.Web.WebPages.Deployment.dll
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\System.Web.WebPages.dll
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\System.Web.WebPages.Razor.dll
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\WebGrease.dll
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\Antlr3.Runtime.pdb
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\DevExtreme.AspNet.Mvc.xml
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\Newtonsoft.Json.xml
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\System.Net.Http.Formatting.xml
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\System.Web.Helpers.xml
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\System.Web.Http.xml
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\System.Web.Http.WebHost.xml
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\System.Web.Mvc.xml
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\System.Web.Optimization.xml
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\System.Web.Razor.xml
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\System.Web.WebPages.xml
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\System.Web.WebPages.Deployment.xml
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\bin\System.Web.WebPages.Razor.xml
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\obj\Debug\Contabilidad.csprojAssemblyReference.cache
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\obj\Debug\Contabilidad.csproj.CoreCompileInputs.cache
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\obj\Debug\Contabilidad.csproj.CopyComplete
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\obj\Debug\Contabilidad.dll
+E:\Carlos\Practicas ASP Net MVC\Contabilidad\Contabilidad\obj\Debug\Contabilidad.pdb

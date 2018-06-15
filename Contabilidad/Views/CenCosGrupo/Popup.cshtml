@@ -1,0 +1,57 @@
+﻿@Html.DevExtreme().Popup().ID("CenCosGrupoPopup").Title("Nuevo Grupo de Centros de Costo").Width("auto").Height("auto").ContentTemplate(@<text>
+    <div class="row">
+        <div class="box-body">
+            @Html.DevExtreme().Form().ID("CenCosGrupoForm").FormData(new Contabilidad.Models.VM.clsCenCosGrupoVM()).Items(items =>
+            {
+                items.AddSimple().Editor(e => e.TextBox().Width("50%")).DataField("CenCosGrupoCod").Label(lb => lb.Text("Código")).IsRequired(true);
+                items.AddSimple().Editor(e => e.TextBox()).DataField("CenCosGrupoDes").Label(lb => lb.Text("Descripción")).IsRequired(true);
+                items.AddSimple().Editor(e => e.TextBox()).DataField("CenCosGrupoEsp").Label(lb => lb.Text("Especificación"));
+                items.AddSimple().Editor(e => e.SelectBox().DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("EstadoList").Key("EstadoId")).ValueExpr("EstadoId").DisplayExpr("EstadoDes").Disabled(true)).DataField("EstadoId").Label(lb => lb.Text("Estado")).IsRequired(true);
+            })
+        </div>
+
+        <div Class="box-footer">
+            <div style="text-align:right; margin: 10px">
+                @Html.DevExtreme().Button().Icon("save").OnClick("onSaveClick")
+                @Html.DevExtreme().Button().Icon("revert").OnClick("onCancelClick")
+            </div>
+        </div>
+    </div>
+</text>)
+
+<script>
+    function onClick() {
+        $("#CenCosGrupoPopup").dxPopup("instance").show();
+        $("#CenCosGrupoForm").dxForm("instance").resetValues();
+        $("#CenCosGrupoForm").dxForm("instance").updateData("EstadoId", 101);
+    }
+
+    function onSaveClick() {
+        var values = $("#CenCosGrupoForm").dxForm("instance").option('formData');
+
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            contentType: 'application/json; charset=utf-8',
+            url: "@Url.Action("CreatePopup", "CenCosGrupo")",
+            data: JSON.stringify(values),
+            success: function (data) {
+                if (data == "OK") {
+                    $("#dxCenCosGrupo").dxSelectBox("instance").reset();
+                    //$("#dxCenCosGrupo").dxSelectBox("instance").repaint();
+
+                    $("#CenCosGrupoPopup").dxPopup("instance").hide();
+                }
+                else
+                    alert(data);
+            }
+        });
+    }
+
+    function onCancelClick() {
+        $("#CenCosGrupoForm").dxForm("instance").resetValues();
+        $("#CenCosGrupoPopup").dxPopup("instance").hide();
+    }
+
+</script>
+

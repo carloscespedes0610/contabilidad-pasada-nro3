@@ -1,0 +1,51 @@
+﻿@model Contabilidad.Models.VM.clsCenCosGrupoVM
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Información Grupo Centro de Costo</h3>
+                </div>
+
+                <div class="box-body">
+                    @using (Html.BeginForm())
+                    {
+                        using (Html.DevExtreme().ValidationGroup())
+                        {
+                            @Html.AntiForgeryToken();
+                            @Html.HiddenFor(m => m.CenCosGrupoId);
+
+                            @(Html.DevExtreme().Form<Contabilidad.Models.VM.clsCenCosGrupoVM>()
+                                .ShowValidationSummary(true)
+                                .Items(items =>
+                                {
+                                    items.AddGroup()
+                                    .Items(groupItems =>
+                                    {
+                                        groupItems.AddSimpleFor(m => m.CenCosGrupoCod).Editor(e => e.TextBox().Width("50%").Disabled(true));
+                                        groupItems.AddSimpleFor(m => m.CenCosGrupoDes).Editor(e => e.TextBox().Disabled(true));
+                                        groupItems.AddSimpleFor(m => m.CenCosGrupoEsp).Editor(e => e.TextBox().Disabled(true));
+                                        groupItems.AddSimpleFor(m => m.EstadoId).Editor(e => e.SelectBox().DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("EstadoList").Key("EstadoId")).ValueExpr("EstadoId").DisplayExpr("EstadoDes").SearchEnabled(true).ShowClearButton(true).Disabled(true)).IsRequired(true);
+                                        groupItems.AddEmpty();
+                                    });
+                                })
+                                .FormData(Model)
+                            )
+
+                            <div Class="box-footer">
+                                <a href="@Url.Action("Edit", "CenCosGrupo", new { id = Model.CenCosGrupoId} )" Class="btn btn-primary"><i Class="fa fa-edit"></i></a>
+                                <a href="@Url.Action("Index", "CenCosGrupo")" Class="btn btn-default"><i Class="fa fa-reply"></i></a>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@(Html.Partial("~/views/Error/InfoPopup.cshtml"))

@@ -10,9 +10,12 @@ namespace Contabilidad.Models.VM
 
         [Display(Name = "Ambito")]
         [Required(ErrorMessage = "{0} es Requerido")]
+        [StringLength(255)]
         public string TipoAmbitoDes { get; set; }
 
         [Display(Name = "Estado")]
+        [Required(ErrorMessage = "{0} es Requerido")]
+        [Range(1, long.MaxValue, ErrorMessage = "{0} es Requerido")]
         public long EstadoId { get; set; }
 
         [NotMapped]

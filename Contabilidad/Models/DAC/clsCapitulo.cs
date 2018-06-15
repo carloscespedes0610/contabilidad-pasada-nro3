@@ -367,7 +367,7 @@ namespace Contabilidad.Models.DAC
                     mstrStoreProcName = "ctbCapituloUpdate";
                     moParameters = new SqlParameter[7] {
                         new SqlParameter("UpdateFilter", mintUpdateFilter),
-                        new SqlParameter("CapituloId", VM.CapituloId),
+                        new SqlParameter(clsCapituloVM._CapituloId, VM.CapituloId),
                         new SqlParameter(clsCapituloVM._TipoCapituloId, VM.TipoCapituloId),
                         new SqlParameter(clsCapituloVM._Orden, VM.Orden),
                         new SqlParameter(clsCapituloVM._CapituloCod, VM.CapituloCod),

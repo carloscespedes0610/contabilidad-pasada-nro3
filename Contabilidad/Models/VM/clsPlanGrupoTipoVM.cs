@@ -11,13 +11,16 @@ namespace Contabilidad.Models.VM
 
         [Display(Name = "Código")]
         [Required(ErrorMessage = "{0} es Requerido")]
+        [StringLength(50)]
         public string PlanGrupoTipoCod { get; set; }
 
         [Display(Name = "Descripción")]
         [Required(ErrorMessage = "{0} es Requerido")]
+        [StringLength(255)]
         public string PlanGrupoTipoDes { get; set; }
 
         [Display(Name = "Especificación")]
+        [StringLength(255)]
         public string PlanGrupoTipoEsp { get; set; }
 
         [Display(Name = "Estado")]

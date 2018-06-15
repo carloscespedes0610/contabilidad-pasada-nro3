@@ -11,13 +11,16 @@ namespace Contabilidad.Models.VM
 
         [Display(Name = "Código")]
         [Required(ErrorMessage = "{0} es Requerido")]
+        [StringLength(50)]
         public string CenCosCod { get; set; }
 
         [Display(Name = "Descripción")]
         [Required(ErrorMessage = "{0} es Requerido")]
+        [StringLength(255)]
         public string CenCosDes { get; set; }
 
         [Display(Name = "Especificación")]
+        [StringLength(255)]
         public string CenCosEsp { get; set; }
 
         [Display(Name = "Grupo")]

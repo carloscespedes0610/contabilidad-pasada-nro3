@@ -10,9 +10,13 @@ namespace Contabilidad.Models.VM
         public long RegTipoPersonaId { get; set; }
 
         [Required(ErrorMessage = "{0} es Requerido")]
+        [Range(1, long.MaxValue, ErrorMessage = "{0} es Requerido")]
+        [Display(Name = "Tipo Persona")]
         public long TipoPersonaId { get; set; }
 
         [Required(ErrorMessage = "{0} es Requerido")]
+        [Range(1, long.MaxValue, ErrorMessage = "{0} es Requerido")]
+        [Display(Name = "Grupo del Plan")]
         public long PlanGrupoId { get; set; }
 
         [Display(Name = "Estado")]

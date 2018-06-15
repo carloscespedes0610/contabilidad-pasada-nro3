@@ -6,6 +6,8 @@ namespace Contabilidad.Models.VM
 {
     public class clsPlanGrupoFormVM
     {
+        public ICollection<clsPlanGrupoDetVM> PlanGrupoDetVM { get; set; }
+
         public clsPlanGrupoFormVM()
         {
             PlanGrupoDetVM = new HashSet<clsPlanGrupoDetVM>();
@@ -16,13 +18,16 @@ namespace Contabilidad.Models.VM
 
         [Display(Name = "Código")]
         [Required(ErrorMessage = "{0} es Requerido")]
+        [StringLength(50)]
         public string PlanGrupoCod { get; set; }
 
         [Display(Name = "Descripción")]
         [Required(ErrorMessage = "{0} es Requerido")]
+        [StringLength(255)]
         public string PlanGrupoDes { get; set; }
 
         [Display(Name = "Especificación")]
+        [StringLength(255)]
         public string PlanGrupoEsp { get; set; }
 
         [Display(Name = "Tipo")]
@@ -66,6 +71,6 @@ namespace Contabilidad.Models.VM
         [Display(Name = "Estado")]
         public string EstadoDes { get; set; }
 
-        public ICollection<clsPlanGrupoDetVM> PlanGrupoDetVM { get; set; }
+        
     }
 }

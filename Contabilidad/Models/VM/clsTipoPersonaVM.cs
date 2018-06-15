@@ -11,10 +11,12 @@ namespace Contabilidad.Models.VM
 
         [Display(Name = "Código")]
         [Required(ErrorMessage = "{0} es Requerido")]
+        [StringLength(50)]
         public string TipoPersonaCod { get; set; }
 
         [Display(Name = "Descripción")]
         [Required(ErrorMessage = "{0} es Requerido")]
+        [StringLength(255)]
         public string TipoPersonaDes { get; set; }
 
         [Display(Name = "Tipo Relación")]

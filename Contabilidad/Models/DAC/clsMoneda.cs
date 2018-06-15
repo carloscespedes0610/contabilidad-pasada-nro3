@@ -1,69 +1,13 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Data;
+using Contabilidad.Models.VM;
 
 namespace Contabilidad.Models.DAC
 {
     public class clsMoneda : clsBase, IDisposable
     {
-        private long mlngMonedaId;
-        private string mstrMonedaCod;
-        private string mstrMonedaDes;
-
-        //******************************************************
-        // Private Data To Match the Table Definition
-        //******************************************************
-        public long MonedaId
-        {
-            get
-            {
-                return mlngMonedaId;
-            }
-
-            set
-            {
-                mlngMonedaId = value;
-            }
-        }
-
-        public string MonedaCod
-        {
-            get
-            {
-                return mstrMonedaCod;
-            }
-
-            set
-            {
-                mstrMonedaCod = value;
-            }
-        }
-
-        public string MonedaDes
-        {
-            get
-            {
-                return mstrMonedaDes;
-            }
-
-            set
-            {
-                mstrMonedaDes = value;
-            }
-        }
-
-        public long Id
-        {
-            get
-            {
-                return mlngId;
-            }
-
-            set
-            {
-                mlngId = value;
-            }
-        }
+        public clsMonedaVM VM;
 
         //******************************************************
         //* The following enumerations will change for each
@@ -273,80 +217,119 @@ namespace Contabilidad.Models.DAC
 
         public void PropertyInit()
         {
-            mlngMonedaId = 0;
-            mstrMonedaCod = "";
-            mstrMonedaDes = "";
+            VM = new clsMonedaVM();
+            VM.MonedaId = 0;
+            VM.MonedaCod = "";
+            VM.MonedaDes = "";
         }
 
         protected override void SetPrimaryKey()
         {
-            mlngMonedaId = mlngId;
+            VM.MonedaId = mlngId;
         }
 
         protected override void SelectParameter()
         {
-            Array.Resize(ref moParameters, 3);
-            moParameters[0] = new SqlParameter("@SelectFilter", mintSelectFilter);
-            moParameters[1] = new SqlParameter("@WhereFilter", mintWhereFilter);
-            moParameters[2] = new SqlParameter("@OrderByFilter", mintOrderByFilter);
+            string strSQL = null;
+
+            mstrStoreProcName = "parMonedaSelect";
 
             switch (mintSelectFilter)
             {
+
                 case SelectFilters.All:
-                    mstrStoreProcName = "parMonedaSelect";
+                    strSQL = " SELECT  " +
+                            "    parMoneda.MonedaId, " +
+                            "    parMoneda.MonedaCod, " +
+                            "    parMoneda.MonedaDes, " +
+                            " FROM parMoneda ";
                     break;
 
                 case SelectFilters.RowCount:
-                    mstrStoreProcName = "parMonedaSelect";
                     break;
 
                 case SelectFilters.ListBox:
-                    mstrStoreProcName = "parMonedaSelect";
+                    strSQL = " SELECT  " +
+                           "    parMoneda.MonedaId, " +
+                           "    parMoneda.MonedaCod, " +
+                           "    parMoneda.MonedaDes, " +
+                           " FROM parMoneda ";
                     break;
 
                 case SelectFilters.Grid:
-                    mstrStoreProcName = "parMonedaSelect";
+                    strSQL = " SELECT  " +
+                          "    parMoneda.MonedaId, " +
+                          "    parMoneda.MonedaCod, " +
+                          "    parMoneda.MonedaDes, " +
+                          " FROM parMoneda ";
                     break;
 
                 case SelectFilters.GridCheck:
                     break;
             }
 
-            WhereParameter();
+            strSQL += WhereFilterGet() + OrderByFilterGet();
 
-            //Call OrderByParameter()
+            Array.Resize(ref moParameters, 1);
+            moParameters[0] = new SqlParameter("SQL", strSQL);
         }
 
-        private void WhereParameter()
+        private string WhereFilterGet()
         {
+            string strSQL = null;
+
             switch (mintWhereFilter)
             {
                 case WhereFilters.None:
-                    Array.Resize(ref moParameters, moParameters.Length + 1);
-                    moParameters[3] = new SqlParameter("@MonedaId", Convert.ToInt32(0));
                     break;
 
                 case WhereFilters.PrimaryKey:
-                    Array.Resize(ref moParameters, moParameters.Length + 1);
-                    moParameters[3] = new SqlParameter("@MonedaId", mlngMonedaId);
+                    strSQL = " WHERE parMoneda.MonedaId = " + SysData.NumberToField(VM.MonedaId);
                     break;
 
                 case WhereFilters.MonedaDes:
+                    strSQL = " WHERE parMoneda.MonedaDes  = " + SysData.NumberToField(VM.MonedaDes);
                     break;
-                //strSQL = " WHERE  parMoneda.MonedaDes = " & StringToField(mstrMonedaDes)
 
                 case WhereFilters.Grid:
-                    Array.Resize(ref moParameters, moParameters.Length + 1);
-                    moParameters[3] = new SqlParameter("@MonedaId", Convert.ToInt32(0));
                     break;
 
                 case WhereFilters.MonedaCod:
+                    strSQL = " WHERE parMoneda.MonedaCod = " + SysData.NumberToField(VM.MonedaCod);
                     break;
 
                 case WhereFilters.GridCheck:
                     break;
             }
+
+            return strSQL;
         }
+
+        private string OrderByFilterGet()
+        {
+            string strSQL = null;
+
+            switch (mintOrderByFilter)
+            {
+                case OrderByFilters.Grid:
+                    strSQL = " ORDER BY parMoneda.MonedaDes ";
+                    break;
+
+                case OrderByFilters.GridCheck:
+                    break;
+
+                case OrderByFilters.MonedaDes:
+                    strSQL = " ORDER BY parMoneda.MonedaDes  ";
+                    break;
+
+                case OrderByFilters.MonedaId:
+                    strSQL = " ORDER BY parMoneda.MonedaId  ";
+                    break;
+            }
+
+            return strSQL;
+        }
+
 
         protected override void InsertParameter()
         {
@@ -357,8 +340,8 @@ namespace Contabilidad.Models.DAC
                     moParameters = new SqlParameter[4] {
                         new SqlParameter("@InsertFilter", mintInsertFilter),
                         new SqlParameter("@Id", SqlDbType.Int),
-                        new SqlParameter("@MonedaCod", mstrMonedaCod),
-                        new SqlParameter("@MonedaDes", mstrMonedaDes)};
+                        new SqlParameter(clsMonedaVM._MonedaCod, VM.MonedaCod),
+                        new SqlParameter(clsMonedaVM._MonedaDes, VM.MonedaDes)};
                     moParameters[1].Direction = ParameterDirection.Output;
                     break;
             }
@@ -372,9 +355,9 @@ namespace Contabilidad.Models.DAC
                     mstrStoreProcName = "parMonedaUpdate";
                     moParameters = new SqlParameter[4] {
                         new SqlParameter("@UpdateFilter", mintUpdateFilter),
-                        new SqlParameter("@MonedaId", mlngMonedaId),
-                        new SqlParameter("@MonedaCod", mstrMonedaCod),
-                        new SqlParameter("@MonedaDes", mstrMonedaDes)};
+                        new SqlParameter(clsMonedaVM._MonedaId, VM.MonedaId),
+                        new SqlParameter(clsMonedaVM._MonedaCod, VM.MonedaCod),
+                        new SqlParameter(clsMonedaVM._MonedaDes, VM.MonedaDes)};
                     break;
             }
         }
@@ -387,7 +370,7 @@ namespace Contabilidad.Models.DAC
                     mstrStoreProcName = "parMonedaDelete";
                     moParameters = new SqlParameter[2] {
                         new SqlParameter("@DeleteFilter", mintDeleteFilter),
-                        new SqlParameter("@MonedaId", mlngMonedaId)};
+                        new SqlParameter(clsMonedaVM._MonedaId, VM.MonedaId)};
                     break;
             }
         }
@@ -401,15 +384,15 @@ namespace Contabilidad.Models.DAC
                 switch (mintSelectFilter)
                 {
                     case SelectFilters.All:
-                        mlngMonedaId = SysData.ToLong(oDataRow["MonedaId"]);
-                        mstrMonedaCod = SysData.ToStr(oDataRow["MonedaCod"]);
-                        mstrMonedaDes = SysData.ToStr(oDataRow["MonedaDes"]);
+                        VM.MonedaId = SysData.ToLong(oDataRow[clsMonedaVM._MonedaId]);
+                        VM.MonedaCod = SysData.ToStr(oDataRow[clsMonedaVM._MonedaCod]);
+                        VM.MonedaDes = SysData.ToStr(oDataRow[clsMonedaVM._MonedaDes]);
                         break;
 
                     case SelectFilters.ListBox:
-                        mlngMonedaId = SysData.ToLong(oDataRow["MonedaId"]);
-                        mstrMonedaCod = SysData.ToStr(oDataRow["MonedaCod"]);
-                        mstrMonedaDes = SysData.ToStr(oDataRow["MonedaDes"]);
+                        VM.MonedaId = SysData.ToLong(oDataRow[clsMonedaVM._MonedaId]);
+                        VM.MonedaCod = SysData.ToStr(oDataRow[clsMonedaVM._MonedaCod]);
+                        VM.MonedaDes = SysData.ToStr(oDataRow[clsMonedaVM._MonedaDes]);
                         break;
                 }
             }
@@ -425,12 +408,12 @@ namespace Contabilidad.Models.DAC
             bool returnValue = false;
             string strMsg = string.Empty;
 
-            if (mstrMonedaCod.Length == 0)
+            if (VM.MonedaCod.Length == 0)
             {
                 strMsg += "Código es Requerido" + Environment.NewLine;
             }
 
-            if (mstrMonedaDes.Length == 0)
+            if (VM.MonedaDes.Length == 0)
             {
                 strMsg += "Descipción del Tipo Usuario es Requerido" + Environment.NewLine;
             }

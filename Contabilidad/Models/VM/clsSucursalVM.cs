@@ -11,13 +11,17 @@ namespace Contabilidad.Models.VM
 
         [Display(Name = "Código")]
         [Required(ErrorMessage = "{0} es Requerido")]
+        [StringLength(50)]
         public string SucursalCod { get; set; }
 
         [Display(Name = "Descripción")]
         [Required(ErrorMessage = "{0} es Requerido")]
+        [StringLength(255)]
         public string SucursalDes { get; set; }
 
         [Display(Name = "Especificación")]
+        [StringLength(255)]
+        [Required(ErrorMessage = "{0} es Requerido")]
         public string SucursalEsp { get; set; }
 
         [Display(Name = "Estado")]

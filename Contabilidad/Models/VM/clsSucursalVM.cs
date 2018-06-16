@@ -31,5 +31,12 @@ namespace Contabilidad.Models.VM
 
         [Display(Name = "Estado")]
         public string EstadoDes { get; set; }
+
+        public static string _SucursalId = nameof(SucursalId);
+        public static string _SucursalCod = nameof(SucursalCod);
+        public static string _SucursalDes = nameof(SucursalDes);
+        public static string _SucursalEsp = nameof(SucursalEsp);
+        public static string _EstadoId = nameof(EstadoId);
+        public static string _EstadoDes = nameof(EstadoDes);
     }
 }

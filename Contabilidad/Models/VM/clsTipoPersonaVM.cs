@@ -39,6 +39,8 @@ namespace Contabilidad.Models.VM
         public static string _TipoPersonaCod = nameof(TipoPersonaCod);
         public static string _TipoPersonaDes = nameof(TipoPersonaDes);
         public static string _TipoRelacionId = nameof(TipoRelacionId);
+        public static string _TipoRelacionDes = nameof(TipoRelacionDes);
         public static string _EstadoId = nameof(EstadoId);
+        public static string _EstadoDes = nameof(EstadoDes);
     }
 }

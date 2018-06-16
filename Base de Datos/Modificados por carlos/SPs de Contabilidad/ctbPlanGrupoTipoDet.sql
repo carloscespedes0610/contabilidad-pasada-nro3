@@ -1,6 +1,7 @@
 /********************************************************************/
 /*  STORE PROCEDURE	: ctbPlanGrupoTipoDet							*/
 /*  AUTOR			: Joel Mercado									*/
+/*  MODIFICACION	: Carlos Cespedes (15/06/2018)					*/
 /*  FECHA			: 28/03/2018									*/
 /*  DESCRIPCION		:									            */
 /********************************************************************/

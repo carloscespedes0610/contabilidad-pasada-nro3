@@ -76,5 +76,22 @@ namespace Contabilidad.Models.VM
 
         [Display(Name = "Estado")]
         public string EstadoDes { get; set; }
+
+        public static string _PlanId = nameof(PlanId);
+        public static string _PlanCod = nameof(PlanCod);
+        public static string _PlanDes = nameof(PlanDes);
+        public static string _PlanEsp = nameof(PlanEsp);
+        public static string _TipoPlanId = nameof(TipoPlanId);
+        public static string _TipoPlanDes = nameof(TipoPlanDes);
+        public static string _Orden = nameof(Orden);
+        public static string _Nivel = nameof(Nivel);
+        public static string _MonedaId = nameof(MonedaId);
+        public static string _MonedaDes = nameof(MonedaDes);
+        public static string _TipoAmbitoId = nameof(TipoAmbitoId);
+        public static string _PlanAjusteId = nameof(PlanAjusteId);
+        public static string _CapituloId = nameof(CapituloId);
+        public static string _PlanPadreId = nameof(PlanPadreId);
+        public static string _EstadoId = nameof(EstadoId);
+        public static string _EstadoDes = nameof(EstadoDes);
     }
 }

@@ -36,5 +36,6 @@ namespace Contabilidad.Models.VM
         public static string _ModuloDes = nameof(ModuloDes);
         public static string _ModuloEsp = nameof(ModuloEsp);
         public static string _EstadoId = nameof(EstadoId);
+        public static string _EstadoDes = nameof(EstadoDes);
     }
 }

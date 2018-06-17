@@ -1,83 +1,13 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Data;
+using Contabilidad.Models.VM;
 
 namespace Contabilidad.Models.DAC
 {
     public class clsRegTipoPersona : clsBase, IDisposable
     {
-        private long mlngRegTipoPersonaId;
-        private long mlngTipoPersonaId;
-        private long mlngPlanGrupoId;
-        private long mlngEstadoId;
-
-        //******************************************************
-        // Private Data To Match the Table Definition
-        //******************************************************
-        public long RegTipoPersonaId
-        {
-            get
-            {
-                return mlngRegTipoPersonaId;
-            }
-
-            set
-            {
-                mlngRegTipoPersonaId = value;
-            }
-        }
-
-        public long TipoPersonaId
-        {
-            get
-            {
-                return mlngTipoPersonaId;
-            }
-
-            set
-            {
-                mlngTipoPersonaId = value;
-            }
-        }
-
-        public long PlanGrupoId
-        {
-            get
-            {
-                return mlngPlanGrupoId;
-            }
-
-            set
-            {
-                mlngPlanGrupoId = value;
-            }
-        }
-
-        public long EstadoId
-        {
-            get
-            {
-                return mlngEstadoId;
-            }
-
-            set
-            {
-                mlngEstadoId = value;
-            }
-        }
-
-        public long Id
-        {
-            get
-            {
-                return mlngId;
-            }
-
-            set
-            {
-                mlngId = value;
-            }
-        }
+        public clsRegTipoPersonaVM VM;
 
         //******************************************************
         //* The following enumerations will change for each
@@ -96,19 +26,17 @@ namespace Contabilidad.Models.DAC
         {
             None = 0,
             PrimaryKey = 1,
-            RegTipoPersonaDes = 2,
-            Grid = 3,
-            GridCheck = 4,
-            TipoPersonaId = 5
+            Grid = 2,
+            GridCheck = 3,
+            TipoPersonaId = 4
         }
 
         public enum OrderByFilters : byte
         {
             None = 0,
             RegTipoPersonaId = 1,
-            RegTipoPersonaDes = 2,
-            Grid = 3,
-            GridCheck = 4
+            Grid = 2,
+            GridCheck = 3
         }
 
         public enum InsertFilters : byte
@@ -288,28 +216,33 @@ namespace Contabilidad.Models.DAC
 
         public void PropertyInit()
         {
-            mlngRegTipoPersonaId = 0;
-            mlngTipoPersonaId = 0;
-            mlngPlanGrupoId = 0;
-            mlngEstadoId = 0;
+            VM = new clsRegTipoPersonaVM();
+            VM.RegTipoPersonaId = 0;
+            VM.TipoPersonaId = 0;
+            VM.PlanGrupoId = 0;
+            VM.EstadoId = 0;
         }
 
         protected override void SetPrimaryKey()
         {
-            mlngRegTipoPersonaId = mlngId;
+            VM.RegTipoPersonaId = mlngId;
         }
 
         protected override void SelectParameter()
         {
-            Array.Resize(ref moParameters, 3);
-            moParameters[0] = new SqlParameter("@SelectFilter", mintSelectFilter);
-            moParameters[1] = new SqlParameter("@WhereFilter", mintWhereFilter);
-            moParameters[2] = new SqlParameter("@OrderByFilter", mintOrderByFilter);
+            string strSQL = null;
+
+            mstrStoreProcName = "ctbRegTipoPersonaSelect";
 
             switch (mintSelectFilter)
             {
                 case SelectFilters.All:
-                    mstrStoreProcName = "ctbRegTipoPersonaSelect";
+                    strSQL = " SELECT  " +
+                           "    ctbRegTipoPersona.RegTipoPersonaId, " +
+                           "    ctbRegTipoPersona.TipoPersonaId, " +
+                           "    ctbRegTipoPersona.PlanGrupoId, " +
+                           "    ctbRegTipoPersona.EstadoId " +
+                           " FROM ctbRegTipoPersona ";
                     break;
 
                 case SelectFilters.RowCount:
@@ -317,66 +250,88 @@ namespace Contabilidad.Models.DAC
                     break;
 
                 case SelectFilters.ListBox:
-                    mstrStoreProcName = "ctbRegTipoPersonaSelect";
+                    strSQL = " SELECT  " +
+                            "    ctbRegTipoPersona.RegTipoPersonaId " +
+                            " FROM ctbRegTipoPersona ";
                     break;
 
                 case SelectFilters.Grid:
-                    mstrStoreProcName = "ctbRegTipoPersonaSelect";
+                    strSQL = " SELECT  " +
+                           "    ctbRegTipoPersona.RegTipoPersonaId, " +
+                           "    parTipoPersona.TipoPersonaId, " +
+                           "    parTipoPersona.TipoPersonaDes, " +
+                           "    ctbPlanGrupo.PlanGrupoId, " +
+                           "    ctbPlanGrupo.PlanGrupoDes, " +
+                           "    parEstado.EstadoId, " +
+                           "    parEstado.EstadoDes " +
+                           " FROM ctbRegTipoPersona  " +
+                           "    LEFT JOIN	parTipoPersona	ON ctbRegTipoPersona.TipoPersonaId = parTipoPersona.TipoPersonaId " +
+                           "    LEFT JOIN	ctbPlanGrupo	ON ctbRegTipoPersona.PlanGrupoId = ctbPlanGrupo.PlanGrupoId " +
+                           "    LEFT JOIN	parEstado		ON ctbRegTipoPersona.EstadoId = parEstado.EstadoId ";
                     break;
 
                 case SelectFilters.GridCheck:
                     break;
             }
 
-            WhereParameter();
+            strSQL += WhereFilterGet() + OrderByFilterGet();
 
-            //Call OrderByParameter()
+            Array.Resize(ref moParameters, 1);
+            moParameters[0] = new SqlParameter("SQL", strSQL);
         }
 
-        private void WhereParameter()
+        private string WhereFilterGet()
         {
+            string strSQL = null;
+
             switch (mintWhereFilter)
             {
                 case WhereFilters.None:
                     Array.Resize(ref moParameters, moParameters.Length + 4);
-                    moParameters[3] = new SqlParameter("@RegTipoPersonaId", Convert.ToInt32(0));
-                    moParameters[4] = new SqlParameter("@TipoPersonaId", Convert.ToInt32(0));
-                    moParameters[5] = new SqlParameter("@PlanGrupoId", Convert.ToInt32(0));
-                    moParameters[6] = new SqlParameter("@EstadoId", Convert.ToInt32(0));
                     break;
 
                 case WhereFilters.PrimaryKey:
-                    Array.Resize(ref moParameters, moParameters.Length + 4);
-                    moParameters[3] = new SqlParameter("@RegTipoPersonaId", mlngRegTipoPersonaId);
-                    moParameters[4] = new SqlParameter("@TipoPersonaId", Convert.ToInt32(0));
-                    moParameters[5] = new SqlParameter("@PlanGrupoId", Convert.ToInt32(0));
-                    moParameters[6] = new SqlParameter("@EstadoId", Convert.ToInt32(0));
+                    strSQL = " WHERE ctbRegTipoPersona.RegTipoPersonaId = " + SysData.NumberToField(VM.RegTipoPersonaId);
                     break;
-
-                case WhereFilters.RegTipoPersonaDes:
-                    break;
-                //strSQL = " WHERE  ctbRegTipoPersona.RegTipoPersonaDes = " & StringToField(mstrRegTipoPersonaDes)
 
                 case WhereFilters.Grid:
-                    Array.Resize(ref moParameters, moParameters.Length + 4);
-                    moParameters[3] = new SqlParameter("@RegTipoPersonaId", Convert.ToInt32(0));
-                    moParameters[4] = new SqlParameter("@TipoPersonaId", Convert.ToInt32(0));
-                    moParameters[5] = new SqlParameter("@PlanGrupoId", Convert.ToInt32(0));
-                    moParameters[6] = new SqlParameter("@EstadoId", Convert.ToInt32(0));
                     break;
 
                 case WhereFilters.TipoPersonaId:
-                    Array.Resize(ref moParameters, moParameters.Length + 4);
-                    moParameters[3] = new SqlParameter("@RegTipoPersonaId", Convert.ToInt32(0));
-                    moParameters[4] = new SqlParameter("@TipoPersonaId", mlngTipoPersonaId);
-                    moParameters[5] = new SqlParameter("@PlanGrupoId", Convert.ToInt32(0));
-                    moParameters[6] = new SqlParameter("@EstadoId", Convert.ToInt32(0));
+                    strSQL = " WHERE ctbRegTipoPersona.TipoPersonaId = " + SysData.NumberToField(VM.TipoPersonaId);
+
                     break;
 
                 case WhereFilters.GridCheck:
                     break;
             }
+
+            return strSQL;
         }
+
+
+        private string OrderByFilterGet()
+        {
+            string strSQL = null;
+
+            switch (mintOrderByFilter)
+            {
+                case OrderByFilters.None:
+                    break;
+                case OrderByFilters.RegTipoPersonaId:
+                    strSQL = " ORDER BY ctbRegTipoPersona.RegTipoPersonaId ";
+                    break;
+                case OrderByFilters.Grid:
+                    strSQL = " ORDER BY parTipoPersona.TipoPersonaDes, ctbPlanGrupo.PlanGrupoDes ";
+                    break;
+                case OrderByFilters.GridCheck:
+                    break;
+            }
+
+            return strSQL;
+
+        }
+
 
         protected override void InsertParameter()
         {
@@ -387,9 +342,9 @@ namespace Contabilidad.Models.DAC
                     moParameters = new SqlParameter[5] {
                         new SqlParameter("@InsertFilter", mintInsertFilter),
                         new SqlParameter("@Id", SqlDbType.Int),
-                        new SqlParameter("@TipoPersonaId", mlngTipoPersonaId),
-                        new SqlParameter("@PlanGrupoId", mlngPlanGrupoId),
-                        new SqlParameter("@EstadoId", mlngEstadoId)};
+                        new SqlParameter(clsRegTipoPersonaVM._TipoPersonaId, VM.TipoPersonaId),
+                        new SqlParameter(clsRegTipoPersonaVM._PlanGrupoId, VM.PlanGrupoId),
+                        new SqlParameter(clsRegTipoPersonaVM._EstadoId, VM.EstadoId)};
                     moParameters[1].Direction = ParameterDirection.Output;
                     break;
             }
@@ -403,10 +358,10 @@ namespace Contabilidad.Models.DAC
                     mstrStoreProcName = "ctbRegTipoPersonaUpdate";
                     moParameters = new SqlParameter[5] {
                         new SqlParameter("@UpdateFilter", mintUpdateFilter),
-                        new SqlParameter("@RegTipoPersonaId", mlngRegTipoPersonaId),
-                        new SqlParameter("@TipoPersonaId", mlngTipoPersonaId),
-                        new SqlParameter("@PlanGrupoId", mlngPlanGrupoId),
-                        new SqlParameter("@EstadoId", mlngEstadoId)};
+                        new SqlParameter(clsRegTipoPersonaVM._RegTipoPersonaId, VM.RegTipoPersonaId),
+                        new SqlParameter(clsRegTipoPersonaVM._TipoPersonaId, VM.TipoPersonaId),
+                        new SqlParameter(clsRegTipoPersonaVM._PlanGrupoId, VM.PlanGrupoId),
+                        new SqlParameter(clsRegTipoPersonaVM._EstadoId, VM.EstadoId)};
                     break;
             }
         }
@@ -419,16 +374,16 @@ namespace Contabilidad.Models.DAC
                     mstrStoreProcName = "ctbRegTipoPersonaDelete";
                     moParameters = new SqlParameter[3] {
                         new SqlParameter("@DeleteFilter", mintDeleteFilter),
-                        new SqlParameter("@RegTipoPersonaId", mlngRegTipoPersonaId),
-                        new SqlParameter("@TipoPersonaId", Convert.ToInt32(0))};
+                        new SqlParameter(clsRegTipoPersonaVM._RegTipoPersonaId, VM.RegTipoPersonaId),
+                        new SqlParameter(clsRegTipoPersonaVM._TipoPersonaId, Convert.ToInt32(0))};
                     break;
 
                 case DeleteFilters.TipoPersonaId:
                     mstrStoreProcName = "ctbRegTipoPersonaDelete";
                     moParameters = new SqlParameter[3] {
                         new SqlParameter("@DeleteFilter", mintDeleteFilter),
-                        new SqlParameter("@RegTipoPersonaId", Convert.ToInt32(0)),
-                        new SqlParameter("@TipoPersonaId", mlngTipoPersonaId)};
+                        new SqlParameter(clsRegTipoPersonaVM._RegTipoPersonaId, Convert.ToInt32(0)),
+                        new SqlParameter(clsRegTipoPersonaVM._TipoPersonaId, VM.TipoPersonaId)};
                     break;
             }
         }
@@ -442,14 +397,14 @@ namespace Contabilidad.Models.DAC
                 switch (mintSelectFilter)
                 {
                     case SelectFilters.All:
-                        mlngRegTipoPersonaId = SysData.ToLong(oDataRow["RegTipoPersonaId"]);
-                        mlngTipoPersonaId = SysData.ToLong(oDataRow["TipoPersonaId"]);
-                        mlngPlanGrupoId = SysData.ToLong(oDataRow["PlanGrupoId"]);
-                        mlngEstadoId = SysData.ToLong(oDataRow["EstadoId"]);
+                        VM.RegTipoPersonaId = SysData.ToLong(oDataRow[clsRegTipoPersonaVM._RegTipoPersonaId]);
+                        VM.TipoPersonaId = SysData.ToLong(oDataRow[clsRegTipoPersonaVM._TipoPersonaId]);
+                        VM.PlanGrupoId = SysData.ToLong(oDataRow[clsRegTipoPersonaVM._PlanGrupoId]);
+                        VM.EstadoId = SysData.ToLong(oDataRow[clsRegTipoPersonaVM._EstadoId]);
                         break;
 
                     case SelectFilters.ListBox:
-                        mlngRegTipoPersonaId = SysData.ToLong(oDataRow["RegTipoPersonaId"]);
+                        VM.RegTipoPersonaId = SysData.ToLong(oDataRow[clsRegTipoPersonaVM._RegTipoPersonaId]);
                         break;
                 }
             }

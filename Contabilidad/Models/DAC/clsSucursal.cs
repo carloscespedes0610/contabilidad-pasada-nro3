@@ -1,97 +1,13 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Data;
+using Contabilidad.Models.VM;
 
 namespace Contabilidad.Models.DAC
 {
     public class clsSucursal : clsBase, IDisposable
     {
-        private long mlngSucursalId;
-        private string mstrSucursalCod;
-        private string mstrSucursalDes;
-        private string mstrSucursalEsp;
-        private long mlngEstadoId;
-
-        //******************************************************
-        // Private Data To Match the Table Definition
-        //******************************************************
-        public long SucursalId
-        {
-            get
-            {
-                return mlngSucursalId;
-            }
-
-            set
-            {
-                mlngSucursalId = value;
-            }
-        }
-
-        public string SucursalCod
-        {
-            get
-            {
-                return mstrSucursalCod;
-            }
-
-            set
-            {
-                mstrSucursalCod = value;
-            }
-        }
-
-        public string SucursalDes
-        {
-            get
-            {
-                return mstrSucursalDes;
-            }
-
-            set
-            {
-                mstrSucursalDes = value;
-            }
-        }
-
-        public string SucursalEsp
-        {
-            get
-            {
-                return mstrSucursalEsp;
-            }
-
-            set
-            {
-                mstrSucursalEsp = value;
-            }
-        }
-
-        public long EstadoId
-        {
-            get
-            {
-                return mlngEstadoId;
-            }
-
-            set
-            {
-                mlngEstadoId = value;
-            }
-        }
-
-        public long Id
-        {
-            get
-            {
-                return mlngId;
-            }
-
-            set
-            {
-                mlngId = value;
-            }
-        }
+        public clsSucursalVM VM;
 
         //******************************************************
         //* The following enumerations will change for each
@@ -301,87 +217,127 @@ namespace Contabilidad.Models.DAC
 
         public void PropertyInit()
         {
-            mlngSucursalId = 0;
-            mstrSucursalCod = "";
-            mstrSucursalDes = "";
-            mstrSucursalEsp = "";
-            mlngEstadoId = 0;
+            VM = new clsSucursalVM();
+            VM.SucursalId = 0;
+            VM.SucursalCod = "";
+            VM.SucursalDes = "";
+            VM.SucursalEsp = "";
+            VM.EstadoId = 0;
         }
 
         protected override void SetPrimaryKey()
         {
-            mlngSucursalId = mlngId;
+            VM.SucursalId = mlngId;
         }
 
         protected override void SelectParameter()
         {
-            Array.Resize(ref moParameters, 3);
-            moParameters[0] = new SqlParameter("@SelectFilter", mintSelectFilter);
-            moParameters[1] = new SqlParameter("@WhereFilter", mintWhereFilter);
-            moParameters[2] = new SqlParameter("@OrderByFilter", mintOrderByFilter);
+            string strSQL = null;
+
+            mstrStoreProcName = "ctbSucursalSelect";
 
             switch (mintSelectFilter)
             {
                 case SelectFilters.All:
-                    mstrStoreProcName = "ctbSucursalSelect";
+                    strSQL = " SELECT  " +
+                           "    ctbSucursal.SucursalId, " +
+                           "    ctbSucursal.SucursalCod, " +
+                           "    ctbSucursal.SucursalDes, " +
+                           "    ctbSucursal.SucursalEsp, " +
+                           "    ctbSucursal.EstadoId " +
+                           " FROM ctbSucursal ";
                     break;
 
                 case SelectFilters.RowCount:
-                    mstrStoreProcName = "ctbSucursalSelect";
                     break;
 
                 case SelectFilters.ListBox:
-                    mstrStoreProcName = "ctbSucursalSelect";
+                    strSQL = " SELECT  " +
+                           "    ctbSucursal.SucursalId, " +
+                           "    ctbSucursal.SucursalCod, " +
+                           "    ctbSucursal.SucursalDes " +
+                           " FROM ctbSucursal ";
                     break;
 
                 case SelectFilters.Grid:
-                    mstrStoreProcName = "ctbSucursalSelect";
+                    strSQL = " SELECT  " +
+                           "    ctbSucursal.SucursalId, " +
+                           "    ctbSucursal.SucursalCod, " +
+                           "    ctbSucursal.SucursalDes, " +
+                           "    ctbSucursal.SucursalEsp, " +
+                           "    ctbSucursal.EstadoId, " +
+                           "    parEstado.EstadoDes " +
+                           " FROM ctbSucursal " +
+                           "    LEFT JOIN	parEstado ON ctbSucursal.EstadoId = parEstado.EstadoId   ";
                     break;
 
                 case SelectFilters.GridCheck:
                     break;
             }
 
-            WhereParameter();
 
-            //Call OrderByParameter()
+            strSQL += WhereFilterGet() + OrderByFilterGet();
+
+            Array.Resize(ref moParameters, 1);
+            moParameters[0] = new SqlParameter("SQL", strSQL);
         }
 
-        private void WhereParameter()
+
+        private string WhereFilterGet()
         {
+            string strSQL = null;
+
             switch (mintWhereFilter)
             {
                 case WhereFilters.None:
-                    Array.Resize(ref moParameters, moParameters.Length + 3);
-                    moParameters[3] = new SqlParameter("@SucursalId", Convert.ToInt32(0));
-                    moParameters[4] = new SqlParameter("@SucursalCod", Convert.ToString(""));
-                    moParameters[5] = new SqlParameter("@EstadoId", Convert.ToInt32(0));
                     break;
 
                 case WhereFilters.PrimaryKey:
-                    Array.Resize(ref moParameters, moParameters.Length + 3);
-                    moParameters[3] = new SqlParameter("@SucursalId", mlngSucursalId);
-                    moParameters[4] = new SqlParameter("@SucursalCod", Convert.ToString(""));
-                    moParameters[5] = new SqlParameter("@EstadoId", Convert.ToInt32(0));
+                    strSQL = " WHERE ctbSucursal.SucursalId = " + SysData.NumberToField(VM.SucursalId);
                     break;
 
                 case WhereFilters.SucursalDes:
+                    strSQL = " WHERE ctbSucursal.SucursalDes = " + SysData.StringToField(VM.SucursalDes);
                     break;
-                //strSQL = " WHERE  ctbSucursal.SucursalDes = " & StringToField(mstrSucursalDes)
 
                 case WhereFilters.Grid:
-                    Array.Resize(ref moParameters, moParameters.Length + 3);
-                    moParameters[3] = new SqlParameter("@SucursalId", Convert.ToInt32(0));
-                    moParameters[4] = new SqlParameter("@SucursalCod", Convert.ToString(""));
-                    moParameters[5] = new SqlParameter("@EstadoId", Convert.ToInt32(0));
+                   
                     break;
 
                 case WhereFilters.SucursalCod:
+                    strSQL = " WHERE ctbSucursal.SucursalCod = " + SysData.StringToField(VM.SucursalCod);
                     break;
 
                 case WhereFilters.GridCheck:
                     break;
             }
+
+            return strSQL;
+        }
+
+
+        private string OrderByFilterGet()
+        {
+            string strSQL = null;
+
+            switch (mintOrderByFilter)
+            {
+                case OrderByFilters.None:
+                    break;
+                case OrderByFilters.SucursalId:
+                    strSQL = " ORDER BY ctbSucursal.SucursalId ";
+                    break;
+                case OrderByFilters.SucursalDes:
+                    strSQL = " ORDER BY ctbSucursal.SucursalDes ";
+                    break;
+                case OrderByFilters.Grid:
+                    strSQL = " ORDER BY ctbSucursal.SucursalDes ";
+                    break;
+                case OrderByFilters.GridCheck:
+                    break;
+            }
+
+            return strSQL;
         }
 
         protected override void InsertParameter()
@@ -393,10 +349,10 @@ namespace Contabilidad.Models.DAC
                     moParameters = new SqlParameter[6] {
                         new SqlParameter("@InsertFilter", mintInsertFilter),
                         new SqlParameter("@Id", SqlDbType.Int),
-                        new SqlParameter("@SucursalCod", mstrSucursalCod),
-                        new SqlParameter("@SucursalDes", mstrSucursalDes),
-                        new SqlParameter("@SucursalEsp", mstrSucursalEsp),
-                        new SqlParameter("@EstadoId", mlngEstadoId)};
+                        new SqlParameter(clsSucursalVM._SucursalCod, VM.SucursalCod),
+                        new SqlParameter(clsSucursalVM._SucursalDes, VM.SucursalDes),
+                        new SqlParameter(clsSucursalVM._SucursalEsp, VM.SucursalEsp),
+                        new SqlParameter(clsSucursalVM._EstadoId, VM.EstadoId)};
                     moParameters[1].Direction = ParameterDirection.Output;
                     break;
             }
@@ -410,11 +366,11 @@ namespace Contabilidad.Models.DAC
                     mstrStoreProcName = "ctbSucursalUpdate";
                     moParameters = new SqlParameter[6] {
                         new SqlParameter("@UpdateFilter", mintUpdateFilter),
-                        new SqlParameter("@SucursalId", mlngSucursalId),
-                        new SqlParameter("@SucursalCod", mstrSucursalCod),
-                        new SqlParameter("@SucursalDes", mstrSucursalDes),
-                        new SqlParameter("@SucursalEsp", mstrSucursalEsp),
-                        new SqlParameter("@EstadoId", mlngEstadoId)};
+                        new SqlParameter(clsSucursalVM._SucursalId, VM.SucursalId),
+                        new SqlParameter(clsSucursalVM._SucursalCod, VM.SucursalCod),
+                        new SqlParameter(clsSucursalVM._SucursalDes, VM.SucursalDes),
+                        new SqlParameter(clsSucursalVM._SucursalEsp, VM.SucursalEsp),
+                        new SqlParameter(clsSucursalVM._EstadoId, VM.EstadoId)};
                     break;
             }
         }
@@ -427,7 +383,7 @@ namespace Contabilidad.Models.DAC
                     mstrStoreProcName = "ctbSucursalDelete";
                     moParameters = new SqlParameter[2] {
                         new SqlParameter("@DeleteFilter", mintDeleteFilter),
-                        new SqlParameter("@SucursalId", mlngSucursalId)};
+                        new SqlParameter(clsSucursalVM._SucursalId, VM.SucursalId)};
                     break;
             }
         }
@@ -441,17 +397,17 @@ namespace Contabilidad.Models.DAC
                 switch (mintSelectFilter)
                 {
                     case SelectFilters.All:
-                        mlngSucursalId = SysData.ToLong(oDataRow["SucursalId"]);
-                        mstrSucursalCod = SysData.ToStr(oDataRow["SucursalCod"]);
-                        mstrSucursalDes = SysData.ToStr(oDataRow["SucursalDes"]);
-                        mstrSucursalEsp = SysData.ToStr(oDataRow["SucursalEsp"]);
-                        mlngEstadoId = SysData.ToLong(oDataRow["EstadoId"]);
+                        VM.SucursalId = SysData.ToLong(oDataRow[clsSucursalVM._SucursalId]);
+                        VM.SucursalCod = SysData.ToStr(oDataRow[clsSucursalVM._SucursalCod]);
+                        VM.SucursalDes = SysData.ToStr(oDataRow[clsSucursalVM._SucursalDes]);
+                        VM.SucursalEsp = SysData.ToStr(oDataRow[clsSucursalVM._SucursalEsp]);
+                        VM.EstadoId = SysData.ToLong(oDataRow[clsSucursalVM._EstadoId]);
                         break;
 
                     case SelectFilters.ListBox:
-                        mlngSucursalId = SysData.ToLong(oDataRow["SucursalId"]);
-                        mstrSucursalCod = SysData.ToStr(oDataRow["SucursalCod"]);
-                        mstrSucursalDes = SysData.ToStr(oDataRow["SucursalDes"]);
+                        VM.SucursalId = SysData.ToLong(oDataRow[clsSucursalVM._SucursalId]);
+                        VM.SucursalCod = SysData.ToStr(oDataRow[clsSucursalVM._SucursalCod]);
+                        VM.SucursalDes = SysData.ToStr(oDataRow[clsSucursalVM._SucursalDes]);
                         break;
                 }
             }
@@ -467,12 +423,12 @@ namespace Contabilidad.Models.DAC
             bool returnValue = false;
             string strMsg = string.Empty;
 
-            if (mstrSucursalCod.Length == 0)
+            if (VM.SucursalCod.Length == 0)
             {
                 strMsg += "Código es Requerido" + Environment.NewLine;
             }
 
-            if (mstrSucursalDes.Length == 0)
+            if (VM.SucursalDes.Length == 0)
             {
                 strMsg += "Descipción del Tipo Usuario es Requerido" + Environment.NewLine;
             }

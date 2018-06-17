@@ -268,8 +268,8 @@ namespace Contabilidad.Models.DAC
                         "    parTipoPersona.EstadoId, " +
                         "    parEstado.EstadoDes " +
                         " FROM  parTipoPersona " +
-               "  LEFT JOIN	parTipoRelacion	ON parTipoPersona.TipoRelacionId = parTipoRelacion.TipoRelacionId " +
-               "  LEFT JOIN	parEstado ON parTipoPersona.EstadoId = parEstado.EstadoId ";
+                        "     LEFT JOIN	parTipoRelacion	ON parTipoPersona.TipoRelacionId = parTipoRelacion.TipoRelacionId " +
+                        "    LEFT JOIN	parEstado ON parTipoPersona.EstadoId = parEstado.EstadoId ";
                break;
 
             case SelectFilters.GridCheck:

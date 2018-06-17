@@ -1,69 +1,13 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Data;
+using Contabilidad.Models.VM;
 
 namespace Contabilidad.Models.DAC
 {
     public class clsTipoAmbito : clsBase, IDisposable
     {
-        private long mlngTipoAmbitoId;
-        private string mstrTipoAmbitoDes;
-        private long mlngEstadoId;
-
-        //******************************************************
-        // Private Data To Match the Table Definition
-        //******************************************************
-        public long TipoAmbitoId
-        {
-            get
-            {
-                return mlngTipoAmbitoId;
-            }
-
-            set
-            {
-                mlngTipoAmbitoId = value;
-            }
-        }
-
-        public string TipoAmbitoDes
-        {
-            get
-            {
-                return mstrTipoAmbitoDes;
-            }
-
-            set
-            {
-                mstrTipoAmbitoDes = value;
-            }
-        }
-
-        public long EstadoId
-        {
-            get
-            {
-                return mlngEstadoId;
-            }
-
-            set
-            {
-                mlngEstadoId = value;
-            }
-        }
-
-        public long Id
-        {
-            get
-            {
-                return mlngId;
-            }
-
-            set
-            {
-                mlngId = value;
-            }
-        }
+        public clsTipoAmbitoVM VM;
 
         //******************************************************
         //* The following enumerations will change for each
@@ -273,80 +217,115 @@ namespace Contabilidad.Models.DAC
 
         public void PropertyInit()
         {
-            mlngTipoAmbitoId = 0;
-            mstrTipoAmbitoDes = "";
-            mlngEstadoId = 0;
+            VM = new clsTipoAmbitoVM();
+            VM.TipoAmbitoId = 0;
+            VM.TipoAmbitoDes = "";
+            VM.EstadoId = 0;
         }
 
         protected override void SetPrimaryKey()
         {
-            mlngTipoAmbitoId = mlngId;
+            VM.TipoAmbitoId = mlngId;
         }
 
         protected override void SelectParameter()
         {
-            Array.Resize(ref moParameters, 3);
-            moParameters[0] = new SqlParameter("@SelectFilter", mintSelectFilter);
-            moParameters[1] = new SqlParameter("@WhereFilter", mintWhereFilter);
-            moParameters[2] = new SqlParameter("@OrderByFilter", mintOrderByFilter);
+            string strSQL = null;
+
+            mstrStoreProcName = "ctbTipoAmbitoSelect";
 
             switch (mintSelectFilter)
             {
                 case SelectFilters.All:
-                    mstrStoreProcName = "ctbTipoAmbitoSelect";
+                    strSQL = " SELECT  " +
+                          "    ctbTipoAmbito.TipoAmbitoId, " +
+                          "    ctbTipoAmbito.TipoAmbitoDes, " +
+                          "    ctbTipoAmbito.EstadoId " +
+                          " FROM ctbTipoAmbito ";
                     break;
 
                 case SelectFilters.RowCount:
-                    mstrStoreProcName = "ctbTipoAmbitoSelect";
                     break;
 
                 case SelectFilters.ListBox:
-                    mstrStoreProcName = "ctbTipoAmbitoSelect";
+                    strSQL = " SELECT  " +
+                          "    ctbTipoAmbito.TipoAmbitoId, " +
+                          "    ctbTipoAmbito.TipoAmbitoDes " +
+                          " FROM ctbTipoAmbito ";
                     break;
 
                 case SelectFilters.Grid:
-                    mstrStoreProcName = "ctbTipoAmbitoSelect";
+                    strSQL = " SELECT  " +
+                          "    ctbTipoAmbito.TipoAmbitoId, " +
+                          "    ctbTipoAmbito.TipoAmbitoDes, " +
+                          "    ctbTipoAmbito.EstadoId, " +
+                          "    parEstado.EstadoDes " +
+                          " FROM ctbTipoAmbito " +
+                          "    LEFT JOIN	parEstado ON ctbTipoAmbito.EstadoId = parEstado.EstadoId ";
                     break;
 
                 case SelectFilters.GridCheck:
                     break;
             }
+            strSQL += WhereFilterGet() + OrderByFilterGet();
 
-            WhereParameter();
-
-            //Call OrderByParameter()
+            Array.Resize(ref moParameters, 1);
+            moParameters[0] = new SqlParameter("SQL", strSQL);
         }
 
-        private void WhereParameter()
+        private string WhereFilterGet()
         {
+            string strSQL = null;
+
             switch (mintWhereFilter)
             {
                 case WhereFilters.PrimaryKey:
-                    Array.Resize(ref moParameters, moParameters.Length + 2);
-                    moParameters[3] = new SqlParameter("@TipoAmbitoId", mlngTipoAmbitoId);
-                    moParameters[4] = new SqlParameter("@EstadoId", Convert.ToInt32(0));
+                    strSQL = " WHERE ctbTipoAmbito.TipoAmbitoId = " + SysData.NumberToField(VM.TipoAmbitoId);
                     break;
 
                 case WhereFilters.TipoAmbitoDes:
+                    strSQL = " WHERE ctbTipoAmbito.TipoAmbitoDes = " + SysData.StringToField(VM.TipoAmbitoDes);
                     break;
-                //strSQL = " WHERE  ctbTipoAmbito.TipoAmbitoDes = " & StringToField(mstrTipoAmbitoDes)
 
                 case WhereFilters.Grid:
-                    Array.Resize(ref moParameters, moParameters.Length + 2);
-                    moParameters[3] = new SqlParameter("@TipoAmbitoId", Convert.ToInt32(0));
-                    moParameters[4] = new SqlParameter("@EstadoId", Convert.ToInt32(0));
                     break;
 
                 case WhereFilters.GridCheck:
                     break;
 
                 case WhereFilters.EstadoId:
-                    Array.Resize(ref moParameters, moParameters.Length + 2);
-                    moParameters[3] = new SqlParameter("@TipoAmbitoId", Convert.ToInt32(0));
-                    moParameters[4] = new SqlParameter("@EstadoId", mlngEstadoId);
+                    strSQL = " WHERE ctbTipoAmbito.EstadoId = " + SysData.NumberToField(VM.EstadoId);
                     break;
             }
+
+            return strSQL;
         }
+
+
+        private string OrderByFilterGet()
+        {
+            string strSQL = null;
+
+            switch (mintOrderByFilter)
+            {
+                case OrderByFilters.None:
+                    break;
+                case OrderByFilters.TipoAmbitoId:
+                    strSQL = " ORDER BY ctbTipoAmbito.TipoAmbitoId ";
+                    break;
+                case OrderByFilters.TipoAmbitoDes:
+                    strSQL = " ORDER BY ctbTipoAmbito.TipoAmbitoDes ";
+                    break;
+                case OrderByFilters.Grid:
+                    strSQL = " ORDER BY ctbTipoAmbito.TipoAmbitoDes ";
+                    break;
+                case OrderByFilters.GridCheck:
+                    break;
+            }
+
+            return strSQL;
+        }
+
 
         protected override void InsertParameter()
         {
@@ -357,8 +336,8 @@ namespace Contabilidad.Models.DAC
                     moParameters = new SqlParameter[4] {
                         new SqlParameter("@InsertFilter", mintInsertFilter),
                         new SqlParameter("@Id", SqlDbType.Int),
-                        new SqlParameter("@TipoAmbitoDes", mstrTipoAmbitoDes),
-                        new SqlParameter("@EstadoId", mlngEstadoId)};
+                        new SqlParameter(clsTipoAmbitoVM._TipoAmbitoDes, VM.TipoAmbitoDes),
+                        new SqlParameter(clsTipoAmbitoVM._EstadoId, VM.EstadoId)};
                     moParameters[1].Direction = ParameterDirection.Output;
                     break;
             }
@@ -372,9 +351,9 @@ namespace Contabilidad.Models.DAC
                     mstrStoreProcName = "ctbTipoAmbitoUpdate";
                     moParameters = new SqlParameter[4] {
                         new SqlParameter("@UpdateFilter", mintUpdateFilter),
-                        new SqlParameter("@TipoAmbitoId", mlngTipoAmbitoId),
-                        new SqlParameter("@TipoAmbitoDes", mstrTipoAmbitoDes),
-                        new SqlParameter("@EstadoId", mlngEstadoId)};
+                        new SqlParameter(clsTipoAmbitoVM._TipoAmbitoId, VM.TipoAmbitoId),
+                        new SqlParameter(clsTipoAmbitoVM._TipoAmbitoDes, VM.TipoAmbitoDes),
+                        new SqlParameter(clsTipoAmbitoVM._EstadoId, VM.EstadoId)};
                     break;
             }
         }
@@ -387,7 +366,7 @@ namespace Contabilidad.Models.DAC
                     mstrStoreProcName = "ctbTipoAmbitoDelete";
                     moParameters = new SqlParameter[2] {
                         new SqlParameter("@DeleteFilter", mintDeleteFilter),
-                        new SqlParameter("@TipoAmbitoId", mlngTipoAmbitoId)};
+                        new SqlParameter(clsTipoAmbitoVM._TipoAmbitoId, VM.TipoAmbitoId)};
                     break;
             }
         }
@@ -401,14 +380,14 @@ namespace Contabilidad.Models.DAC
                 switch (mintSelectFilter)
                 {
                     case SelectFilters.All:
-                        mlngTipoAmbitoId = SysData.ToLong(oDataRow["TipoAmbitoId"]);
-                        mstrTipoAmbitoDes = SysData.ToStr(oDataRow["TipoAmbitoDes"]);
-                        mlngEstadoId = SysData.ToLong(oDataRow["EstadoId"]);
+                        VM.TipoAmbitoId = SysData.ToLong(oDataRow[clsTipoAmbitoVM._TipoAmbitoId]);
+                        VM.TipoAmbitoDes = SysData.ToStr(oDataRow[clsTipoAmbitoVM._TipoAmbitoDes]);
+                        VM.EstadoId = SysData.ToLong(oDataRow[clsTipoAmbitoVM._EstadoId]);
                         break;
 
                     case SelectFilters.ListBox:
-                        mlngTipoAmbitoId = SysData.ToLong(oDataRow["TipoAmbitoId"]);
-                        mstrTipoAmbitoDes = SysData.ToStr(oDataRow["TipoAmbitoDes"]);
+                        VM.TipoAmbitoId = SysData.ToLong(oDataRow[clsTipoAmbitoVM._TipoAmbitoId]);
+                        VM.TipoAmbitoDes = SysData.ToStr(oDataRow[clsTipoAmbitoVM._TipoAmbitoDes]);
                         break;
                 }
             }
@@ -424,7 +403,7 @@ namespace Contabilidad.Models.DAC
             bool returnValue = false;
             string strMsg = string.Empty;
 
-            if (mstrTipoAmbitoDes.Length == 0)
+            if (VM.TipoAmbitoDes.Length == 0)
             {
                 strMsg += "Descipción del Tipo Usuario es Requerido" + Environment.NewLine;
             }

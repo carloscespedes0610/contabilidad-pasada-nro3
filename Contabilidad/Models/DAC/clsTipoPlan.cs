@@ -1,69 +1,13 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Data;
+using Contabilidad.Models.VM;
 
 namespace Contabilidad.Models.DAC
 {
     public class clsTipoPlan : clsBase, IDisposable
     {
-        private long mlngTipoPlanId;
-        private string mstrTipoPlanDes;
-        private long mlngEstadoId;
-
-        //******************************************************
-        // Private Data To Match the Table Definition
-        //******************************************************
-        public long TipoPlanId
-        {
-            get
-            {
-                return mlngTipoPlanId;
-            }
-
-            set
-            {
-                mlngTipoPlanId = value;
-            }
-        }
-
-        public string TipoPlanDes
-        {
-            get
-            {
-                return mstrTipoPlanDes;
-            }
-
-            set
-            {
-                mstrTipoPlanDes = value;
-            }
-        }
-
-        public long EstadoId
-        {
-            get
-            {
-                return mlngEstadoId;
-            }
-
-            set
-            {
-                mlngEstadoId = value;
-            }
-        }
-
-        public long Id
-        {
-            get
-            {
-                return mlngId;
-            }
-
-            set
-            {
-                mlngId = value;
-            }
-        }
+        public clsTipoPlanVM VM;
 
         //******************************************************
         //* The following enumerations will change for each
@@ -273,80 +217,119 @@ namespace Contabilidad.Models.DAC
 
         public void PropertyInit()
         {
-            mlngTipoPlanId = 0;
-            mstrTipoPlanDes = "";
-            mlngEstadoId = 0;
+            VM = new clsTipoPlanVM();
+            VM.TipoPlanId = 0;
+            VM.TipoPlanDes = "";
+            VM.EstadoId = 0;
         }
 
         protected override void SetPrimaryKey()
         {
-            mlngTipoPlanId = mlngId;
+            VM.TipoPlanId = mlngId;
         }
 
         protected override void SelectParameter()
         {
-            Array.Resize(ref moParameters, 3);
-            moParameters[0] = new SqlParameter("@SelectFilter", mintSelectFilter);
-            moParameters[1] = new SqlParameter("@WhereFilter", mintWhereFilter);
-            moParameters[2] = new SqlParameter("@OrderByFilter", mintOrderByFilter);
+            string strSQL = null;
+
+            mstrStoreProcName = "ctbTipoPlanSelect";
 
             switch (mintSelectFilter)
             {
                 case SelectFilters.All:
-                    mstrStoreProcName = "ctbTipoPlanSelect";
+                    strSQL = " SELECT  " +
+                           "    ctbTipoPlan.TipoPlanId, " +
+                           "    ctbTipoPlan.TipoPlanDes, " +
+                           "    ctbTipoPlan.EstadoId " +
+                           " FROM ctbTipoPlan ";
                     break;
 
                 case SelectFilters.RowCount:
-                    mstrStoreProcName = "ctbTipoPlanSelect";
                     break;
 
                 case SelectFilters.ListBox:
-                    mstrStoreProcName = "ctbTipoPlanSelect";
+                    strSQL = " SELECT  " +
+                           "    ctbTipoPlan.TipoPlanId, " +
+                           "    ctbTipoPlan.TipoPlanDes " +
+                           " FROM ctbTipoPlan ";
                     break;
 
                 case SelectFilters.Grid:
-                    mstrStoreProcName = "ctbTipoPlanSelect";
+                    strSQL = " SELECT  " +
+                           "    ctbTipoPlan.TipoPlanId, " +
+                           "    ctbTipoPlan.TipoPlanDes, " +
+                           "    ctbTipoPlan.EstadoId, " +
+                           "    parEstado.EstadoDes " +
+                           " FROM ctbTipoPlan " +
+                           "    LEFT JOIN	parEstado ON ctbTipoPlan.EstadoId = parEstado.EstadoId  ";
                     break;
 
                 case SelectFilters.GridCheck:
                     break;
             }
 
-            WhereParameter();
+            strSQL += WhereFilterGet() + OrderByFilterGet();
 
-            //Call OrderByParameter()
+            Array.Resize(ref moParameters, 1);
+            moParameters[0] = new SqlParameter("SQL", strSQL);
         }
 
-        private void WhereParameter()
+        private string WhereFilterGet()
         {
+            string strSQL = null;
+
             switch (mintWhereFilter)
             {
                 case WhereFilters.PrimaryKey:
-                    Array.Resize(ref moParameters, moParameters.Length + 2);
-                    moParameters[3] = new SqlParameter("@TipoPlanId", mlngTipoPlanId);
-                    moParameters[4] = new SqlParameter("@EstadoId", Convert.ToInt32(0));
+                    strSQL = " WHERE ctbTipoPlan.TipoPlanId = " + SysData.NumberToField(VM.TipoPlanId);
                     break;
 
                 case WhereFilters.TipoPlanDes:
+                    strSQL = " WHERE ctbTipoPlan.TipoPlanDes = " + SysData.StringToField(VM.TipoPlanDes);
                     break;
-                //strSQL = " WHERE  ctbTipoPlan.TipoPlanDes = " & StringToField(mstrTipoPlanDes)
 
                 case WhereFilters.Grid:
-                    Array.Resize(ref moParameters, moParameters.Length + 2);
-                    moParameters[3] = new SqlParameter("@TipoPlanId", Convert.ToInt32(0));
-                    moParameters[4] = new SqlParameter("@EstadoId", Convert.ToInt32(0));
+                    
                     break;
 
                 case WhereFilters.GridCheck:
                     break;
 
                 case WhereFilters.EstadoId:
-                    Array.Resize(ref moParameters, moParameters.Length + 2);
-                    moParameters[3] = new SqlParameter("@TipoPlanId", Convert.ToInt32(0));
-                    moParameters[4] = new SqlParameter("@EstadoId", mlngEstadoId);
+                    strSQL = " WHERE ctbTipoPlan.EstadoId = " + SysData.NumberToField(VM.EstadoId);
                     break;
             }
+
+            return strSQL;
         }
+
+
+        private string OrderByFilterGet()
+        {
+            string strSQL = null;
+
+            switch (mintOrderByFilter)
+            {
+                case OrderByFilters.None:
+                    break;
+                case OrderByFilters.TipoPlanId:
+                    strSQL = " ORDER BY ctbTipoPlan.TipoPlanId ";
+                    break;
+                case OrderByFilters.TipoPlanDes:
+                    strSQL = " ORDER BY ctbTipoPlan.TipoPlanDes ";
+                    break;
+                case OrderByFilters.Grid:
+                    strSQL = " ORDER BY ctbTipoPlan.TipoPlanDes ";
+                    break;
+                case OrderByFilters.GridCheck:
+                    break;
+                
+            }
+
+            return strSQL;
+
+        }
+
 
         protected override void InsertParameter()
         {
@@ -357,8 +340,8 @@ namespace Contabilidad.Models.DAC
                     moParameters = new SqlParameter[4] {
                         new SqlParameter("@InsertFilter", mintInsertFilter),
                         new SqlParameter("@Id", SqlDbType.Int),
-                        new SqlParameter("@TipoPlanDes", mstrTipoPlanDes),
-                        new SqlParameter("@EstadoId", mlngEstadoId)};
+                        new SqlParameter(clsTipoPlanVM._TipoPlanDes, VM.TipoPlanDes),
+                        new SqlParameter(clsTipoPlanVM._EstadoId, VM.EstadoId)};
                     moParameters[1].Direction = ParameterDirection.Output;
                     break;
             }
@@ -372,9 +355,9 @@ namespace Contabilidad.Models.DAC
                     mstrStoreProcName = "ctbTipoPlanUpdate";
                     moParameters = new SqlParameter[4] {
                         new SqlParameter("@UpdateFilter", mintUpdateFilter),
-                        new SqlParameter("@TipoPlanId", mlngTipoPlanId),
-                        new SqlParameter("@TipoPlanDes", mstrTipoPlanDes),
-                        new SqlParameter("@EstadoId", mlngEstadoId)};
+                        new SqlParameter(clsTipoPlanVM._TipoPlanId, VM.TipoPlanId),
+                        new SqlParameter(clsTipoPlanVM._TipoPlanDes, VM.TipoPlanDes),
+                        new SqlParameter(clsTipoPlanVM._EstadoId, VM.EstadoId)};
                     break;
             }
         }
@@ -387,7 +370,7 @@ namespace Contabilidad.Models.DAC
                     mstrStoreProcName = "ctbTipoPlanDelete";
                     moParameters = new SqlParameter[2] {
                         new SqlParameter("@DeleteFilter", mintDeleteFilter),
-                        new SqlParameter("@TipoPlanId", mlngTipoPlanId)};
+                        new SqlParameter(clsTipoPlanVM._TipoPlanId, VM.TipoPlanId)};
                     break;
             }
         }
@@ -401,14 +384,14 @@ namespace Contabilidad.Models.DAC
                 switch (mintSelectFilter)
                 {
                     case SelectFilters.All:
-                        mlngTipoPlanId = SysData.ToLong(oDataRow["TipoPlanId"]);
-                        mstrTipoPlanDes = SysData.ToStr(oDataRow["TipoPlanDes"]);
-                        mlngEstadoId = SysData.ToLong(oDataRow["EstadoId"]);
+                        VM.TipoPlanId = SysData.ToLong(oDataRow[clsTipoPlanVM._TipoPlanId]);
+                        VM.TipoPlanDes = SysData.ToStr(oDataRow[clsTipoPlanVM._TipoPlanDes]);
+                        VM.EstadoId = SysData.ToLong(oDataRow[clsTipoPlanVM._EstadoId]);
                         break;
 
                     case SelectFilters.ListBox:
-                        mlngTipoPlanId = SysData.ToLong(oDataRow["TipoPlanId"]);
-                        mstrTipoPlanDes = SysData.ToStr(oDataRow["TipoPlanDes"]);
+                        VM.TipoPlanId = SysData.ToLong(oDataRow[clsTipoPlanVM._TipoPlanId]);
+                        VM.TipoPlanDes = SysData.ToStr(oDataRow[clsTipoPlanVM._TipoPlanDes]);
                         break;
                 }
             }
@@ -424,7 +407,7 @@ namespace Contabilidad.Models.DAC
             bool returnValue = false;
             string strMsg = string.Empty;
 
-            if (mstrTipoPlanDes.Length == 0)
+            if (VM.TipoPlanDes.Length == 0)
             {
                 strMsg += "Descipción del Tipo Usuario es Requerido" + Environment.NewLine;
             }

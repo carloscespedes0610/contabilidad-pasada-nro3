@@ -265,7 +265,8 @@ namespace Contabilidad.Models.DAC
                            "    ctbCenCosGrupo.CenCosGrupoEsp, " +
                            "    parEstado.EstadoId, " +
                            "    parEstado.EstadoDes " +
-                           " FROM ctbCenCosGrupo ";
+                           " FROM ctbCenCosGrupo " +
+                           "    LEFT JOIN parEstado ON ctbCenCosGrupo.EstadoId = parEstado.EstadoId ";
                     break;
 
                 case SelectFilters.GridCheck:
@@ -292,7 +293,6 @@ namespace Contabilidad.Models.DAC
                     break;
 
                 case WhereFilters.Grid:
-                    strSQL = " LEFT JOIN parEstado ON ctbCenCosGrupo.EstadoId = parEstado.EstadoId ";
                     break;
 
                 case WhereFilters.CenCosGrupoCod:

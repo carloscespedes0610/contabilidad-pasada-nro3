@@ -1,209 +1,13 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Data;
+using Contabilidad.Models.VM;
 
 namespace Contabilidad.Models.DAC
 {
     public class clsPlan : clsBase, IDisposable
     {
-        private long mlngPlanId;
-        private string mstrPlanCod;
-        private string mstrPlanDes;
-        private string mstrPlanEsp;
-        private long mlngTipoPlanId;
-        private long mlngOrden;
-        private long mlngNivel;
-        private long mlngMonedaId;
-        private long mlngTipoAmbitoId;
-        private long mlngPlanAjusteId;
-        private long mlngCapituloId;
-        private long mlngPlanPadreId;
-        private long mlngEstadoId;
-
-        //******************************************************
-        // Private Data To Match the Table Definition
-        //******************************************************
-        public long PlanId
-        {
-            get
-            {
-                return mlngPlanId;
-            }
-
-            set
-            {
-                mlngPlanId = value;
-            }
-        }
-
-        public string PlanCod
-        {
-            get
-            {
-                return mstrPlanCod;
-            }
-
-            set
-            {
-                mstrPlanCod = value;
-            }
-        }
-
-        public string PlanDes
-        {
-            get
-            {
-                return mstrPlanDes;
-            }
-
-            set
-            {
-                mstrPlanDes = value;
-            }
-        }
-
-        public string PlanEsp
-        {
-            get
-            {
-                return mstrPlanEsp;
-            }
-
-            set
-            {
-                mstrPlanEsp = value;
-            }
-        }
-
-        public long TipoPlanId
-        {
-            get
-            {
-                return mlngTipoPlanId;
-            }
-
-            set
-            {
-                mlngTipoPlanId = value;
-            }
-        }
-
-        public long Orden
-        {
-            get
-            {
-                return mlngOrden;
-            }
-
-            set
-            {
-                mlngOrden = value;
-            }
-        }
-
-        public long Nivel
-        {
-            get
-            {
-                return mlngNivel;
-            }
-
-            set
-            {
-                mlngNivel = value;
-            }
-        }
-
-        public long MonedaId
-        {
-            get
-            {
-                return mlngMonedaId;
-            }
-
-            set
-            {
-                mlngMonedaId = value;
-            }
-        }
-
-        public long TipoAmbitoId
-        {
-            get
-            {
-                return mlngTipoAmbitoId;
-            }
-
-            set
-            {
-                mlngTipoAmbitoId = value;
-            }
-        }
-
-        public long PlanAjusteId
-        {
-            get
-            {
-                return mlngPlanAjusteId;
-            }
-
-            set
-            {
-                mlngPlanAjusteId = value;
-            }
-        }
-
-        public long CapituloId
-        {
-            get
-            {
-                return mlngCapituloId;
-            }
-
-            set
-            {
-                mlngCapituloId = value;
-            }
-        }
-
-        public long PlanPadreId
-        {
-            get
-            {
-                return mlngPlanPadreId;
-            }
-
-            set
-            {
-                mlngPlanPadreId = value;
-            }
-        }
-
-        public long EstadoId
-        {
-            get
-            {
-                return mlngEstadoId;
-            }
-
-            set
-            {
-                mlngEstadoId = value;
-            }
-        }
-
-        public long Id
-        {
-            get
-            {
-                return mlngId;
-            }
-
-            set
-            {
-                mlngId = value;
-            }
-        }
+        public clsPlanVM VM;
 
         //******************************************************
         //* The following enumerations will change for each
@@ -226,11 +30,10 @@ namespace Contabilidad.Models.DAC
             Grid = 3,
             GridCheck = 4,
             PlanCod = 5,
-            Grid_PlanPadreId = 6,
-            PlanPadreId = 7,
-            PlanHijo_MaxOrden = 8,
-            EstadoId = 9,
-            TipoPlanId = 10
+            PlanPadreId = 6,
+            EstadoId = 7,
+            TipoPlanId = 8,
+            PlanHijoMAXorden = 9
         }
 
         public enum OrderByFilters : byte
@@ -239,7 +42,8 @@ namespace Contabilidad.Models.DAC
             PlanId = 1,
             PlanDes = 2,
             Grid = 3,
-            GridCheck = 4
+            GridCheck = 4,
+            Orden = 5
         }
 
         public enum InsertFilters : byte
@@ -418,137 +222,169 @@ namespace Contabilidad.Models.DAC
 
         public void PropertyInit()
         {
-            mlngPlanId = 0;
-            mstrPlanCod = "";
-            mstrPlanDes = "";
-            mstrPlanEsp = "";
-            mlngTipoPlanId = 0;
-            mlngOrden = 0;
-            mlngNivel = 0;
-            mlngMonedaId = 0;
-            mlngTipoAmbitoId = 0;
-            mlngPlanAjusteId = 0;
-            mlngCapituloId = 0;
-            mlngPlanPadreId = 0;
-            mlngEstadoId = 0;
+            VM = new clsPlanVM();
+
+            VM.PlanId = 0;
+            VM.PlanCod = "";
+            VM.PlanDes = "";
+            VM.PlanEsp = "";
+            VM.TipoPlanId = 0;
+            VM.Orden = 0;
+            VM.Nivel = 0;
+            VM.MonedaId = 0;
+            VM.TipoAmbitoId = 0;
+            VM.PlanAjusteId = 0;
+            VM.CapituloId = 0;
+            VM.PlanPadreId = 0;
+            VM.EstadoId = 0;
         }
 
         protected override void SetPrimaryKey()
         {
-            mlngPlanId = mlngId;
+            VM.PlanId = mlngId;
         }
 
         protected override void SelectParameter()
         {
-            Array.Resize(ref moParameters, 3);
-            moParameters[0] = new SqlParameter("@SelectFilter", mintSelectFilter);
-            moParameters[1] = new SqlParameter("@WhereFilter", mintWhereFilter);
-            moParameters[2] = new SqlParameter("@OrderByFilter", mintOrderByFilter);
+            string strSQL = null;
+
+            mstrStoreProcName = "ctbPlanSelect";
 
             switch (mintSelectFilter)
             {
                 case SelectFilters.All:
-                    mstrStoreProcName = "ctbPlanSelect";
+                    strSQL = " SELECT  " +
+                           "    ctbPlan.PlanId, " +
+                           "    ctbPlan.PlanCod, " +
+                           "    ctbPlan.PlanDes, " +
+                           "    ctbPlan.PlanEsp, " +
+                           "    ctbPlan.TipoPlanId, " +
+                           "    ctbPlan.Orden, " +
+                           "    ctbPlan.Nivel, " +
+                           "    ctbPlan.MonedaId, " +
+                           "    ctbPlan.TipoAmbitoId, " +
+                           "    ctbPlan.PlanAjusteId, " +
+                           "    ctbPlan.CapituloId, " +
+                           "    ctbPlan.PlanPadreId, " +
+                           "    ctbPlan.EstadoId " +
+                           " FROM ctbPlan ";
                     break;
 
                 case SelectFilters.RowCount:
-                    mstrStoreProcName = "ctbPlanSelect";
                     break;
 
                 case SelectFilters.ListBox:
-                    mstrStoreProcName = "ctbPlanSelect";
+                    strSQL = " SELECT  " +
+                           "    ctbPlan.PlanId, " +
+                           "    ctbPlan.PlanCod, " +
+                           "    ctbPlan.PlanDes " +
+                           " FROM ctbPlan ";
                     break;
 
                 case SelectFilters.Grid:
-                    mstrStoreProcName = "ctbPlanSelect";
+                    strSQL = " SELECT  " +
+                          "    ctbPlan.PlanId, " +
+                          "    ctbPlan.PlanCod, " +
+                          "    ctbPlan.PlanDes, " +
+                          "    ctbTipoPlan.TipoPlanId, " +
+                          "    ctbTipoPlan.TipoPlanDes, " +
+                          "    ctbPlan.Orden, " +
+                          "    ctbPlan.Nivel, " +
+                          "    ctbPlan.MonedaId, " +
+                          "    parMoneda.MonedaDes, " +
+                          "    ctbPlan.CapituloId, " +
+                          "    ctbPlan.PlanPadreId, " +
+                          "    ctbPlan.EstadoId, " +
+                          "    parEstado.EstadoDes " +
+                          " FROM ctbPlan "+
+                          "    LEFT JOIN	ctbTipoPlan		ON ctbPlan.TipoPlanId = ctbTipoPlan.TipoPlanId  " +
+                          "    LEFT JOIN	parMoneda		ON ctbPlan.MonedaId = parMoneda.MonedaId  " +
+                          "    LEFT JOIN	parEstado		ON ctbPlan.EstadoId = parEstado.EstadoId   ";
                     break;
 
-                case SelectFilters.GridCheck:
-                    break;
             }
 
-            WhereParameter();
+            strSQL += WhereFilterGet() + OrderByFilterGet();
 
-            //Call OrderByParameter()
+            Array.Resize(ref moParameters, 1);
+            moParameters[0] = new SqlParameter("SQL", strSQL);
         }
 
-        private void WhereParameter()
+        
+
+        private string WhereFilterGet()
         {
+            string strSQL = null;
+
             switch (mintWhereFilter)
             {
                 case WhereFilters.PrimaryKey:
-                    Array.Resize(ref moParameters, moParameters.Length + 5);
-                    moParameters[3] = new SqlParameter("@PlanId", mlngPlanId);
-                    moParameters[4] = new SqlParameter("@PlanCod", Convert.ToString(""));
-                    moParameters[5] = new SqlParameter("@PlanPadreId", Convert.ToInt32(0));
-                    moParameters[6] = new SqlParameter("@TipoPlanId", Convert.ToInt32(0));
-                    moParameters[7] = new SqlParameter("@EstadoId", Convert.ToInt32(0));
+                    strSQL = " WHERE ctbPlan.PlanId = " + SysData.NumberToField(VM.PlanId);
                     break;
 
                 case WhereFilters.PlanDes:
+                    strSQL = " WHERE ctbPlan.PlanDes = " + SysData.StringToField(VM.PlanDes);
                     break;
-                //strSQL = " WHERE  ctbPlan.PlanDes = " & StringToField(mstrPlanDes)
 
                 case WhereFilters.Grid:
-                    Array.Resize(ref moParameters, moParameters.Length + 5);
-                    moParameters[3] = new SqlParameter("@PlanId", Convert.ToInt32(0));
-                    moParameters[4] = new SqlParameter("@PlanCod", Convert.ToString(""));
-                    moParameters[5] = new SqlParameter("@PlanPadreId", mlngPlanPadreId);
-                    moParameters[6] = new SqlParameter("@TipoPlanId", Convert.ToInt32(0));
-                    moParameters[7] = new SqlParameter("@EstadoId", mlngEstadoId);
                     break;
 
                 case WhereFilters.PlanCod:
+                    strSQL = " WHERE ctbPlan.PlanCod = " + SysData.StringToField(VM.PlanCod);
                     break;
 
                 case WhereFilters.GridCheck:
                     break;
 
-                case WhereFilters.Grid_PlanPadreId:
-                    Array.Resize(ref moParameters, moParameters.Length + 5);
-                    moParameters[3] = new SqlParameter("@PlanId", Convert.ToInt32(0));
-                    moParameters[4] = new SqlParameter("@PlanCod", Convert.ToString(""));
-                    moParameters[5] = new SqlParameter("@PlanPadreId", mlngPlanPadreId);
-                    moParameters[6] = new SqlParameter("@TipoPlanId", Convert.ToInt32(0));
-                    moParameters[7] = new SqlParameter("@EstadoId", Convert.ToInt32(0));
-                    break;
-
                 case WhereFilters.PlanPadreId:
-                    Array.Resize(ref moParameters, moParameters.Length + 5);
-                    moParameters[3] = new SqlParameter("@PlanId", Convert.ToInt32(0));
-                    moParameters[4] = new SqlParameter("@PlanCod", Convert.ToString(""));
-                    moParameters[5] = new SqlParameter("@PlanPadreId", mlngPlanPadreId);
-                    moParameters[6] = new SqlParameter("@TipoPlanId", Convert.ToInt32(0));
-                    moParameters[7] = new SqlParameter("@EstadoId", Convert.ToInt32(0));
-                    break;
-
-                case WhereFilters.PlanHijo_MaxOrden:
-                    Array.Resize(ref moParameters, moParameters.Length + 5);
-                    moParameters[3] = new SqlParameter("@PlanId", Convert.ToInt32(0));
-                    moParameters[4] = new SqlParameter("@PlanCod", Convert.ToString(""));
-                    moParameters[5] = new SqlParameter("@PlanPadreId", mlngPlanPadreId);
-                    moParameters[6] = new SqlParameter("@TipoPlanId", Convert.ToInt32(0));
-                    moParameters[7] = new SqlParameter("@EstadoId", mlngEstadoId);
+                    strSQL = " WHERE ctbPlan.PlanPadreId = " + SysData.NumberToField(VM.PlanPadreId);
                     break;
 
                 case WhereFilters.EstadoId:
-                    Array.Resize(ref moParameters, moParameters.Length + 5);
-                    moParameters[3] = new SqlParameter("@PlanId", Convert.ToInt32(0));
-                    moParameters[4] = new SqlParameter("@PlanCod", Convert.ToString(""));
-                    moParameters[5] = new SqlParameter("@PlanPadreId", Convert.ToInt32(0));
-                    moParameters[6] = new SqlParameter("@TipoPlanId", Convert.ToInt32(0));
-                    moParameters[7] = new SqlParameter("@EstadoId", mlngEstadoId);
+                    strSQL = " WHERE ctbPlan.EstadoId = " + SysData.NumberToField(VM.EstadoId);
                     break;
 
                 case WhereFilters.TipoPlanId:
-                    Array.Resize(ref moParameters, moParameters.Length + 5);
-                    moParameters[3] = new SqlParameter("@PlanId", Convert.ToInt32(0));
-                    moParameters[4] = new SqlParameter("@PlanCod", Convert.ToString(""));
-                    moParameters[5] = new SqlParameter("@PlanPadreId", Convert.ToInt32(0));
-                    moParameters[6] = new SqlParameter("@TipoPlanId", mlngTipoPlanId);
-                    moParameters[7] = new SqlParameter("@EstadoId", mlngEstadoId);
+                    strSQL = " WHERE ctbPlan.TipoPlanId = " + SysData.NumberToField(VM.TipoPlanId);
+                    break;
+
+                case WhereFilters.PlanHijoMAXorden:
+                    strSQL = " WHERE ctbPlan.PlanPadreId = " + SysData.NumberToField(VM.PlanPadreId) +
+                            "  AND   ctbPlan.EstadoId = " + SysData.NumberToField(VM.EstadoId) +
+                            "  AND   ctbPlan.Orden = " +
+                                         " ( SELECT MAX(Orden) FROM ctbPlan " +
+                                          "  WHERE	PlanPadreId = "+ SysData.NumberToField(VM.PlanPadreId) + ")";
                     break;
             }
+
+            return strSQL;
+        }
+
+        private string OrderByFilterGet()
+        {
+            string strSQL = null;
+
+            switch (mintOrderByFilter)
+            {
+                case OrderByFilters.None:
+                    break;
+                case OrderByFilters.PlanId:
+                    strSQL = " ORDER BY  ctbPlan.PlanId ";
+                    break;
+                case OrderByFilters.PlanDes:
+                    strSQL = " ORDER BY  ctbPlan.PlanDes ";
+                    break;
+                case OrderByFilters.Grid:
+                    strSQL = " ORDER BY  ctbPlan.PlanCod, ctbPlan.Orden ";
+                    break;
+                case OrderByFilters.GridCheck:
+                    break;
+                case OrderByFilters.Orden:
+                    strSQL = " ORDER BY  ctbPlan.Orden ";
+                    break;
+            }
+
+            return strSQL;
         }
 
         protected override void InsertParameter()
@@ -560,18 +396,18 @@ namespace Contabilidad.Models.DAC
                     moParameters = new SqlParameter[14] {
                         new SqlParameter("@InsertFilter", mintInsertFilter),
                         new SqlParameter("@Id", SqlDbType.Int),
-                        new SqlParameter("@PlanCod", mstrPlanCod),
-                        new SqlParameter("@PlanDes", mstrPlanDes),
-                        new SqlParameter("@PlanEsp", mstrPlanEsp),
-                        new SqlParameter("@TipoPlanId", mlngTipoPlanId),
-                        new SqlParameter("@Orden", mlngOrden),
-                        new SqlParameter("@Nivel", mlngNivel),
-                        new SqlParameter("@MonedaId", mlngMonedaId),
-                        new SqlParameter("@TipoAmbitoId", mlngTipoAmbitoId),
-                        new SqlParameter("@PlanAjusteId", mlngPlanAjusteId),
-                        new SqlParameter("@CapituloId", mlngCapituloId),
-                        new SqlParameter("@PlanPadreId", mlngPlanPadreId),
-                        new SqlParameter("@EstadoId", mlngEstadoId)};
+                        new SqlParameter(clsPlanVM._PlanCod, VM.PlanCod),
+                        new SqlParameter(clsPlanVM._PlanDes, VM.PlanDes),
+                        new SqlParameter(clsPlanVM._PlanEsp, VM.PlanEsp),
+                        new SqlParameter(clsPlanVM._TipoPlanId, VM.TipoPlanId),
+                        new SqlParameter(clsPlanVM._Orden, VM.Orden),
+                        new SqlParameter(clsPlanVM._Nivel, VM.Nivel),
+                        new SqlParameter(clsPlanVM._MonedaId, VM.MonedaId),
+                        new SqlParameter(clsPlanVM._TipoAmbitoId, VM.TipoAmbitoId),
+                        new SqlParameter(clsPlanVM._PlanAjusteId, VM.PlanAjusteId),
+                        new SqlParameter(clsPlanVM._CapituloId, VM.CapituloId),
+                        new SqlParameter(clsPlanVM._PlanPadreId, VM.PlanPadreId),
+                        new SqlParameter(clsPlanVM._EstadoId, VM.EstadoId)};
                     moParameters[1].Direction = ParameterDirection.Output;
                     break;
             }
@@ -585,19 +421,19 @@ namespace Contabilidad.Models.DAC
                     mstrStoreProcName = "ctbPlanUpdate";
                     moParameters = new SqlParameter[14] {
                         new SqlParameter("@UpdateFilter", mintUpdateFilter),
-                        new SqlParameter("@PlanId", mlngPlanId),
-                        new SqlParameter("@PlanCod", mstrPlanCod),
-                        new SqlParameter("@PlanDes", mstrPlanDes),
-                        new SqlParameter("@PlanEsp", mstrPlanEsp),
-                        new SqlParameter("@TipoPlanId", mlngTipoPlanId),
-                        new SqlParameter("@Orden", mlngOrden),
-                        new SqlParameter("@Nivel", mlngNivel),
-                        new SqlParameter("@MonedaId", mlngMonedaId),
-                        new SqlParameter("@TipoAmbitoId", mlngTipoAmbitoId),
-                        new SqlParameter("@PlanAjusteId", mlngPlanAjusteId),
-                        new SqlParameter("@CapituloId", mlngCapituloId),
-                        new SqlParameter("@PlanPadreId", mlngPlanPadreId),
-                        new SqlParameter("@EstadoId", mlngEstadoId)};
+                        new SqlParameter(clsPlanVM._PlanId, VM.PlanId),
+                        new SqlParameter(clsPlanVM._PlanCod, VM.PlanCod),
+                        new SqlParameter(clsPlanVM._PlanDes, VM.PlanDes),
+                        new SqlParameter(clsPlanVM._PlanEsp, VM.PlanEsp),
+                        new SqlParameter(clsPlanVM._TipoPlanId, VM.TipoPlanId),
+                        new SqlParameter(clsPlanVM._Orden, VM.Orden),
+                        new SqlParameter(clsPlanVM._Nivel, VM.Nivel),
+                        new SqlParameter(clsPlanVM._MonedaId, VM.MonedaId),
+                        new SqlParameter(clsPlanVM._TipoAmbitoId, VM.TipoAmbitoId),
+                        new SqlParameter(clsPlanVM._PlanAjusteId, VM.PlanAjusteId),
+                        new SqlParameter(clsPlanVM._CapituloId, VM.CapituloId),
+                        new SqlParameter(clsPlanVM._PlanPadreId, VM.PlanPadreId),
+                        new SqlParameter(clsPlanVM._EstadoId, VM.EstadoId)};
                     break;
             }
         }
@@ -610,7 +446,7 @@ namespace Contabilidad.Models.DAC
                     mstrStoreProcName = "ctbPlanDelete";
                     moParameters = new SqlParameter[2] {
                         new SqlParameter("@DeleteFilter", mintDeleteFilter),
-                        new SqlParameter("@PlanId", mlngPlanId)};
+                        new SqlParameter(clsPlanVM._PlanId, VM.PlanId)};
                     break;
             }
         }
@@ -624,25 +460,41 @@ namespace Contabilidad.Models.DAC
                 switch (mintSelectFilter)
                 {
                     case SelectFilters.All:
-                        mlngPlanId = SysData.ToLong(oDataRow["PlanId"]);
-                        mstrPlanCod = SysData.ToStr(oDataRow["PlanCod"]);
-                        mstrPlanDes = SysData.ToStr(oDataRow["PlanDes"]);
-                        mstrPlanEsp = SysData.ToStr(oDataRow["PlanEsp"]);
-                        mlngTipoPlanId = SysData.ToLong(oDataRow["TipoPlanId"]);
-                        mlngOrden = SysData.ToLong(oDataRow["Orden"]);
-                        mlngNivel = SysData.ToLong(oDataRow["Nivel"]);
-                        mlngMonedaId = SysData.ToLong(oDataRow["MonedaId"]);
-                        mlngTipoAmbitoId = SysData.ToLong(oDataRow["TipoAmbitoId"]);
-                        mlngPlanAjusteId = SysData.ToLong(oDataRow["PlanAjusteId"]);
-                        mlngCapituloId = SysData.ToLong(oDataRow["CapituloId"]);
-                        mlngPlanPadreId = SysData.ToLong(oDataRow["PlanPadreId"]);
-                        mlngEstadoId = SysData.ToLong(oDataRow["EstadoId"]);
+                        VM.PlanId = SysData.ToLong(oDataRow[clsPlanVM._PlanId]);
+                        VM.PlanCod = SysData.ToStr(oDataRow[clsPlanVM._PlanCod]);
+                        VM.PlanDes = SysData.ToStr(oDataRow[clsPlanVM._PlanDes]);
+                        VM.PlanEsp = SysData.ToStr(oDataRow[clsPlanVM._PlanEsp]);
+                        VM.TipoPlanId = SysData.ToLong(oDataRow[clsPlanVM._TipoPlanId]);
+                        VM.Orden = SysData.ToLong(oDataRow[clsPlanVM._Orden]);
+                        VM.Nivel = SysData.ToLong(oDataRow[clsPlanVM._Nivel]);
+                        VM.MonedaId = SysData.ToLong(oDataRow[clsPlanVM._MonedaId]);
+                        VM.TipoAmbitoId = SysData.ToLong(oDataRow[clsPlanVM._TipoAmbitoId]);
+                        VM.PlanAjusteId = SysData.ToLong(oDataRow[clsPlanVM._PlanAjusteId]);
+                        VM.CapituloId = SysData.ToLong(oDataRow[clsPlanVM._CapituloId]);
+                        VM.PlanPadreId = SysData.ToLong(oDataRow[clsPlanVM._PlanPadreId]);
+                        VM.EstadoId = SysData.ToLong(oDataRow[clsPlanVM._EstadoId]);
                         break;
 
                     case SelectFilters.ListBox:
-                        mlngPlanId = SysData.ToLong(oDataRow["PlanId"]);
-                        mstrPlanCod = SysData.ToStr(oDataRow["PlanCod"]);
-                        mstrPlanDes = SysData.ToStr(oDataRow["PlanDes"]);
+                        VM.PlanId = SysData.ToLong(oDataRow[clsPlanVM._PlanId]);
+                        VM.PlanCod = SysData.ToStr(oDataRow[clsPlanVM._PlanCod]);
+                        VM.PlanDes = SysData.ToStr(oDataRow[clsPlanVM._PlanDes]);
+                        break;
+
+                    case SelectFilters.Grid:
+                        VM.PlanId = SysData.ToLong(oDataRow[clsPlanVM._PlanId]);
+                        VM.PlanCod = SysData.ToStr(oDataRow[clsPlanVM._PlanCod]);
+                        VM.PlanDes = SysData.ToStr(oDataRow[clsPlanVM._PlanDes]);
+                        VM.TipoPlanId = SysData.ToLong(oDataRow[clsPlanVM._TipoPlanId]);
+                        VM.TipoPlanDes = SysData.ToStr(oDataRow[clsPlanVM._TipoPlanDes]);
+                        VM.Orden = SysData.ToLong(oDataRow[clsPlanVM._Orden]);
+                        VM.Nivel = SysData.ToLong(oDataRow[clsPlanVM._Nivel]);
+                        VM.MonedaId = SysData.ToLong(oDataRow[clsPlanVM._MonedaId]);
+                        VM.MonedaDes = SysData.ToStr(oDataRow[clsPlanVM._MonedaDes]);
+                        VM.CapituloId = SysData.ToLong(oDataRow[clsPlanVM._CapituloId]);
+                        VM.PlanPadreId = SysData.ToLong(oDataRow[clsPlanVM._PlanPadreId]);
+                        VM.EstadoId = SysData.ToLong(oDataRow[clsPlanVM._EstadoId]);
+                        VM.EstadoDes = SysData.ToStr(oDataRow[clsPlanVM._EstadoDes]);
                         break;
                 }
             }
@@ -658,12 +510,12 @@ namespace Contabilidad.Models.DAC
             bool returnValue = false;
             string strMsg = string.Empty;
 
-            if (mstrPlanCod.Length == 0)
+            if (VM.PlanCod.Length == 0)
             {
                 strMsg += "Código es Requerido" + Environment.NewLine;
             }
 
-            if (mstrPlanDes.Length == 0)
+            if (VM.PlanDes.Length == 0)
             {
                 strMsg += "Descipción del Tipo Usuario es Requerido" + Environment.NewLine;
             }

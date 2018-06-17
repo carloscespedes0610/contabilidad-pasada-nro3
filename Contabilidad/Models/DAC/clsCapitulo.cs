@@ -269,7 +269,8 @@ namespace Contabilidad.Models.DAC
                             "    ctbCapitulo.CapituloDes, " +
                             "    parEstado.EstadoId, " +
                             "    parEstado.EstadoDes  " +
-                            " FROM ctbCenCos ";
+                            " FROM ctbCenCos "+
+                            "    LEFT JOIN parEstado ON ctbCapitulo.EstadoId = parEstado.EstadoId ";
                     break;
 
                 case SelectFilters.GridCheck:
@@ -296,7 +297,6 @@ namespace Contabilidad.Models.DAC
                     break;
 
                 case WhereFilters.Grid:
-                    strSQL = " LEFT JOIN parEstado ON ctbCapitulo.EstadoId = parEstado.EstadoId ";
                     break;
 
                 case WhereFilters.CapituloCod:
@@ -307,8 +307,7 @@ namespace Contabilidad.Models.DAC
                     break;
 
                 case WhereFilters.Grid_EstadoId:
-                    strSQL = " LEFT JOIN parEstado ON ctbCapitulo.EstadoId = parEstado.EstadoId " +
-                             " WHERE ctbCapitulo.EstadoId = " + SysData.NumberToField(VM.EstadoId);
+                    strSQL = " WHERE ctbCapitulo.EstadoId = " + SysData.NumberToField(VM.EstadoId);
                     break;
             }
 

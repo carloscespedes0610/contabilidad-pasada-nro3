@@ -81,14 +81,13 @@ namespace Contabilidad.Controllers
                     oRegTipoPersona.BeginTransaction();
 
                     oRegTipoPersona.DeleteFilter = clsRegTipoPersona.DeleteFilters.TipoPersonaId;
-                    oRegTipoPersona.TipoPersonaId = lngTipoPersonaId;
                     oRegTipoPersona.Delete();
 
                     foreach (var lngId in ArrayId)
                     {
-                        oRegTipoPersona.TipoPersonaId = lngTipoPersonaId;
-                        oRegTipoPersona.PlanGrupoId = SysData.ToLong(lngId);
-                        oRegTipoPersona.EstadoId = ConstEstado.Activo;
+                        oRegTipoPersona.VM.TipoPersonaId = lngTipoPersonaId;
+                        oRegTipoPersona.VM.PlanGrupoId = SysData.ToLong(lngId);
+                        oRegTipoPersona.VM.EstadoId = ConstEstado.Activo;
 
                         if (oRegTipoPersona.Insert())
                         {
@@ -140,13 +139,13 @@ namespace Contabilidad.Controllers
                     {
                         oTipoPersonaVM.Add(new clsTipoPersonaVM()
                         {
-                            TipoPersonaId = SysData.ToLong(dr["TipoPersonaId"]),
-                            TipoPersonaCod = SysData.ToStr(dr["TipoPersonaCod"]),
-                            TipoPersonaDes = SysData.ToStr(dr["TipoPersonaDes"]),
-                            TipoRelacionId = SysData.ToLong(dr["TipoRelacionId"]),
-                            TipoRelacionDes = SysData.ToStr(dr["TipoRelacionDes"]),
-                            EstadoId = SysData.ToLong(dr["EstadoId"]),
-                            EstadoDes = SysData.ToStr(dr["EstadoDes"])
+                            TipoPersonaId = SysData.ToLong(dr[clsTipoPersonaVM._TipoPersonaId]),
+                            TipoPersonaCod = SysData.ToStr(dr[clsTipoPersonaVM._TipoPersonaCod]),
+                            TipoPersonaDes = SysData.ToStr(dr[clsTipoPersonaVM._TipoPersonaDes]),
+                            TipoRelacionId = SysData.ToLong(dr[clsTipoPersonaVM._TipoRelacionId]),
+                            TipoRelacionDes = SysData.ToStr(dr[clsTipoPersonaVM._TipoRelacionDes]),
+                            EstadoId = SysData.ToLong(dr[clsTipoPersonaVM._EstadoId]),
+                            EstadoDes = SysData.ToStr(dr[clsTipoPersonaVM._EstadoDes])
                         });
                     }
                 }
@@ -182,20 +181,20 @@ namespace Contabilidad.Controllers
                     {
                         oPlanGrupoVM.Add(new clsPlanGrupoVM()
                         {
-                            PlanGrupoId = SysData.ToLong(dr["PlanGrupoId"]),
-                            PlanGrupoCod = SysData.ToStr(dr["PlanGrupoCod"]),
-                            PlanGrupoDes = SysData.ToStr(dr["PlanGrupoDes"]),
-                            PlanGrupoEsp = SysData.ToStr(dr["PlanGrupoEsp"]),
-                            PlanGrupoTipoId = SysData.ToLong(dr["PlanGrupoTipoId"]),
-                            PlanGrupoTipoDes = SysData.ToStr(dr["PlanGrupoTipoDes"]),
-                            PlanGrupoTipoDetId = SysData.ToLong(dr["PlanGrupoTipoDetId"]),
-                            PlanGrupoTipoDetDes = SysData.ToStr(dr["PlanGrupoTipoDetDes"]),
-                            NroCuentas = SysData.ToLong(dr["NroCuentas"]),
-                            MonedaId = SysData.ToLong(dr["MonedaId"]),
-                            MonedaDes = SysData.ToStr(dr["MonedaDes"]),
-                            VerificaMto = SysData.ToBoolean(dr["VerificaMto"]),
-                            EstadoId = SysData.ToLong(dr["EstadoId"]),
-                            EstadoDes = SysData.ToStr(dr["EstadoDes"])
+                            PlanGrupoId = SysData.ToLong(dr[clsPlanGrupoVM._PlanGrupoId]),
+                            PlanGrupoCod = SysData.ToStr(dr[clsPlanGrupoVM._PlanGrupoCod]),
+                            PlanGrupoDes = SysData.ToStr(dr[clsPlanGrupoVM._PlanGrupoDes]),
+                            PlanGrupoEsp = SysData.ToStr(dr[clsPlanGrupoVM._PlanGrupoEsp]),
+                            PlanGrupoTipoId = SysData.ToLong(dr[clsPlanGrupoVM._PlanGrupoTipoId]),
+                            PlanGrupoTipoDes = SysData.ToStr(dr[clsPlanGrupoVM._PlanGrupoTipoDes]),
+                            PlanGrupoTipoDetId = SysData.ToLong(dr[clsPlanGrupoVM._PlanGrupoTipoDetId]),
+                            PlanGrupoTipoDetDes = SysData.ToStr(dr[clsPlanGrupoVM._PlanGrupoTipoDetDes]),
+                            NroCuentas = SysData.ToLong(dr[clsPlanGrupoVM._NroCuentas]),
+                            MonedaId = SysData.ToLong(dr[clsPlanGrupoVM._MonedaId]),
+                            MonedaDes = SysData.ToStr(dr[clsPlanGrupoVM._MonedaDes]),
+                            VerificaMto = SysData.ToBoolean(dr[clsPlanGrupoVM._VerificaMto]),
+                            EstadoId = SysData.ToLong(dr[clsPlanGrupoVM._EstadoId]),
+                            EstadoDes = SysData.ToStr(dr[clsPlanGrupoVM._EstadoDes])
                         });
                     }
                 }
@@ -226,7 +225,7 @@ namespace Contabilidad.Controllers
                 oRegTipoPersona.SelectFilter = clsRegTipoPersona.SelectFilters.All;
                 oRegTipoPersona.WhereFilter = clsRegTipoPersona.WhereFilters.TipoPersonaId;
                 oRegTipoPersona.OrderByFilter = clsRegTipoPersona.OrderByFilters.RegTipoPersonaId;
-                oRegTipoPersona.TipoPersonaId = lngTipoPersonaId;
+                oRegTipoPersona.VM.TipoPersonaId = lngTipoPersonaId;
 
                 if (oRegTipoPersona.Open())
                 {
@@ -234,11 +233,11 @@ namespace Contabilidad.Controllers
                     {
                         if (lngRowCount == 0)
                         {
-                            strPlanGrupoId = "[" + SysData.ToStr(dr["PlanGrupoId"]);
+                            strPlanGrupoId = "[" + SysData.ToStr(dr[clsRegTipoPersonaVM._PlanGrupoId]);
                         }
                         else
                         {
-                            strPlanGrupoId += "," + SysData.ToStr(dr["PlanGrupoId"]);
+                            strPlanGrupoId += "," + SysData.ToStr(dr[clsRegTipoPersonaVM._PlanGrupoId]);
                         }
 
                         lngRowCount++;

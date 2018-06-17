@@ -1,4 +1,5 @@
 ﻿using Contabilidad.Models.Modules;
+using Contabilidad.Models.VM;
 using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Mvc;
 using Newtonsoft.Json;
@@ -11,7 +12,7 @@ namespace Contabilidad.Controllers
         [HttpGet]
         public ActionResult EstadoList(DataSourceLoadOptions loadOptions)
         {
-            loadOptions.Sort = new[] { new SortingInfo { Selector = "EstadoDes" } };
+            loadOptions.Sort = new[] { new SortingInfo { Selector = clsEstadoVM._EstadoDes } };
 
             return Content(JsonConvert.SerializeObject(DataSourceLoader.Load(ComboBox.EstadoList(), loadOptions)), "application/json");
         }
@@ -19,7 +20,7 @@ namespace Contabilidad.Controllers
         [HttpGet]
         public ActionResult CenCosGrupoList(DataSourceLoadOptions loadOptions)
         {
-            loadOptions.Sort = new[] { new SortingInfo { Selector = "CenCosGrupoDes" } };
+            loadOptions.Sort = new[] { new SortingInfo { Selector = clsCenCosGrupoVM._CenCosGrupoDes } };
 
             return Content(JsonConvert.SerializeObject(DataSourceLoader.Load(ComboBox.CenCosGrupoList(), loadOptions)), "application/json");
         }

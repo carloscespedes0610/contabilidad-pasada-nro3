@@ -131,7 +131,6 @@ namespace Contabilidad.Controllers
                     if (oPlanGrupo.Insert())
                     {
                         var oPlanGrupoDetVMList = (List<clsPlanGrupoDetVM>)Session[SessionKey];
-                        //oPlanGrupo.PlanGrupoId = oPlanGrupo.Id;
                         oPlanGrupoDet.Transaction = oPlanGrupo.Transaction;
 
                         foreach (clsPlanGrupoDetVM oPlanGrupoDetVM in oPlanGrupoDetVMList)
@@ -310,13 +309,13 @@ namespace Contabilidad.Controllers
                     return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = "Índice nulo o no encontrado" });
                 }
 
-                oPlanGrupo.PlanGrupoId = SysData.ToLong(id);
+                oPlanGrupo.VM.PlanGrupoId = SysData.ToLong(id);
                 oPlanGrupo.Transaction = oPlanGrupo.Connection.BeginTransaction(IsolationLevel.ReadCommitted);
 
                 if (oPlanGrupo.Delete())
                 {
                     oPlanGrupoDet.DeleteFilter = clsPlanGrupoDet.DeleteFilters.PlanGrupoId;
-                    oPlanGrupoDet.PlanGrupoId = SysData.ToLong(id);
+                    oPlanGrupoDet.VM.PlanGrupoId = SysData.ToLong(id);
                     oPlanGrupoDet.Transaction = oPlanGrupo.Transaction;
 
                     if (oPlanGrupoDet.Delete())
@@ -412,7 +411,6 @@ namespace Contabilidad.Controllers
                     if (oPlanGrupo.Insert())
                     {
                         var oPlanGrupoDetVMList = (List<clsPlanGrupoDetVM>)Session[SessionKey];
-                        oPlanGrupo.PlanGrupoId = oPlanGrupo.Id;
                         oPlanGrupoDet.Transaction = oPlanGrupo.Transaction;
 
                         foreach (clsPlanGrupoDetVM oPlanGrupoDetVM in oPlanGrupoDetVMList)
@@ -591,7 +589,6 @@ namespace Contabilidad.Controllers
                     if (oPlanGrupo.Insert())
                     {
                         var oPlanGrupoDetVMList = (List<clsPlanGrupoDetVM>)Session[SessionKey];
-                        oPlanGrupo.PlanGrupoId = oPlanGrupo.Id;
                         oPlanGrupoDet.Transaction = oPlanGrupo.Transaction;
 
                         foreach (clsPlanGrupoDetVM oPlanGrupoDetVM in oPlanGrupoDetVMList)
@@ -656,35 +653,35 @@ namespace Contabilidad.Controllers
         {
             if (boolEditing)
             {
-                oPlanGrupo.PlanGrupoId = SysData.ToLong(oPlanGrupoFormVM.PlanGrupoId);
+                oPlanGrupo.VM.PlanGrupoId = SysData.ToLong(oPlanGrupoFormVM.PlanGrupoId);
             }
 
-            oPlanGrupo.PlanGrupoCod = SysData.ToStr(oPlanGrupoFormVM.PlanGrupoCod);
-            oPlanGrupo.PlanGrupoDes = SysData.ToStr(oPlanGrupoFormVM.PlanGrupoDes);
-            oPlanGrupo.PlanGrupoEsp = SysData.ToStr(oPlanGrupoFormVM.PlanGrupoEsp);
-            oPlanGrupo.PlanGrupoTipoId = SysData.ToLong(oPlanGrupoFormVM.PlanGrupoTipoId);
-            oPlanGrupo.PlanGrupoTipoDetId = SysData.ToLong(oPlanGrupoFormVM.PlanGrupoTipoDetId);
-            oPlanGrupo.NroCuentas = SysData.ToLong(oPlanGrupoFormVM.NroCuentas);
-            oPlanGrupo.MonedaId = SysData.ToLong(oPlanGrupoFormVM.MonedaId);
-            oPlanGrupo.VerificaMto = SysData.ToBoolean(oPlanGrupoFormVM.VerificaMto);
-            oPlanGrupo.EstadoId = SysData.ToLong(oPlanGrupoFormVM.EstadoId);
+            oPlanGrupo.VM.PlanGrupoCod = SysData.ToStr(oPlanGrupoFormVM.PlanGrupoCod);
+            oPlanGrupo.VM.PlanGrupoDes = SysData.ToStr(oPlanGrupoFormVM.PlanGrupoDes);
+            oPlanGrupo.VM.PlanGrupoEsp = SysData.ToStr(oPlanGrupoFormVM.PlanGrupoEsp);
+            oPlanGrupo.VM.PlanGrupoTipoId = SysData.ToLong(oPlanGrupoFormVM.PlanGrupoTipoId);
+            oPlanGrupo.VM.PlanGrupoTipoDetId = SysData.ToLong(oPlanGrupoFormVM.PlanGrupoTipoDetId);
+            oPlanGrupo.VM.NroCuentas = SysData.ToLong(oPlanGrupoFormVM.NroCuentas);
+            oPlanGrupo.VM.MonedaId = SysData.ToLong(oPlanGrupoFormVM.MonedaId);
+            oPlanGrupo.VM.VerificaMto = SysData.ToBoolean(oPlanGrupoFormVM.VerificaMto);
+            oPlanGrupo.VM.EstadoId = SysData.ToLong(oPlanGrupoFormVM.EstadoId);
         }
 
         private void DataMoveDet(clsPlanGrupo oPlanGrupo, clsPlanGrupoDetVM oPlanGrupoDetVM, clsPlanGrupoDet oPlanGrupoDet, bool boolEditing)
         {
             if (boolEditing)
             {
-                oPlanGrupoDet.PlanGrupoDetId = SysData.ToLong(oPlanGrupoDetVM.PlanGrupoDetId);
+                oPlanGrupoDet.VM.PlanGrupoDetId = SysData.ToLong(oPlanGrupoDetVM.PlanGrupoDetId);
             }
 
-            oPlanGrupoDet.PlanGrupoId = SysData.ToLong(oPlanGrupo.PlanGrupoId);
-            oPlanGrupoDet.PlanGrupoDetDes = SysData.ToStr(oPlanGrupoDetVM.PlanGrupoDetDes);
-            oPlanGrupoDet.PlanId = SysData.ToLong(oPlanGrupoDetVM.PlanId);
-            oPlanGrupoDet.PlanFlujoId = SysData.ToLong(oPlanGrupoDetVM.PlanFlujoId);
-            oPlanGrupoDet.SucursalId = SysData.ToLong(oPlanGrupoDetVM.SucursalId);
-            oPlanGrupoDet.CenCosId = SysData.ToLong(oPlanGrupoDetVM.CenCosId);
-            oPlanGrupoDet.Orden = SysData.ToLong(oPlanGrupoDetVM.Orden);
-            oPlanGrupoDet.EstadoId = SysData.ToLong(oPlanGrupo.EstadoId);
+            oPlanGrupoDet.VM.PlanGrupoId = SysData.ToLong(oPlanGrupo.VM.PlanGrupoId);
+            oPlanGrupoDet.VM.PlanGrupoDetDes = SysData.ToStr(oPlanGrupoDetVM.PlanGrupoDetDes);
+            oPlanGrupoDet.VM.PlanId = SysData.ToLong(oPlanGrupoDetVM.PlanId);
+            oPlanGrupoDet.VM.PlanFlujoId = SysData.ToLong(oPlanGrupoDetVM.PlanFlujoId);
+            oPlanGrupoDet.VM.SucursalId = SysData.ToLong(oPlanGrupoDetVM.SucursalId);
+            oPlanGrupoDet.VM.CenCosId = SysData.ToLong(oPlanGrupoDetVM.CenCosId);
+            oPlanGrupoDet.VM.Orden = SysData.ToLong(oPlanGrupoDetVM.Orden);
+            oPlanGrupoDet.VM.EstadoId = SysData.ToLong(oPlanGrupo.VM.EstadoId);
         }
 
         public List<clsPlanGrupoVM> PlanGrupoGrid()
@@ -704,20 +701,20 @@ namespace Contabilidad.Controllers
                     {
                         oPlanGrupoVM.Add(new clsPlanGrupoVM()
                         {
-                            PlanGrupoId = SysData.ToLong(dr["PlanGrupoId"]),
-                            PlanGrupoCod = SysData.ToStr(dr["PlanGrupoCod"]),
-                            PlanGrupoDes = SysData.ToStr(dr["PlanGrupoDes"]),
-                            PlanGrupoEsp = SysData.ToStr(dr["PlanGrupoEsp"]),
-                            PlanGrupoTipoId = SysData.ToLong(dr["PlanGrupoTipoId"]),
-                            PlanGrupoTipoDes = SysData.ToStr(dr["PlanGrupoTipoDes"]),
-                            PlanGrupoTipoDetId = SysData.ToLong(dr["PlanGrupoTipoDetId"]),
-                            PlanGrupoTipoDetDes = SysData.ToStr(dr["PlanGrupoTipoDetDes"]),
-                            NroCuentas = SysData.ToLong(dr["NroCuentas"]),
-                            MonedaId = SysData.ToLong(dr["MonedaId"]),
-                            MonedaDes = SysData.ToStr(dr["MonedaDes"]),
-                            VerificaMto = SysData.ToBoolean(dr["VerificaMto"]),
-                            EstadoId = SysData.ToLong(dr["EstadoId"]),
-                            EstadoDes = SysData.ToStr(dr["EstadoDes"])
+                            PlanGrupoId = SysData.ToLong(dr[clsPlanGrupoVM._PlanGrupoId]),
+                            PlanGrupoCod = SysData.ToStr(dr[clsPlanGrupoVM._PlanGrupoCod]),
+                            PlanGrupoDes = SysData.ToStr(dr[clsPlanGrupoVM._PlanGrupoDes]),
+                            PlanGrupoEsp = SysData.ToStr(dr[clsPlanGrupoVM._PlanGrupoEsp]),
+                            PlanGrupoTipoId = SysData.ToLong(dr[clsPlanGrupoVM._PlanGrupoTipoId]),
+                            PlanGrupoTipoDes = SysData.ToStr(dr[clsPlanGrupoVM._PlanGrupoTipoDes]),
+                            PlanGrupoTipoDetId = SysData.ToLong(dr[clsPlanGrupoVM._PlanGrupoTipoDetId]),
+                            PlanGrupoTipoDetDes = SysData.ToStr(dr[clsPlanGrupoVM._PlanGrupoTipoDetDes]),
+                            NroCuentas = SysData.ToLong(dr[clsPlanGrupoVM._NroCuentas]),
+                            MonedaId = SysData.ToLong(dr[clsPlanGrupoVM._MonedaId]),
+                            MonedaDes = SysData.ToStr(dr[clsPlanGrupoVM._MonedaDes]),
+                            VerificaMto = SysData.ToBoolean(dr[clsPlanGrupoVM._VerificaMto]),
+                            EstadoId = SysData.ToLong(dr[clsPlanGrupoVM._EstadoId]),
+                            EstadoDes = SysData.ToStr(dr[clsPlanGrupoVM._EstadoDes])
                         });
                     }
                 }
@@ -745,25 +742,25 @@ namespace Contabilidad.Controllers
 
             try
             {
-                oPlanGrupo.PlanGrupoId = lngPlanGrupoId;
+                oPlanGrupo.VM.PlanGrupoId = lngPlanGrupoId;
 
                 if (oPlanGrupo.FindByPK())
                 {
-                    oPlanGrupoFormVM.PlanGrupoId = oPlanGrupo.PlanGrupoId;
-                    oPlanGrupoFormVM.PlanGrupoCod = oPlanGrupo.PlanGrupoCod;
-                    oPlanGrupoFormVM.PlanGrupoDes = oPlanGrupo.PlanGrupoDes;
-                    oPlanGrupoFormVM.PlanGrupoEsp = oPlanGrupo.PlanGrupoEsp;
-                    oPlanGrupoFormVM.PlanGrupoTipoId = oPlanGrupo.PlanGrupoTipoId;
-                    oPlanGrupoFormVM.PlanGrupoTipoDetId = oPlanGrupo.PlanGrupoTipoDetId;
-                    oPlanGrupoFormVM.NroCuentas = oPlanGrupo.NroCuentas;
-                    oPlanGrupoFormVM.MonedaId = oPlanGrupo.MonedaId;
-                    oPlanGrupoFormVM.VerificaMto = oPlanGrupo.VerificaMto;
-                    oPlanGrupoFormVM.EstadoId = oPlanGrupo.EstadoId;
+                    oPlanGrupoFormVM.PlanGrupoId = oPlanGrupo.VM.PlanGrupoId;
+                    oPlanGrupoFormVM.PlanGrupoCod = oPlanGrupo.VM.PlanGrupoCod;
+                    oPlanGrupoFormVM.PlanGrupoDes = oPlanGrupo.VM.PlanGrupoDes;
+                    oPlanGrupoFormVM.PlanGrupoEsp = oPlanGrupo.VM.PlanGrupoEsp;
+                    oPlanGrupoFormVM.PlanGrupoTipoId = oPlanGrupo.VM.PlanGrupoTipoId;
+                    oPlanGrupoFormVM.PlanGrupoTipoDetId = oPlanGrupo.VM.PlanGrupoTipoDetId;
+                    oPlanGrupoFormVM.NroCuentas = oPlanGrupo.VM.NroCuentas;
+                    oPlanGrupoFormVM.MonedaId = oPlanGrupo.VM.MonedaId;
+                    oPlanGrupoFormVM.VerificaMto = oPlanGrupo.VM.VerificaMto;
+                    oPlanGrupoFormVM.EstadoId = oPlanGrupo.VM.EstadoId;
 
                     oPlanGrupoDet.SelectFilter = clsPlanGrupoDet.SelectFilters.All;
                     oPlanGrupoDet.WhereFilter = clsPlanGrupoDet.WhereFilters.PlanGrupoId;
                     oPlanGrupoDet.OrderByFilter = clsPlanGrupoDet.OrderByFilters.Orden;
-                    oPlanGrupoDet.PlanGrupoId = lngPlanGrupoId;
+                    oPlanGrupoDet.VM.PlanGrupoId = lngPlanGrupoId;
 
                     if (oPlanGrupoDet.Open())
                     {
@@ -771,15 +768,15 @@ namespace Contabilidad.Controllers
                         {
                             oPlanGrupoDetVM.Add(new clsPlanGrupoDetVM()
                             {
-                                PlanGrupoDetId = SysData.ToLong(dr["PlanGrupoDetId"]),
-                                PlanGrupoId = SysData.ToLong(dr["PlanGrupoId"]),
-                                PlanGrupoDetDes = SysData.ToStr(dr["PlanGrupoDetDes"]),
-                                PlanId = SysData.ToLong(dr["PlanId"]),
-                                PlanFlujoId = SysData.ToLong(dr["PlanFlujoId"]),
-                                SucursalId = SysData.ToLong(dr["SucursalId"]),
-                                CenCosId = SysData.ToLong(dr["CenCosId"]),
-                                Orden = SysData.ToLong(dr["Orden"]),
-                                EstadoId = SysData.ToLong(dr["EstadoId"])
+                                PlanGrupoDetId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanGrupoDetId]),
+                                PlanGrupoId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanGrupoId]),
+                                PlanGrupoDetDes = SysData.ToStr(dr[clsPlanGrupoDetVM._PlanGrupoDetDes]),
+                                PlanId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanId]),
+                                PlanFlujoId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanFlujoId]),
+                                SucursalId = SysData.ToLong(dr[clsPlanGrupoDetVM._SucursalId]),
+                                CenCosId = SysData.ToLong(dr[clsPlanGrupoDetVM._CenCosId]),
+                                Orden = SysData.ToLong(dr[clsPlanGrupoDetVM._Orden]),
+                                EstadoId = SysData.ToLong(dr[clsPlanGrupoDetVM._EstadoId])
                             });
                         }
 

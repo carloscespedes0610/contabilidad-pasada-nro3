@@ -48,11 +48,11 @@ namespace Contabilidad.Controllers
                 if (lngPlanPadreId > 0) 
                 {
                     clsPlan oPlanPadre = new clsPlan(clsAppInfo.Connection);
-                    oPlanPadre.PlanId = lngPlanPadreId;
+                    oPlanPadre.VM.PlanId = lngPlanPadreId;
 
                     if (oPlanPadre.FindByPK())
                     {
-                        if (oPlanPadre.Nivel >= 1)
+                        if (oPlanPadre.VM.Nivel >= 1)
                         {
                             PlanHijoNew(oPlanPadre, oPlanVM);
 
@@ -105,7 +105,7 @@ namespace Contabilidad.Controllers
                     clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
                     DataMove(oPlanVM, oPlan, false);
 
-                    if (oPlan.TipoPlanId > 1)
+                    if (oPlan.VM.TipoPlanId > 1)
                     {
                         if ((oPlanVM.MonedaId > 0) && (oPlanVM.TipoAmbitoId > 0))
                         {
@@ -122,8 +122,8 @@ namespace Contabilidad.Controllers
                     }
                     else
                     {
-                        oPlan.MonedaId = 0;
-                        oPlan.TipoAmbitoId = 0;
+                        oPlan.VM.MonedaId = 0;
+                        oPlan.VM.TipoAmbitoId = 0;
 
                         if (oPlan.Insert())
                         {
@@ -197,7 +197,7 @@ namespace Contabilidad.Controllers
                     clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
                     DataMove(oPlanVM, oPlan, true);
 
-                    if (oPlan.TipoPlanId > 1)
+                    if (oPlan.VM.TipoPlanId > 1)
                     {
                         if ((oPlanVM.MonedaId > 0) && (oPlanVM.TipoAmbitoId > 0))
                         {
@@ -214,8 +214,8 @@ namespace Contabilidad.Controllers
                     }
                     else
                     {
-                        oPlan.MonedaId = 0;
-                        oPlan.TipoAmbitoId = 0;
+                        oPlan.VM.MonedaId = 0;
+                        oPlan.VM.TipoAmbitoId = 0;
 
                         if (oPlan.Update())
                         {
@@ -290,7 +290,7 @@ namespace Contabilidad.Controllers
                 clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
 
                 oPlan.WhereFilter = clsPlan.WhereFilters.PrimaryKey;
-                oPlan.PlanId = id;
+                oPlan.VM.PlanId = id;
 
                 if (oPlan.Delete())
                 {
@@ -354,21 +354,21 @@ namespace Contabilidad.Controllers
         {
             if (boolEditing)
             {
-                oPlan.PlanId = SysData.ToLong(oPlanVM.PlanId);
+                oPlan.VM.PlanId = SysData.ToLong(oPlanVM.PlanId);
             }
 
-            oPlan.PlanCod = SysData.ToStr(oPlanVM.PlanCod);
-            oPlan.PlanDes = SysData.ToStr(oPlanVM.PlanDes);
-            oPlan.PlanEsp = SysData.ToStr(oPlanVM.PlanEsp);
-            oPlan.TipoPlanId = SysData.ToLong(oPlanVM.TipoPlanId);
-            oPlan.Orden = SysData.ToLong(oPlanVM.Orden);
-            oPlan.Nivel = SysData.ToLong(oPlanVM.Nivel);
-            oPlan.MonedaId = SysData.ToLong(oPlanVM.MonedaId);
-            oPlan.TipoAmbitoId = SysData.ToLong(oPlanVM.TipoAmbitoId);
-            oPlan.PlanAjusteId = SysData.ToLong(oPlanVM.PlanAjusteId);
-            oPlan.CapituloId = SysData.ToLong(oPlanVM.CapituloId);
-            oPlan.PlanPadreId = SysData.ToLong(oPlanVM.PlanPadreId);
-            oPlan.EstadoId = SysData.ToLong(oPlanVM.EstadoId);
+            oPlan.VM.PlanCod = SysData.ToStr(oPlanVM.PlanCod);
+            oPlan.VM.PlanDes = SysData.ToStr(oPlanVM.PlanDes);
+            oPlan.VM.PlanEsp = SysData.ToStr(oPlanVM.PlanEsp);
+            oPlan.VM.TipoPlanId = SysData.ToLong(oPlanVM.TipoPlanId);
+            oPlan.VM.Orden = SysData.ToLong(oPlanVM.Orden);
+            oPlan.VM.Nivel = SysData.ToLong(oPlanVM.Nivel);
+            oPlan.VM.MonedaId = SysData.ToLong(oPlanVM.MonedaId);
+            oPlan.VM.TipoAmbitoId = SysData.ToLong(oPlanVM.TipoAmbitoId);
+            oPlan.VM.PlanAjusteId = SysData.ToLong(oPlanVM.PlanAjusteId);
+            oPlan.VM.CapituloId = SysData.ToLong(oPlanVM.CapituloId);
+            oPlan.VM.PlanPadreId = SysData.ToLong(oPlanVM.PlanPadreId);
+            oPlan.VM.EstadoId = SysData.ToLong(oPlanVM.EstadoId);
         }
 
         private List<clsPlanVM> PlanGrid()
@@ -413,9 +413,9 @@ namespace Contabilidad.Controllers
             try
             {
                 oPlan.SelectFilter = clsPlan.SelectFilters.Grid;
-                oPlan.WhereFilter = clsPlan.WhereFilters.Grid_PlanPadreId;
+                oPlan.WhereFilter = clsPlan.WhereFilters.PlanPadreId;
                 oPlan.OrderByFilter = clsPlan.OrderByFilters.Grid;
-                oPlan.PlanPadreId = lngPlanPadreId;
+                oPlan.VM.PlanPadreId = lngPlanPadreId;
 
                 if (oPlan.Open())
                 {
@@ -465,7 +465,7 @@ namespace Contabilidad.Controllers
             {
                 oPlan.SelectFilter = clsPlan.SelectFilters.All;
                 oPlan.WhereFilter = clsPlan.WhereFilters.PlanPadreId;
-                oPlan.PlanPadreId = lngPlanPadreId;
+                oPlan.VM.PlanPadreId = lngPlanPadreId;
 
                 if (oPlan.FindOnly())
                 {
@@ -492,23 +492,23 @@ namespace Contabilidad.Controllers
 
             try
             {
-                oPlan.PlanId = lngPlanId;
+                oPlan.VM.PlanId = lngPlanId;
 
                 if (oPlan.FindByPK())
                 {
-                    oPlanVM.PlanId = oPlan.PlanId;
-                    oPlanVM.PlanCod = oPlan.PlanCod;
-                    oPlanVM.PlanDes = oPlan.PlanDes;
-                    oPlanVM.PlanEsp = oPlan.PlanEsp;
-                    oPlanVM.TipoPlanId = oPlan.TipoPlanId;
-                    oPlanVM.Orden = oPlan.Orden;
-                    oPlanVM.Nivel = oPlan.Nivel;
-                    oPlanVM.MonedaId = oPlan.MonedaId;
-                    oPlanVM.TipoAmbitoId = oPlan.TipoAmbitoId;
-                    oPlanVM.PlanAjusteId = oPlan.PlanAjusteId;
-                    oPlanVM.CapituloId = oPlan.CapituloId;
-                    oPlanVM.PlanPadreId = oPlan.PlanPadreId;
-                    oPlanVM.EstadoId = oPlan.EstadoId;
+                    oPlanVM.PlanId = oPlan.VM.PlanId;
+                    oPlanVM.PlanCod = oPlan.VM.PlanCod;
+                    oPlanVM.PlanDes = oPlan.VM.PlanDes;
+                    oPlanVM.PlanEsp = oPlan.VM.PlanEsp;
+                    oPlanVM.TipoPlanId = oPlan.VM.TipoPlanId;
+                    oPlanVM.Orden = oPlan.VM.Orden;
+                    oPlanVM.Nivel = oPlan.VM.Nivel;
+                    oPlanVM.MonedaId = oPlan.VM.MonedaId;
+                    oPlanVM.TipoAmbitoId = oPlan.VM.TipoAmbitoId;
+                    oPlanVM.PlanAjusteId = oPlan.VM.PlanAjusteId;
+                    oPlanVM.CapituloId = oPlan.VM.CapituloId;
+                    oPlanVM.PlanPadreId = oPlan.VM.PlanPadreId;
+                    oPlanVM.EstadoId = oPlan.VM.EstadoId;
 
                     return oPlanVM;
                 }
@@ -533,28 +533,28 @@ namespace Contabilidad.Controllers
             try
             {
                 oPlan.SelectFilter = clsPlan.SelectFilters.All;
-                oPlan.WhereFilter = clsPlan.WhereFilters.PlanHijo_MaxOrden;
-                oPlan.PlanPadreId = oPlanPadre.PlanId;
-                oPlan.EstadoId = ConstEstado.Activo;
+                oPlan.WhereFilter = clsPlan.WhereFilters.PlanHijoMAXorden;
+                oPlan.VM.PlanPadreId = oPlanPadre.VM.PlanId;
+                oPlan.VM.EstadoId = ConstEstado.Activo;
 
                 if (oPlan.Find())
                 {
-                    oPlanVM.PlanCod = SysData.ToStr(SysData.ToLong(oPlan.PlanCod) + 1);
-                    oPlanVM.TipoPlanId = oPlan.TipoPlanId;
-                    oPlanVM.Nivel = oPlan.Nivel;
-                    oPlanVM.Orden = oPlan.Orden + 1;
-                    oPlanVM.CapituloId = oPlan.CapituloId;
-                    oPlanVM.PlanPadreId = oPlan.PlanPadreId;
+                    oPlanVM.PlanCod = SysData.ToStr(SysData.ToLong(oPlan.VM.PlanCod) + 1);
+                    oPlanVM.TipoPlanId = oPlan.VM.TipoPlanId;
+                    oPlanVM.Nivel = oPlan.VM.Nivel;
+                    oPlanVM.Orden = oPlan.VM.Orden + 1;
+                    oPlanVM.CapituloId = oPlan.VM.CapituloId;
+                    oPlanVM.PlanPadreId = oPlan.VM.PlanPadreId;
                     oPlanVM.EstadoId = ConstEstado.Activo;
                 }
                 else
                 {
-                    oPlanVM.PlanCod = oPlanPadre.PlanCod;
+                    oPlanVM.PlanCod = oPlanPadre.VM.PlanCod;
                     oPlanVM.TipoPlanId = 0;
-                    oPlanVM.Nivel = oPlanPadre.Nivel + 1;
+                    oPlanVM.Nivel = oPlanPadre.VM.Nivel + 1;
                     oPlanVM.Orden = 1;
-                    oPlanVM.CapituloId = oPlanPadre.CapituloId;
-                    oPlanVM.PlanPadreId = oPlanPadre.PlanId;
+                    oPlanVM.CapituloId = oPlanPadre.VM.CapituloId;
+                    oPlanVM.PlanPadreId = oPlanPadre.VM.PlanId;
                     oPlanVM.EstadoId = ConstEstado.Activo;
                 }
             }

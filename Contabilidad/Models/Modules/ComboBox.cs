@@ -20,7 +20,7 @@ namespace Contabilidad.Models.Modules
                 oTipoPlan.SelectFilter = clsTipoPlan.SelectFilters.ListBox;
                 oTipoPlan.WhereFilter = clsTipoPlan.WhereFilters.EstadoId;
                 oTipoPlan.OrderByFilter = clsTipoPlan.OrderByFilters.TipoPlanDes;
-                oTipoPlan.EstadoId = ConstEstado.Activo;
+                oTipoPlan.VM.EstadoId = ConstEstado.Activo;
 
                 if (oTipoPlan.Open())
                 {
@@ -28,8 +28,8 @@ namespace Contabilidad.Models.Modules
                     {
                         oTipoPlanVM.Add(new clsTipoPlanVM()
                         {
-                            TipoPlanId = SysData.ToLong(dr["TipoPlanId"]),
-                            TipoPlanDes = SysData.ToStr(dr["TipoPlanDes"])
+                            TipoPlanId = SysData.ToLong(dr[clsTipoPlanVM._TipoPlanId]),
+                            TipoPlanDes = SysData.ToStr(dr[clsTipoPlanVM._TipoPlanDes])
                         });
                     }
                 }
@@ -65,8 +65,8 @@ namespace Contabilidad.Models.Modules
                     {
                         oMonedaVM.Add(new clsMonedaVM()
                         {
-                            MonedaId = SysData.ToLong(dr["MonedaId"]),
-                            MonedaDes = SysData.ToStr(dr["MonedaDes"])
+                            MonedaId = SysData.ToLong(dr[clsMonedaVM._MonedaId]),
+                            MonedaDes = SysData.ToStr(dr[clsMonedaVM._MonedaDes])
                         });
                     }
                 }
@@ -95,7 +95,7 @@ namespace Contabilidad.Models.Modules
                 oTipoAmbito.SelectFilter = clsTipoAmbito.SelectFilters.ListBox;
                 oTipoAmbito.WhereFilter = clsTipoAmbito.WhereFilters.EstadoId;
                 oTipoAmbito.OrderByFilter = clsTipoAmbito.OrderByFilters.TipoAmbitoDes;
-                oTipoAmbito.EstadoId = ConstEstado.Activo;
+                oTipoAmbito.VM.EstadoId = ConstEstado.Activo;
 
                 if (oTipoAmbito.Open())
                 {
@@ -103,8 +103,8 @@ namespace Contabilidad.Models.Modules
                     {
                         oTipoAmbitoVM.Add(new clsTipoAmbitoVM()
                         {
-                            TipoAmbitoId = SysData.ToLong(dr["TipoAmbitoId"]),
-                            TipoAmbitoDes = SysData.ToStr(dr["TipoAmbitoDes"])
+                            TipoAmbitoId = SysData.ToLong(dr[clsTipoAmbitoVM._TipoAmbitoId]),
+                            TipoAmbitoDes = SysData.ToStr(dr[clsTipoAmbitoVM._TipoAmbitoDes])
                         });
                     }
                 }
@@ -141,8 +141,8 @@ namespace Contabilidad.Models.Modules
                     {
                         oEstadoVM.Add(new clsEstadoVM()
                         {
-                            EstadoId = SysData.ToLong(dr["EstadoId"]),
-                            EstadoDes = SysData.ToStr(dr["EstadoDes"])
+                            EstadoId = SysData.ToLong(dr[clsEstadoVM._EstadoId]),
+                            EstadoDes = SysData.ToStr(dr[clsEstadoVM._EstadoDes])
                         });
                     }
                 }
@@ -177,9 +177,9 @@ namespace Contabilidad.Models.Modules
                     {
                         oCenCosGrupoVM.Add(new clsCenCosGrupoVM()
                         {
-                            CenCosGrupoId = SysData.ToLong(dr["CenCosGrupoId"]),
-                            CenCosGrupoCod = SysData.ToStr(dr["CenCosGrupoCod"]),
-                            CenCosGrupoDes = SysData.ToStr(dr["CenCosGrupoDes"])
+                            CenCosGrupoId = SysData.ToLong(dr[clsCenCosGrupoVM._CenCosGrupoId]),
+                            CenCosGrupoCod = SysData.ToStr(dr[clsCenCosGrupoVM._CenCosGrupoCod]),
+                            CenCosGrupoDes = SysData.ToStr(dr[clsCenCosGrupoVM._CenCosGrupoDes])
                         });
                     }
                 }
@@ -214,9 +214,9 @@ namespace Contabilidad.Models.Modules
                     {
                         oPlanGrupoTipoVM.Add(new clsPlanGrupoTipoVM()
                         {
-                            PlanGrupoTipoId = SysData.ToLong(dr["PlanGrupoTipoId"]),
-                            PlanGrupoTipoCod = SysData.ToStr(dr["PlanGrupoTipoCod"]),
-                            PlanGrupoTipoDes = SysData.ToStr(dr["PlanGrupoTipoDes"])
+                            PlanGrupoTipoId = SysData.ToLong(dr[clsPlanGrupoTipoVM._PlanGrupoTipoId]),
+                            PlanGrupoTipoCod = SysData.ToStr(dr[clsPlanGrupoTipoVM._PlanGrupoTipoCod]),
+                            PlanGrupoTipoDes = SysData.ToStr(dr[clsPlanGrupoTipoVM._PlanGrupoTipoDes])
                         });
                     }
                 }
@@ -283,8 +283,8 @@ namespace Contabilidad.Models.Modules
                 oPlan.SelectFilter = clsPlan.SelectFilters.ListBox;
                 oPlan.WhereFilter = clsPlan.WhereFilters.TipoPlanId;
                 oPlan.OrderByFilter = clsPlan.OrderByFilters.PlanDes;
-                oPlan.TipoPlanId = 2;
-                oPlan.EstadoId = ConstEstado.Activo;
+                oPlan.VM.TipoPlanId = 2;
+                oPlan.VM.EstadoId = ConstEstado.Activo;
 
                 if (oPlan.Open())
                 {
@@ -292,8 +292,8 @@ namespace Contabilidad.Models.Modules
                     {
                         oPlanVM.Add(new clsPlanVM()
                         {
-                            PlanId = SysData.ToLong(dr["PlanId"]),
-                            PlanDes = SysData.ToStr(dr["PlanDes"]) + " - " + SysData.ToStr(dr["PlanCod"])
+                            PlanId = SysData.ToLong(dr[clsPlanVM._PlanId]),
+                            PlanDes = SysData.ToStr(dr[clsPlanVM._PlanDes]) + " - " + SysData.ToStr(dr[clsPlanVM._PlanCod])
                         });
                     }
                 }
@@ -328,9 +328,9 @@ namespace Contabilidad.Models.Modules
                     {
                         oSucursalVM.Add(new clsSucursalVM()
                         {
-                            SucursalId = SysData.ToLong(dr["SucursalId"]),
-                            SucursalCod = SysData.ToStr(dr["SucursalCod"]),
-                            SucursalDes = SysData.ToStr(dr["SucursalDes"])
+                            SucursalId = SysData.ToLong(dr[clsSucursalVM._SucursalId]),
+                            SucursalCod = SysData.ToStr(dr[clsSucursalVM._SucursalCod]),
+                            SucursalDes = SysData.ToStr(dr[clsSucursalVM._SucursalDes])
                         });
                     }
                 }
@@ -365,9 +365,9 @@ namespace Contabilidad.Models.Modules
                     {
                         oCenCosVM.Add(new clsCenCosVM()
                         {
-                            CenCosId = SysData.ToLong(dr["CenCosId"]),
-                            CenCosCod = SysData.ToStr(dr["CenCosCod"]),
-                            CenCosDes = SysData.ToStr(dr["CenCosDes"])
+                            CenCosId = SysData.ToLong(dr[clsCenCosVM._CenCosId]),
+                            CenCosCod = SysData.ToStr(dr[clsCenCosVM._CenCosCod]),
+                            CenCosDes = SysData.ToStr(dr[clsCenCosVM._CenCosDes])
                         });
                     }
                 }
@@ -396,7 +396,7 @@ namespace Contabilidad.Models.Modules
                 oPlanGrupoDet.SelectFilter = clsPlanGrupoDet.SelectFilters.All;
                 oPlanGrupoDet.WhereFilter = clsPlanGrupoDet.WhereFilters.PlanGrupoId;
                 oPlanGrupoDet.OrderByFilter = clsPlanGrupoDet.OrderByFilters.Orden;
-                oPlanGrupoDet.PlanGrupoId = lngPlanGrupoId;
+                oPlanGrupoDet.VM.PlanGrupoId = lngPlanGrupoId;
 
                 if (oPlanGrupoDet.Open())
                 {
@@ -404,15 +404,15 @@ namespace Contabilidad.Models.Modules
                     {
                         oPlanGrupoDetVM.Add(new clsPlanGrupoDetVM()
                         {
-                            PlanGrupoDetId = SysData.ToLong(dr["PlanGrupoDetId"]),
-                            PlanGrupoId = SysData.ToLong(dr["PlanGrupoId"]),
-                            PlanGrupoDetDes = SysData.ToStr(dr["PlanGrupoDetDes"]),
-                            PlanId = SysData.ToLong(dr["PlanId"]),
-                            PlanFlujoId = SysData.ToLong(dr["PlanFlujoId"]),
-                            SucursalId = SysData.ToLong(dr["SucursalId"]),
-                            CenCosId = SysData.ToLong(dr["CenCosId"]),
-                            Orden = SysData.ToLong(dr["Orden"]),
-                            EstadoId = SysData.ToLong(dr["EstadoId"])
+                            PlanGrupoDetId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanGrupoDetId]),
+                            PlanGrupoId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanGrupoId]),
+                            PlanGrupoDetDes = SysData.ToStr(dr[clsPlanGrupoDetVM._PlanGrupoDetDes]),
+                            PlanId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanId]),
+                            PlanFlujoId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanFlujoId]),
+                            SucursalId = SysData.ToLong(dr[clsPlanGrupoDetVM._SucursalId]),
+                            CenCosId = SysData.ToLong(dr[clsPlanGrupoDetVM._CenCosId]),
+                            Orden = SysData.ToLong(dr[clsPlanGrupoDetVM._Orden]),
+                            EstadoId = SysData.ToLong(dr[clsPlanGrupoDetVM._EstadoId])
                         });
                     }
                 }
@@ -447,9 +447,9 @@ namespace Contabilidad.Models.Modules
                     {
                         oTipoPersonaVM.Add(new clsTipoPersonaVM()
                         {
-                            TipoPersonaId = SysData.ToLong(dr["TipoPersonaId"]),
-                            TipoPersonaCod = SysData.ToStr(dr["TipoPersonaCod"]),
-                            TipoPersonaDes = SysData.ToStr(dr["TipoPersonaDes"])
+                            TipoPersonaId = SysData.ToLong(dr[clsTipoPersonaVM._TipoPersonaId]),
+                            TipoPersonaCod = SysData.ToStr(dr[clsTipoPersonaVM._TipoPersonaCod]),
+                            TipoPersonaDes = SysData.ToStr(dr[clsTipoPersonaVM._TipoPersonaDes])
                         });
                     }
                 }

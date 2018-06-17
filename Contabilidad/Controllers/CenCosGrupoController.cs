@@ -287,12 +287,12 @@ namespace Contabilidad.Controllers
                     {
                         oCenCosGrupoVM.Add(new clsCenCosGrupoVM()
                         {
-                            CenCosGrupoId = SysData.ToLong(dr["CenCosGrupoId"]),
-                            CenCosGrupoCod = SysData.ToStr(dr["CenCosGrupoCod"]),
-                            CenCosGrupoDes = SysData.ToStr(dr["CenCosGrupoDes"]),
-                            CenCosGrupoEsp = SysData.ToStr(dr["CenCosGrupoEsp"]),
-                            EstadoId = SysData.ToLong(dr["EstadoId"]),
-                            EstadoDes = SysData.ToStr(dr["EstadoDes"])
+                            CenCosGrupoId = SysData.ToLong(dr[clsCenCosGrupoVM._CenCosGrupoId]),
+                            CenCosGrupoCod = SysData.ToStr(dr[clsCenCosGrupoVM._CenCosGrupoCod]),
+                            CenCosGrupoDes = SysData.ToStr(dr[clsCenCosGrupoVM._CenCosGrupoDes]),
+                            CenCosGrupoEsp = SysData.ToStr(dr[clsCenCosGrupoVM._CenCosGrupoEsp]),
+                            EstadoId = SysData.ToLong(dr[clsCenCosGrupoVM._EstadoId]),
+                            EstadoDes = SysData.ToStr(dr[clsCenCosGrupoVM._EstadoDes])
                         });
                     }
                 }

@@ -71,6 +71,7 @@ namespace Contabilidad.Models.VM
         public static string _PlanGrupoDes = nameof(PlanGrupoDes);
         public static string _PlanGrupoEsp = nameof(PlanGrupoEsp);
         public static string _PlanGrupoTipoId = nameof(PlanGrupoTipoId);
+        public static string _PlanGrupoTipoDes = nameof(PlanGrupoTipoDes);
         public static string _PlanGrupoTipoDetId = nameof(PlanGrupoTipoDetId);
         public static string _PlanGrupoTipoDetDes = nameof(PlanGrupoTipoDetDes);
         public static string _NroCuentas = nameof(NroCuentas);

@@ -19,5 +19,9 @@ namespace Contabilidad.Models.VM
 
         [NotMapped]
         public long EmpresaId { get; set; }
+
+        public static string _UsuarioId = nameof(UsuarioId);
+        public static string _UsuarioPass = nameof(UsuarioPass);
+        public static string _EmpresaId = nameof(EmpresaId);
     }
 }

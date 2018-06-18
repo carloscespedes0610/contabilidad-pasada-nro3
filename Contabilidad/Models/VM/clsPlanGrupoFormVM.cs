@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Contabilidad.Models.DAC;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 

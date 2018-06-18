@@ -240,8 +240,8 @@ namespace Contabilidad.Models.DAC
 
     static class ConstEstado
     {
-        public const long Inactivo = 100;
-        public const long Activo = 101;
+        public const long Inactivo = 2;
+        public const long Activo = 1;
     }
 
 }

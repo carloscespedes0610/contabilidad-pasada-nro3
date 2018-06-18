@@ -133,7 +133,7 @@ namespace Contabilidad.Models.Modules
                 oEstado.SelectFilter = clsEstado.SelectFilters.ListBox;
                 oEstado.WhereFilter = clsEstado.WhereFilters.AplicacionId;
                 oEstado.OrderByFilter = clsEstado.OrderByFilters.EstadoDes;
-                oEstado.VM.AplicacionId = clsAppInfo.AplicacionId;
+                oEstado.VM.AplicacionId = 0;
 
                 if (oEstado.Open())
                 {

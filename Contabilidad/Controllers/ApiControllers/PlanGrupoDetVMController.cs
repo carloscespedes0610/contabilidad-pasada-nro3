@@ -1,4 +1,5 @@
-﻿using Contabilidad.Models.InMemory;
+﻿using Contabilidad.Models.DAC;
+using Contabilidad.Models.InMemory;
 using Contabilidad.Models.Modules;
 using Contabilidad.Models.VM;
 using DevExtreme.AspNet.Data;
@@ -33,6 +34,7 @@ namespace Contabilidad.Controllers.ApiControllers
             var values = form.Get("values");
 
             var oPlanGrupoDetVM = new clsPlanGrupoDetVM();
+           
             JsonConvert.PopulateObject(values, oPlanGrupoDetVM);
 
             Validate(oPlanGrupoDetVM);

@@ -1,7 +1,4 @@
-﻿@model IEnumerable<Contabilidad.Models.VM.clsPlanVM>
-@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+﻿
 
 <section class="content">
     <div class="box-header with-border">
@@ -19,7 +16,7 @@
 
     @(Html.DevExtreme().TreeList<Contabilidad.Models.VM.clsPlanVM>()
         .ID("grid")
-        .DataSource(d => d.Mvc().Controller("Plan").LoadAction("PlanGrid").Key("PlanId"))
+        .DataSource(d => d.Mvc().Controller("Plan").LoadAction("PlanGrid_View").Key("PlanId"))
         .KeyExpr("PlanId")
         .ParentIdExpr("PlanPadreId")
         .ShowColumnLines(false)
@@ -46,7 +43,6 @@
         })
         .SelectedRowKeys(new[] { ViewBag.PlanIdDef })
         .ExpandedRowKeys(new[] { ViewBag.PlanIdDef })
-        //.AutoExpandAll(true)
     )
 </section>
 

@@ -15,7 +15,7 @@ namespace Contabilidad.Controllers
     [SessionExpireFilter]
     public class PlanController : Controller
     {
-        List<clsPlanVM> moPlanVM;
+        List<clsPlanVM> moPlanVM = new List<clsPlanVM>();
 
         // GET: Plan
         public ActionResult Index(string MessageErr)
@@ -571,61 +571,11 @@ namespace Contabilidad.Controllers
             }
         }
 
-        private List<clsPlanVM> PlanGridIndex()
-        {
-            clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
-            List < clsPlanVM > lista = new List<clsPlanVM>();
-
-            try
-            {
-                oPlan.SelectFilter = clsPlan.SelectFilters.Grid;
-                oPlan.WhereFilter = clsPlan.WhereFilters.Grid;
-                oPlan.OrderByFilter = clsPlan.OrderByFilters.Grid;
-
-                if (oPlan.Open())
-                {
-                    foreach (DataRow dr in oPlan.DataSet.Tables[oPlan.TableName].Rows)
-                    {
-                        lista.Add(new clsPlanVM()
-                        {
-                            PlanId = SysData.ToLong(dr[clsPlanVM._PlanId]),
-                            PlanCod = SysData.ToStr(dr[clsPlanVM._PlanCod]),
-                            PlanDes = SysData.ToStr(dr[clsPlanVM._PlanDes]),
-                            TipoPlanId = SysData.ToLong(dr[clsPlanVM._TipoPlanId]),
-                            TipoPlanDes = SysData.ToStr(dr[clsPlanVM._TipoPlanDes]),
-                            Orden = SysData.ToLong(dr[clsPlanVM._Orden]),
-                            Nivel = SysData.ToLong(dr[clsPlanVM._Nivel]),
-                            MonedaId = SysData.ToLong(dr[clsPlanVM._MonedaId]),
-                            MonedaDes = SysData.ToStr(dr[clsPlanVM._MonedaDes]),
-                            CapituloId = SysData.ToLong(dr[clsPlanVM._CapituloId]),
-                            PlanPadreId = SysData.ToLong(dr[clsPlanVM._PlanPadreId]),
-                            EstadoId = SysData.ToLong(dr[clsPlanVM._EstadoId]),
-                            EstadoDes = SysData.ToStr(dr[clsPlanVM._EstadoDes])
-                        });
-
-                        if (TieneHijos(SysData.ToLong(dr[clsPlanVM._PlanId])))
-                        {
-                            PlanHijoLoad(SysData.ToLong(dr[clsPlanVM._PlanId]));
-                        }
-                    }
-                }
-            }
-
-            catch (Exception exp)
-            {
-                throw (exp);
-            }
-            finally
-            {
-                oPlan.Dispose();
-            }
-            return lista;
-        }
 
         [HttpGet]
-        public ActionResult PlanGrid(DataSourceLoadOptions loadOptions)
+        public ActionResult PlanGrid_View(DataSourceLoadOptions loadOptions)
         {
-            return Content(JsonConvert.SerializeObject(PlanGridIndex()), "application/json");
+            return Content(JsonConvert.SerializeObject(PlanGrid()), "application/json");
         }
     }
 }

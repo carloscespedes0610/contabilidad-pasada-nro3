@@ -8,12 +8,13 @@ namespace Contabilidad.Models.VM
 {
     public class clsPlanGrupoDetVM
     {
+
         [Key]
         public long PlanGrupoDetId { get; set; }
 
         [Display(Name = "Tipo")]
         [Required(ErrorMessage = "{0} es Requerido")]
-        [Range(1, long.MaxValue, ErrorMessage = "{0} es Requerido")]
+       // [Range(1, long.MaxValue, ErrorMessage = "{0} es Requerido")]
         public long PlanGrupoId { get; set; }
 
         [Display(Name = "Descripción")]
@@ -26,7 +27,7 @@ namespace Contabilidad.Models.VM
         public long PlanId { get; set; }
 
         [Display(Name = "Cuenta Flujo")]
-        [Range(1, long.MaxValue, ErrorMessage = "{0} es Requerido")]
+      //  [Range(1, long.MaxValue, ErrorMessage = "{0} es Requerido")]
         [Required(ErrorMessage = "{0} es Requerido")]
         public long PlanFlujoId { get; set; }
 
@@ -37,7 +38,7 @@ namespace Contabilidad.Models.VM
 
         [Display(Name = "Centro Costo")]
         [Required(ErrorMessage = "{0} es Requerido")]
-        [Range(1, long.MaxValue, ErrorMessage = "{0} es Requerido")]
+      //  [Range(1, long.MaxValue, ErrorMessage = "{0} es Requerido")]
         public long CenCosId { get; set; }
 
         [Display(Name = "Orden")]
@@ -47,7 +48,7 @@ namespace Contabilidad.Models.VM
 
         [Display(Name = "Estado")]
         [Required(ErrorMessage = "{0} es Requerido")]
-        [Range(1, long.MaxValue, ErrorMessage = "{0} es Requerido")]
+       // [Range(1, long.MaxValue, ErrorMessage = "{0} es Requerido")]
         public long EstadoId { get; set; }
 
         [Display(Name = "Estado")]
@@ -65,3 +66,4 @@ namespace Contabilidad.Models.VM
         public static string _EstadoDes = nameof(EstadoDes);
     }
 }
+ 

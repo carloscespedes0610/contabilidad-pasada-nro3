@@ -1,6 +1,8 @@
 ﻿using Contabilidad.Models.DAC;
 using Contabilidad.Models.Modules;
 using Contabilidad.Models.VM;
+using DevExtreme.AspNet.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -643,28 +645,28 @@ namespace Contabilidad.Controllers
 
         private void DataInit(clsPlanGrupoFormVM oPlanGrupoFormVM)
         {
-            oPlanGrupoFormVM.PlanGrupoId = 0;
-            oPlanGrupoFormVM.MonedaId = 1;
-            oPlanGrupoFormVM.NroCuentas = 1;
-            oPlanGrupoFormVM.EstadoId = ConstEstado.Activo;
+            oPlanGrupoFormVM.VM.PlanGrupoId = 0;
+            oPlanGrupoFormVM.VM.MonedaId = 1;
+            oPlanGrupoFormVM.VM.NroCuentas = 1;
+            oPlanGrupoFormVM.VM.EstadoId = ConstEstado.Activo;
         }
 
         private void DataMove(clsPlanGrupoFormVM oPlanGrupoFormVM, clsPlanGrupo oPlanGrupo, bool boolEditing)
         {
             if (boolEditing)
             {
-                oPlanGrupo.VM.PlanGrupoId = SysData.ToLong(oPlanGrupoFormVM.PlanGrupoId);
+                oPlanGrupo.VM.PlanGrupoId = SysData.ToLong(oPlanGrupoFormVM.VM.PlanGrupoId);
             }
 
-            oPlanGrupo.VM.PlanGrupoCod = SysData.ToStr(oPlanGrupoFormVM.PlanGrupoCod);
-            oPlanGrupo.VM.PlanGrupoDes = SysData.ToStr(oPlanGrupoFormVM.PlanGrupoDes);
-            oPlanGrupo.VM.PlanGrupoEsp = SysData.ToStr(oPlanGrupoFormVM.PlanGrupoEsp);
-            oPlanGrupo.VM.PlanGrupoTipoId = SysData.ToLong(oPlanGrupoFormVM.PlanGrupoTipoId);
-            oPlanGrupo.VM.PlanGrupoTipoDetId = SysData.ToLong(oPlanGrupoFormVM.PlanGrupoTipoDetId);
-            oPlanGrupo.VM.NroCuentas = SysData.ToLong(oPlanGrupoFormVM.NroCuentas);
-            oPlanGrupo.VM.MonedaId = SysData.ToLong(oPlanGrupoFormVM.MonedaId);
-            oPlanGrupo.VM.VerificaMto = SysData.ToBoolean(oPlanGrupoFormVM.VerificaMto);
-            oPlanGrupo.VM.EstadoId = SysData.ToLong(oPlanGrupoFormVM.EstadoId);
+            oPlanGrupo.VM.PlanGrupoCod = SysData.ToStr(oPlanGrupoFormVM.VM.PlanGrupoCod);
+            oPlanGrupo.VM.PlanGrupoDes = SysData.ToStr(oPlanGrupoFormVM.VM.PlanGrupoDes);
+            oPlanGrupo.VM.PlanGrupoEsp = SysData.ToStr(oPlanGrupoFormVM.VM.PlanGrupoEsp);
+            oPlanGrupo.VM.PlanGrupoTipoId = SysData.ToLong(oPlanGrupoFormVM.VM.PlanGrupoTipoId);
+            oPlanGrupo.VM.PlanGrupoTipoDetId = SysData.ToLong(oPlanGrupoFormVM.VM.PlanGrupoTipoDetId);
+            oPlanGrupo.VM.NroCuentas = SysData.ToLong(oPlanGrupoFormVM.VM.NroCuentas);
+            oPlanGrupo.VM.MonedaId = SysData.ToLong(oPlanGrupoFormVM.VM.MonedaId);
+            oPlanGrupo.VM.VerificaMto = SysData.ToBoolean(oPlanGrupoFormVM.VM.VerificaMto);
+            oPlanGrupo.VM.EstadoId = SysData.ToLong(oPlanGrupoFormVM.VM.EstadoId);
         }
 
         private void DataMoveDet(clsPlanGrupo oPlanGrupo, clsPlanGrupoDetVM oPlanGrupoDetVM, clsPlanGrupoDet oPlanGrupoDet, bool boolEditing)
@@ -746,16 +748,16 @@ namespace Contabilidad.Controllers
 
                 if (oPlanGrupo.FindByPK())
                 {
-                    oPlanGrupoFormVM.PlanGrupoId = oPlanGrupo.VM.PlanGrupoId;
-                    oPlanGrupoFormVM.PlanGrupoCod = oPlanGrupo.VM.PlanGrupoCod;
-                    oPlanGrupoFormVM.PlanGrupoDes = oPlanGrupo.VM.PlanGrupoDes;
-                    oPlanGrupoFormVM.PlanGrupoEsp = oPlanGrupo.VM.PlanGrupoEsp;
-                    oPlanGrupoFormVM.PlanGrupoTipoId = oPlanGrupo.VM.PlanGrupoTipoId;
-                    oPlanGrupoFormVM.PlanGrupoTipoDetId = oPlanGrupo.VM.PlanGrupoTipoDetId;
-                    oPlanGrupoFormVM.NroCuentas = oPlanGrupo.VM.NroCuentas;
-                    oPlanGrupoFormVM.MonedaId = oPlanGrupo.VM.MonedaId;
-                    oPlanGrupoFormVM.VerificaMto = oPlanGrupo.VM.VerificaMto;
-                    oPlanGrupoFormVM.EstadoId = oPlanGrupo.VM.EstadoId;
+                    oPlanGrupoFormVM.VM.PlanGrupoId = oPlanGrupo.VM.PlanGrupoId;
+                    oPlanGrupoFormVM.VM.PlanGrupoCod = oPlanGrupo.VM.PlanGrupoCod;
+                    oPlanGrupoFormVM.VM.PlanGrupoDes = oPlanGrupo.VM.PlanGrupoDes;
+                    oPlanGrupoFormVM.VM.PlanGrupoEsp = oPlanGrupo.VM.PlanGrupoEsp;
+                    oPlanGrupoFormVM.VM.PlanGrupoTipoId = oPlanGrupo.VM.PlanGrupoTipoId;
+                    oPlanGrupoFormVM.VM.PlanGrupoTipoDetId = oPlanGrupo.VM.PlanGrupoTipoDetId;
+                    oPlanGrupoFormVM.VM.NroCuentas = oPlanGrupo.VM.NroCuentas;
+                    oPlanGrupoFormVM.VM.MonedaId = oPlanGrupo.VM.MonedaId;
+                    oPlanGrupoFormVM.VM.VerificaMto = oPlanGrupo.VM.VerificaMto;
+                    oPlanGrupoFormVM.VM.EstadoId = oPlanGrupo.VM.EstadoId;
 
                     oPlanGrupoDet.SelectFilter = clsPlanGrupoDet.SelectFilters.All;
                     oPlanGrupoDet.WhereFilter = clsPlanGrupoDet.WhereFilters.PlanGrupoId;
@@ -798,5 +800,10 @@ namespace Contabilidad.Controllers
             return null;
         }
 
+        [HttpGet]
+        public ActionResult PlanGrupoGrid(DataSourceLoadOptions loadOptions)
+        {
+            return Content(JsonConvert.SerializeObject(PlanGrupoGrid()), "application/json");
+        }
     }
 }

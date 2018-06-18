@@ -19,7 +19,7 @@
                             @Html.AntiForgeryToken();
 
                             @Html.HiddenFor(m => m.NroCuentas);
-                            @Html.HiddenFor(m => m.VerificaMto);
+                            @*@Html.HiddenFor(m => m.VerificaMto);*@
 
                             @(Html.DevExtreme().Form<Contabilidad.Models.VM.clsPlanGrupoFormVM>()
                                         .ShowValidationSummary(true)

@@ -241,7 +241,7 @@ namespace Contabilidad.Models.DAC
                     strSQL = " SELECT  " +
                             "    parMoneda.MonedaId, " +
                             "    parMoneda.MonedaCod, " +
-                            "    parMoneda.MonedaDes, " +
+                            "    parMoneda.MonedaDes " +
                             " FROM parMoneda ";
                     break;
 
@@ -252,7 +252,7 @@ namespace Contabilidad.Models.DAC
                     strSQL = " SELECT  " +
                            "    parMoneda.MonedaId, " +
                            "    parMoneda.MonedaCod, " +
-                           "    parMoneda.MonedaDes, " +
+                           "    parMoneda.MonedaDes " +
                            " FROM parMoneda ";
                     break;
 
@@ -260,7 +260,7 @@ namespace Contabilidad.Models.DAC
                     strSQL = " SELECT  " +
                           "    parMoneda.MonedaId, " +
                           "    parMoneda.MonedaCod, " +
-                          "    parMoneda.MonedaDes, " +
+                          "    parMoneda.MonedaDes " +
                           " FROM parMoneda ";
                     break;
 

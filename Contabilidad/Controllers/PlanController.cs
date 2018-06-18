@@ -1,6 +1,8 @@
 ﻿using Contabilidad.Models.DAC;
 using Contabilidad.Models.Modules;
 using Contabilidad.Models.VM;
+using DevExtreme.AspNet.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -423,24 +425,24 @@ namespace Contabilidad.Controllers
                     {
                         moPlanVM.Add(new clsPlanVM()
                         {
-                            PlanId = SysData.ToLong(dr["PlanId"]),
-                            PlanCod = SysData.ToStr(dr["PlanCod"]),
-                            PlanDes = SysData.ToStr(dr["PlanDes"]),
-                            TipoPlanId = SysData.ToLong(dr["TipoPlanId"]),
-                            TipoPlanDes = SysData.ToStr(dr["TipoPlanDes"]),
-                            Orden = SysData.ToLong(dr["Orden"]),
-                            Nivel = SysData.ToLong(dr["Nivel"]),
-                            MonedaId = SysData.ToLong(dr["MonedaId"]),
-                            MonedaDes = SysData.ToStr(dr["MonedaDes"]),
-                            CapituloId = SysData.ToLong(dr["CapituloId"]),
-                            PlanPadreId = SysData.ToLong(dr["PlanPadreId"]),
-                            EstadoId = SysData.ToLong(dr["EstadoId"]),
-                            EstadoDes = SysData.ToStr(dr["EstadoDes"])
+                            PlanId = SysData.ToLong(dr[clsPlanVM._PlanId]),
+                            PlanCod = SysData.ToStr(dr[clsPlanVM._PlanCod]),
+                            PlanDes = SysData.ToStr(dr[clsPlanVM._PlanDes]),
+                            TipoPlanId = SysData.ToLong(dr[clsPlanVM._TipoPlanId]),
+                            TipoPlanDes = SysData.ToStr(dr[clsPlanVM._TipoPlanDes]),
+                            Orden = SysData.ToLong(dr[clsPlanVM._Orden]),
+                            Nivel = SysData.ToLong(dr[clsPlanVM._Nivel]),
+                            MonedaId = SysData.ToLong(dr[clsPlanVM._MonedaId]),
+                            MonedaDes = SysData.ToStr(dr[clsPlanVM._MonedaDes]),
+                            CapituloId = SysData.ToLong(dr[clsPlanVM._CapituloId]),
+                            PlanPadreId = SysData.ToLong(dr[clsPlanVM._PlanPadreId]),
+                            EstadoId = SysData.ToLong(dr[clsPlanVM._EstadoId]),
+                            EstadoDes = SysData.ToStr(dr[clsPlanVM._EstadoDes])
                         });
 
-                        if (TieneHijos(SysData.ToLong(dr["PlanId"])))
+                        if (TieneHijos(SysData.ToLong(dr[clsPlanVM._PlanId])))
                         {
-                            PlanHijoLoad(SysData.ToLong(dr["PlanId"]));
+                            PlanHijoLoad(SysData.ToLong(dr[clsPlanVM._PlanId]));
                         }
                     }
                 }
@@ -569,5 +571,61 @@ namespace Contabilidad.Controllers
             }
         }
 
+        private List<clsPlanVM> PlanGridIndex()
+        {
+            clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
+            List < clsPlanVM > lista = new List<clsPlanVM>();
+
+            try
+            {
+                oPlan.SelectFilter = clsPlan.SelectFilters.Grid;
+                oPlan.WhereFilter = clsPlan.WhereFilters.Grid;
+                oPlan.OrderByFilter = clsPlan.OrderByFilters.Grid;
+
+                if (oPlan.Open())
+                {
+                    foreach (DataRow dr in oPlan.DataSet.Tables[oPlan.TableName].Rows)
+                    {
+                        lista.Add(new clsPlanVM()
+                        {
+                            PlanId = SysData.ToLong(dr[clsPlanVM._PlanId]),
+                            PlanCod = SysData.ToStr(dr[clsPlanVM._PlanCod]),
+                            PlanDes = SysData.ToStr(dr[clsPlanVM._PlanDes]),
+                            TipoPlanId = SysData.ToLong(dr[clsPlanVM._TipoPlanId]),
+                            TipoPlanDes = SysData.ToStr(dr[clsPlanVM._TipoPlanDes]),
+                            Orden = SysData.ToLong(dr[clsPlanVM._Orden]),
+                            Nivel = SysData.ToLong(dr[clsPlanVM._Nivel]),
+                            MonedaId = SysData.ToLong(dr[clsPlanVM._MonedaId]),
+                            MonedaDes = SysData.ToStr(dr[clsPlanVM._MonedaDes]),
+                            CapituloId = SysData.ToLong(dr[clsPlanVM._CapituloId]),
+                            PlanPadreId = SysData.ToLong(dr[clsPlanVM._PlanPadreId]),
+                            EstadoId = SysData.ToLong(dr[clsPlanVM._EstadoId]),
+                            EstadoDes = SysData.ToStr(dr[clsPlanVM._EstadoDes])
+                        });
+
+                        if (TieneHijos(SysData.ToLong(dr[clsPlanVM._PlanId])))
+                        {
+                            PlanHijoLoad(SysData.ToLong(dr[clsPlanVM._PlanId]));
+                        }
+                    }
+                }
+            }
+
+            catch (Exception exp)
+            {
+                throw (exp);
+            }
+            finally
+            {
+                oPlan.Dispose();
+            }
+            return lista;
+        }
+
+        [HttpGet]
+        public ActionResult PlanGrid(DataSourceLoadOptions loadOptions)
+        {
+            return Content(JsonConvert.SerializeObject(PlanGridIndex()), "application/json");
+        }
     }
 }

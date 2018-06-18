@@ -18,8 +18,8 @@
                         {
                             @Html.AntiForgeryToken();
 
-                            @Html.HiddenFor(m => m.PlanGrupoId);
-                            @Html.HiddenFor(m => m.NroCuentas);
+                            @Html.HiddenFor(m => m.VM.PlanGrupoId);
+                            @Html.HiddenFor(m => m.VM.NroCuentas);
 
                             @(Html.DevExtreme().Form<Contabilidad.Models.VM.clsPlanGrupoFormVM>()
                                         .ShowValidationSummary(true)
@@ -29,14 +29,14 @@
                                             .ColCount(2)
                                             .Items(groupItems =>
                                             {
-                                                groupItems.AddSimpleFor(m => m.PlanGrupoCod).Editor(e => e.TextBox().Width("50%")).IsRequired(true);
-                                                groupItems.AddSimpleFor(m => m.PlanGrupoDes).Editor(e => e.TextBox()).IsRequired(true);
-                                                groupItems.AddSimpleFor(m => m.PlanGrupoEsp).Editor(e => e.TextBox()).ColSpan(2);
-                                                groupItems.AddSimpleFor(m => m.PlanGrupoTipoId).Editor(e => e.SelectBox().ID("PlanGrupoTipo").DataSource(ViewBag.PlanGrupoTipoId).ValueExpr("PlanGrupoTipoId").DisplayExpr("PlanGrupoTipoDes").SearchEnabled(true).ShowClearButton(true).OnValueChanged("onValueChanged")).IsRequired(true);
-                                                groupItems.AddSimpleFor(m => m.PlanGrupoTipoDetId).Editor(e => e.SelectBox().ID("PlanGrupoTipoDet").DataSource(ViewBag.PlanGrupoTipoDetId).ValueExpr("PlanGrupoTipoDetId").DisplayExpr("PlanGrupoTipoDetDes").SearchEnabled(true).ShowClearButton(true)).IsRequired(true);
-                                                groupItems.AddSimpleFor(m => m.MonedaId).Editor(e => e.SelectBox().DataSource(ViewBag.MonedaId).ValueExpr("MonedaId").DisplayExpr("MonedaDes").SearchEnabled(true).ShowClearButton(true)).IsRequired(true);
-                                                groupItems.AddSimpleFor(m => m.VerificaMto).Editor(e => e.CheckBox());
-                                                groupItems.AddSimpleFor(m => m.EstadoId).Editor(e => e.SelectBox().DataSource(ViewBag.EstadoId).ValueExpr("EstadoId").DisplayExpr("EstadoDes").SearchEnabled(true).ShowClearButton(true).ReadOnly(true)).IsRequired(true);
+                                                groupItems.AddSimpleFor(m => m.VM.PlanGrupoCod).Editor(e => e.TextBox().Width("50%")).IsRequired(true);
+                                                groupItems.AddSimpleFor(m => m.VM.PlanGrupoDes).Editor(e => e.TextBox()).IsRequired(true);
+                                                groupItems.AddSimpleFor(m => m.VM.PlanGrupoEsp).Editor(e => e.TextBox()).ColSpan(2);
+                                                groupItems.AddSimpleFor(m => m.VM.PlanGrupoTipoId).Editor(e => e.SelectBox().ID("PlanGrupoTipo").DataSource(ViewBag.PlanGrupoTipoId).ValueExpr("PlanGrupoTipoId").DisplayExpr("PlanGrupoTipoDes").SearchEnabled(true).ShowClearButton(true).OnValueChanged("onValueChanged")).IsRequired(true);
+                                                groupItems.AddSimpleFor(m => m.VM.PlanGrupoTipoDetId).Editor(e => e.SelectBox().ID("PlanGrupoTipoDet").DataSource(ViewBag.PlanGrupoTipoDetId).ValueExpr("PlanGrupoTipoDetId").DisplayExpr("PlanGrupoTipoDetDes").SearchEnabled(true).ShowClearButton(true)).IsRequired(true);
+                                                groupItems.AddSimpleFor(m => m.VM.MonedaId).Editor(e => e.SelectBox().DataSource(ViewBag.MonedaId).ValueExpr("MonedaId").DisplayExpr("MonedaDes").SearchEnabled(true).ShowClearButton(true)).IsRequired(true);
+                                                groupItems.AddSimpleFor(m => m.VM.VerificaMto).Editor(e => e.CheckBox());
+                                                groupItems.AddSimpleFor(m => m.VM.EstadoId).Editor(e => e.SelectBox().DataSource(ViewBag.EstadoId).ValueExpr("EstadoId").DisplayExpr("EstadoDes").SearchEnabled(true).ShowClearButton(true).ReadOnly(true)).IsRequired(true);
                                             });
 
                                             items.AddEmpty();
@@ -58,7 +58,7 @@
                                                                 .InsertAction(true)
                                                                 .UpdateAction(true)
                                                                 .DeleteAction(true)
-                                                                .LoadParams(new { id = Model.PlanGrupoId })
+                                                                .LoadParams(new { id = Model.VM.PlanGrupoId })
                                                             )
                                                             .ShowBorders(true)
                                                             .Columns(columns =>

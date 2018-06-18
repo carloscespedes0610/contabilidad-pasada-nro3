@@ -1,13 +1,10 @@
 ﻿using Contabilidad.Models.DAC;
 using Contabilidad.Models.VM;
-using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Contabilidad.Controllers

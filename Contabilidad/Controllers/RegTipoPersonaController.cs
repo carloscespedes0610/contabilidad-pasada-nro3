@@ -1,5 +1,7 @@
 ﻿using Contabilidad.Models.DAC;
 using Contabilidad.Models.VM;
+using DevExtreme.AspNet.Mvc;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -261,5 +263,10 @@ namespace Contabilidad.Controllers
             return strPlanGrupoId;
         }
 
+        [HttpGet]
+        public ActionResult RegTipoPersonaGrid(DataSourceLoadOptions loadOptions)
+        {
+            return Content(JsonConvert.SerializeObject(TipoPersonaGrid()), "application/json");
+        }
     }
 }

@@ -35,7 +35,7 @@
 
     @(Html.DevExtreme().DataGrid<Contabilidad.Models.VM.clsPlanGrupoVM>()
                 .ID("grid")
-                .DataSource(Model, "PlanGrupoId")
+                .DataSource(d => d.Mvc().Controller("PlanGrupo").LoadAction("PlanGrupoGrid").Key("PlanGrupoDetId"))
                 .AllowColumnResizing(true)
                 .ShowColumnLines(false)
                 .ShowRowLines(true)

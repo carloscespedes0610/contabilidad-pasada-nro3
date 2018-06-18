@@ -23,7 +23,7 @@ namespace Contabilidad.Models.VM
         public string EstadoDes { get; set; }
 
         public static string _TipoAmbitoId = nameof(TipoAmbitoId);
-        public static string _TipoAmbitoDes = nameofTipoAmbitoDes();
+        public static string _TipoAmbitoDes = nameof(TipoAmbitoDes);
         public static string _EstadoId = nameof(EstadoId);
         public static string _EstadoDes = nameof(EstadoDes);
     }

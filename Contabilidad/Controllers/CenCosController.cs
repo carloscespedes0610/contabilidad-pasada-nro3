@@ -259,28 +259,20 @@ namespace Contabilidad.Controllers
                 oCenCos.WhereFilter = clsCenCos.WhereFilters.Grid;
                 oCenCos.OrderByFilter = clsCenCos.OrderByFilters.Grid;
 
-                //oCenCos.SelectFilter = clsCenCos.SelectFilters.All;
-                //oCenCos.WhereFilter = clsCenCos.WhereFilters.CenCosCod;
-                //oCenCos.VM.CenCosCod = "PUE";
-
-                //if (oCenCos.Find())
-                //{
-                //}
-
                 if (oCenCos.Open())
                 {
                     foreach (DataRow dr in oCenCos.DataSet.Tables[oCenCos.TableName].Rows)
                     {
                         oCenCosVM.Add(new clsCenCosVM()
                         {
-                            CenCosId = SysData.ToLong(dr["CenCosId"]),
-                            CenCosCod = SysData.ToStr(dr["CenCosCod"]),
-                            CenCosDes = SysData.ToStr(dr["CenCosDes"]),
-                            CenCosEsp = SysData.ToStr(dr["CenCosEsp"]),
-                            CenCosGrupoId = SysData.ToLong(dr["CenCosGrupoId"]),
-                            CenCosGrupoDes = SysData.ToStr(dr["CenCosGrupoDes"]),
-                            EstadoId = SysData.ToLong(dr["EstadoId"]),
-                            EstadoDes = SysData.ToStr(dr["EstadoDes"])
+                            CenCosId = SysData.ToLong(dr[clsCenCosVM._CenCosId]),
+                            CenCosCod = SysData.ToStr(dr[clsCenCosVM._CenCosCod]),
+                            CenCosDes = SysData.ToStr(dr[clsCenCosVM._CenCosDes]),
+                            CenCosEsp = SysData.ToStr(dr[clsCenCosVM._CenCosEsp]),
+                            CenCosGrupoId = SysData.ToLong(dr[clsCenCosVM._CenCosGrupoId]),
+                            CenCosGrupoDes = SysData.ToStr(dr[clsCenCosVM._CenCosGrupoDes]),
+                            EstadoId = SysData.ToLong(dr[clsCenCosVM._EstadoId]),
+                            EstadoDes = SysData.ToStr(dr[clsCenCosVM._EstadoDes])
                         });
                     }
                 }

@@ -19,7 +19,7 @@
 
     @(Html.DevExtreme().TreeList<Contabilidad.Models.VM.clsPlanVM>()
         .ID("grid")
-        .DataSource(Model, "PlanId")
+        .DataSource(d => d.Mvc().Controller("Plan").LoadAction("PlanGrid").Key("PlanId"))
         .KeyExpr("PlanId")
         .ParentIdExpr("PlanPadreId")
         .ShowColumnLines(false)

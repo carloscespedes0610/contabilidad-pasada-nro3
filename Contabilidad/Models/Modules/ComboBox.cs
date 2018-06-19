@@ -386,6 +386,51 @@ namespace Contabilidad.Models.Modules
             return ((IEnumerable<clsCenCosVM>)oCenCosVM);
         }
 
+        public static List<clsPlanGrupoDetVM> PlanGrupoDetList()
+        {
+            clsPlanGrupoDet oPlanGrupoDet = new clsPlanGrupoDet(clsAppInfo.Connection);
+            List<clsPlanGrupoDetVM> oPlanGrupoDetVM = new List<clsPlanGrupoDetVM>();
+
+            try
+            {
+                oPlanGrupoDet.SelectFilter = clsPlanGrupoDet.SelectFilters.All;
+                oPlanGrupoDet.WhereFilter = clsPlanGrupoDet.WhereFilters.None;
+                oPlanGrupoDet.OrderByFilter = clsPlanGrupoDet.OrderByFilters.Orden;
+                //oPlanGrupoDet.VM.PlanGrupoId = lngPlanGrupoId;
+
+                if (oPlanGrupoDet.Open())
+                {
+                    foreach (DataRow dr in oPlanGrupoDet.DataSet.Tables[oPlanGrupoDet.TableName].Rows)
+                    {
+                        oPlanGrupoDetVM.Add(new clsPlanGrupoDetVM()
+                        {
+                            PlanGrupoDetId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanGrupoDetId]),
+                            PlanGrupoId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanGrupoId]),
+                            PlanGrupoDetDes = SysData.ToStr(dr[clsPlanGrupoDetVM._PlanGrupoDetDes]),
+                            PlanId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanId]),
+                            PlanFlujoId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanFlujoId]),
+                            SucursalId = SysData.ToLong(dr[clsPlanGrupoDetVM._SucursalId]),
+                            CenCosId = SysData.ToLong(dr[clsPlanGrupoDetVM._CenCosId]),
+                            Orden = SysData.ToLong(dr[clsPlanGrupoDetVM._Orden]),
+                            EstadoId = SysData.ToLong(dr[clsPlanGrupoDetVM._EstadoId])
+                        });
+                    }
+                }
+            }
+
+            catch (Exception exp)
+            {
+                throw (exp);
+
+            }
+            finally
+            {
+                oPlanGrupoDet.Dispose();
+            }
+
+            return (oPlanGrupoDetVM);
+        }
+
         public static List<clsPlanGrupoDetVM> PlanGrupoDetList(long lngPlanGrupoId)
         {
             clsPlanGrupoDet oPlanGrupoDet = new clsPlanGrupoDet(clsAppInfo.Connection);

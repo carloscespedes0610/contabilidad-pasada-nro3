@@ -24,8 +24,7 @@ namespace Contabilidad.Controllers
             {
                 this.GetDefaultData();
 
-                var lstPlanGrupo = PlanGrupoGrid();
-                return View(lstPlanGrupo);
+                return View();
             }
 
             catch (Exception exp)
@@ -104,7 +103,6 @@ namespace Contabilidad.Controllers
 
                 DataInit(oPlanGrupoFormVM);
 
-                ViewBagLoad();
                 return View(oPlanGrupoFormVM);
             }
 
@@ -156,7 +154,6 @@ namespace Contabilidad.Controllers
                     oPlanGrupo.Rollback();
                 }
 
-                ViewBagLoad();
                 return View(oPlanGrupoFormVM);
             }
 
@@ -164,7 +161,6 @@ namespace Contabilidad.Controllers
             {
                 oPlanGrupo.Rollback();
 
-                ViewBagLoad();
                 ViewBag.MessageErr = exp.Message;
                 return View(oPlanGrupoFormVM);
             }
@@ -191,7 +187,6 @@ namespace Contabilidad.Controllers
                     return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = "Índice no encontrado" });
                 }
 
-                ViewBagLoad();
                 return View(oPlanGrupoFormVM);
             }
 
@@ -252,7 +247,7 @@ namespace Contabilidad.Controllers
                     oPlanGrupo.Rollback();
                 }
 
-                ViewBagLoad();
+               // ViewBagLoad();
                 return View(oPlanGrupoFormVM);
             }
 
@@ -260,7 +255,6 @@ namespace Contabilidad.Controllers
             {
                 oPlanGrupo.Rollback();
 
-                ViewBagLoad();
                 ViewBag.MessageErr = exp.Message;
                 return View(oPlanGrupoFormVM);
             }
@@ -285,7 +279,6 @@ namespace Contabilidad.Controllers
                     return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = "Índice no encontrado" });
                 }
 
-                ViewBagLoad();
                 return View(oPlanGrupoFormVM);
             }
 
@@ -358,7 +351,6 @@ namespace Contabilidad.Controllers
                     return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = "Índice no encontrado" });
                 }
 
-                ViewBagLoad();
                 return View(oPlanGrupoFormVM);
             }
 
@@ -384,7 +376,7 @@ namespace Contabilidad.Controllers
 
                 DataInit(oPlanGrupoFormVM);
 
-                ViewBagLoad();
+               // ViewBagLoad();
                 return View(oPlanGrupoFormVM);
             }
 
@@ -436,7 +428,6 @@ namespace Contabilidad.Controllers
                     oPlanGrupo.Rollback();
                 }
 
-                ViewBagLoad();
                 return View(oPlanGrupoFormVM);
             }
 
@@ -444,7 +435,6 @@ namespace Contabilidad.Controllers
             {
                 oPlanGrupo.Rollback();
 
-                ViewBagLoad();
                 ViewBag.MessageErr = exp.Message;
                 return View(oPlanGrupoFormVM);
             }
@@ -471,7 +461,6 @@ namespace Contabilidad.Controllers
                     return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = "Índice no encontrado" });
                 }
 
-                ViewBagLoad();
                 return View(oPlanGrupoFormVM);
             }
 
@@ -513,7 +502,7 @@ namespace Contabilidad.Controllers
                                     lngRowCount += 1;
                             }
                             else
-                            { 
+                            {
                                 DataMoveDet(oPlanGrupo, oPlanGrupoDetVM, oPlanGrupoDet, true);
 
                                 if (oPlanGrupoDet.Update())
@@ -532,7 +521,6 @@ namespace Contabilidad.Controllers
                     oPlanGrupo.Rollback();
                 }
 
-                ViewBagLoad();
                 return View(oPlanGrupoFormVM);
             }
 
@@ -540,7 +528,6 @@ namespace Contabilidad.Controllers
             {
                 oPlanGrupo.Rollback();
 
-                ViewBagLoad();
                 ViewBag.MessageErr = exp.Message;
                 return View(oPlanGrupoFormVM);
             }
@@ -562,7 +549,6 @@ namespace Contabilidad.Controllers
 
                 DataInit(oPlanGrupoFormVM);
 
-                ViewBagLoad();
                 return View(oPlanGrupoFormVM);
             }
 
@@ -614,7 +600,6 @@ namespace Contabilidad.Controllers
                     oPlanGrupo.Rollback();
                 }
 
-                ViewBagLoad();
                 return View(oPlanGrupoFormVM);
             }
 
@@ -622,26 +607,12 @@ namespace Contabilidad.Controllers
             {
                 oPlanGrupo.Rollback();
 
-                ViewBagLoad();
                 ViewBag.MessageErr = exp.Message;
                 return View(oPlanGrupoFormVM);
             }
         }
 
 
-
-
-        private void ViewBagLoad()
-        {
-            ViewBag.PlanGrupoTipoId = ComboBox.PlanGrupoTipoList();
-            ViewBag.PlanGrupoTipoDetId = ComboBox.PlanGrupoTipoDetList();
-            ViewBag.MonedaId = ComboBox.MonedaList();
-            ViewBag.EstadoId = ComboBox.EstadoList();
-
-            ViewBag.PlanId = ComboBox.PlanList();
-            ViewBag.CenCosId = ComboBox.CenCosList();
-            ViewBag.SucursalId = ComboBox.SucursalList();
-        }
 
         private void DataInit(clsPlanGrupoFormVM oPlanGrupoFormVM)
         {

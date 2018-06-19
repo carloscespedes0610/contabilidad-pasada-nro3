@@ -24,10 +24,9 @@ namespace Contabilidad.Controllers
             {
                 this.GetDefaultData();
 
-                var lstPlan = PlanGrid();
                 ViewBag.MessageErr = MessageErr;
                 ViewBag.PlanIdDef = -1;
-                return View(lstPlan);
+                return View();
             }
 
             catch (Exception exp)
@@ -58,7 +57,6 @@ namespace Contabilidad.Controllers
                         {
                             PlanHijoNew(oPlanPadre, oPlanVM);
 
-                            ViewBagLoad();
                             return View(oPlanVM);
                         }
                         else
@@ -137,20 +135,17 @@ namespace Contabilidad.Controllers
 
             catch (Exception exp)
             {
-                ViewBagLoad();
                 ViewBag.MessageErr = exp.Message;
                 return View(oPlanVM);
             }
 
             if (strMsg.Trim() != string.Empty)
             {
-                ViewBagLoad();
                 ViewBag.MessageErr = strMsg;
                 return View(oPlanVM);
             }
             else
             {
-                ViewBagLoad();
                 return View(oPlanVM);
             }
         }
@@ -175,7 +170,6 @@ namespace Contabilidad.Controllers
                     return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = "Índice no encontrado" });
                 }
 
-                ViewBagLoad();
                 return View(oPlanVM);
             }
 
@@ -229,20 +223,17 @@ namespace Contabilidad.Controllers
 
             catch (Exception exp)
             {
-                ViewBagLoad();
                 ViewBag.MessageErr = exp.Message;
                 return View(oPlanVM);
             }
 
             if (strMsg.Trim() != string.Empty)
             {
-                ViewBagLoad();
                 ViewBag.MessageErr = strMsg;
                 return View(oPlanVM);
             }
             else
             {
-                ViewBagLoad();
                 return View(oPlanVM);
             }
         }
@@ -266,7 +257,6 @@ namespace Contabilidad.Controllers
                     return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = "Índice no encontrado" });
                 }
 
-                ViewBagLoad();
                 return View(oPlanVM);
             }
 
@@ -327,7 +317,6 @@ namespace Contabilidad.Controllers
                     return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = "Índice no encontrado" });
                 }
 
-                ViewBagLoad();
                 return View(oPlanVM);
             }
 
@@ -338,19 +327,7 @@ namespace Contabilidad.Controllers
         }
 
 
-
-
-
-
-
-
-        private void ViewBagLoad()
-        {
-            ViewBag.TipoPlanId = ComboBox.TipoPlanList();
-            ViewBag.MonedaId = ComboBox.MonedaList();
-            ViewBag.TipoAmbitoId = ComboBox.TipoAmbitoList();
-            ViewBag.EstadoId = ComboBox.EstadoList();
-        }
+        
 
         private void DataMove(clsPlanVM oPlanVM, clsPlan oPlan, bool boolEditing)
         {

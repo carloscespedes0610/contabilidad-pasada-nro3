@@ -276,7 +276,7 @@ namespace Contabilidad.Models.DAC
             strSQL += WhereFilterGet() + OrderByFilterGet();
 
             Array.Resize(ref moParameters, 1);
-            moParameters[0] = new SqlParameter("SQL", strSQL);
+            moParameters[0] = new SqlParameter("@SQL", strSQL);
         }
 
         private string WhereFilterGet()
@@ -338,8 +338,8 @@ namespace Contabilidad.Models.DAC
                 case InsertFilters.All:
                     mstrStoreProcName = "ctbCenCosGrupoInsert";
                     moParameters = new SqlParameter[6] {
-                        new SqlParameter("InsertFilter", mintInsertFilter),
-                        new SqlParameter("Id", SqlDbType.Int),
+                        new SqlParameter("@InsertFilter", mintInsertFilter),
+                        new SqlParameter("@Id", SqlDbType.Int),
                         new SqlParameter(clsCenCosGrupoVM._CenCosGrupoCod, VM.CenCosGrupoCod),
                         new SqlParameter(clsCenCosGrupoVM._CenCosGrupoDes, VM.CenCosGrupoDes),
                         new SqlParameter(clsCenCosGrupoVM._CenCosGrupoEsp, VM.CenCosGrupoEsp),
@@ -356,7 +356,7 @@ namespace Contabilidad.Models.DAC
                 case UpdateFilters.All:
                     mstrStoreProcName = "ctbCenCosGrupoUpdate";
                     moParameters = new SqlParameter[6] {
-                        new SqlParameter("UpdateFilter", mintUpdateFilter),
+                        new SqlParameter("@UpdateFilter", mintUpdateFilter),
                         new SqlParameter(clsCenCosGrupoVM._CenCosGrupoId, VM.CenCosGrupoId),
                         new SqlParameter(clsCenCosGrupoVM._CenCosGrupoCod, VM.CenCosGrupoCod),
                         new SqlParameter(clsCenCosGrupoVM._CenCosGrupoDes, VM.CenCosGrupoDes),
@@ -373,7 +373,7 @@ namespace Contabilidad.Models.DAC
                 case DeleteFilters.All:
                     mstrStoreProcName = "ctbCenCosGrupoDelete";
                     moParameters = new SqlParameter[2] {
-                        new SqlParameter("DeleteFilter", mintDeleteFilter),
+                        new SqlParameter("@DeleteFilter", mintDeleteFilter),
                         new SqlParameter(clsCenCosGrupoVM._CenCosGrupoId, VM.CenCosGrupoId)};
                     break;
             }

@@ -281,7 +281,7 @@ namespace Contabilidad.Models.DAC
             strSQL += WhereFilterGet() + OrderByFilterGet();
 
             Array.Resize(ref moParameters, 1);
-            moParameters[0] = new SqlParameter("SQL", strSQL);
+            moParameters[0] = new SqlParameter("@SQL", strSQL);
         }
 
         private string WhereFilterGet()
@@ -343,8 +343,8 @@ namespace Contabilidad.Models.DAC
                 case InsertFilters.All:
                     mstrStoreProcName = "ctbCenCosInsert";
                     moParameters = new SqlParameter[7] {
-                        new SqlParameter("InsertFilter", mintInsertFilter),
-                        new SqlParameter("Id", SqlDbType.Int),
+                        new SqlParameter("@InsertFilter", mintInsertFilter),
+                        new SqlParameter("@Id", SqlDbType.Int),
                         new SqlParameter(clsCenCosVM._CenCosCod, VM.CenCosCod),
                         new SqlParameter(clsCenCosVM._CenCosDes, VM.CenCosDes),
                         new SqlParameter(clsCenCosVM._CenCosEsp, VM.CenCosEsp),
@@ -362,7 +362,7 @@ namespace Contabilidad.Models.DAC
                 case UpdateFilters.All:
                     mstrStoreProcName = "ctbCenCosUpdate";
                     moParameters = new SqlParameter[7] {
-                        new SqlParameter("UpdateFilter", mintUpdateFilter),
+                        new SqlParameter("@UpdateFilter", mintUpdateFilter),
                         new SqlParameter(clsCenCosVM._CenCosId, VM.CenCosId),
                         new SqlParameter(clsCenCosVM._CenCosCod, VM.CenCosCod),
                         new SqlParameter(clsCenCosVM._CenCosDes, VM.CenCosDes),
@@ -380,7 +380,7 @@ namespace Contabilidad.Models.DAC
                 case DeleteFilters.All:
                     mstrStoreProcName = "ctbCenCosDelete";
                     moParameters = new SqlParameter[2] {
-                        new SqlParameter("DeleteFilter", mintDeleteFilter),
+                        new SqlParameter("@DeleteFilter", mintDeleteFilter),
                         new SqlParameter(clsCenCosVM._CenCosId, VM.CenCosId)};
                     break;
             }

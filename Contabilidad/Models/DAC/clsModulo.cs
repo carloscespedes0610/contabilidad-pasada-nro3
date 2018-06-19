@@ -277,7 +277,7 @@ namespace Contabilidad.Models.DAC
             strSQL += WhereFilterGet() + OrderByFilterGet();
 
             Array.Resize(ref moParameters, 1);
-            moParameters[0] = new SqlParameter("SQL", strSQL);
+            moParameters[0] = new SqlParameter("@SQL", strSQL);
         }
 
         private string WhereFilterGet()
@@ -338,8 +338,8 @@ namespace Contabilidad.Models.DAC
                 case InsertFilters.All:
                     mstrStoreProcName = "segModuloInsert";
                     moParameters = new SqlParameter[7] {
-                        new SqlParameter("InsertFilter", mintInsertFilter),
-                        new SqlParameter("Id", SqlDbType.Int),
+                        new SqlParameter("@InsertFilter", mintInsertFilter),
+                        new SqlParameter("@Id", SqlDbType.Int),
                         new SqlParameter(clsModuloVM._ModuloId, VM.ModuloId),
                         new SqlParameter(clsModuloVM._ModuloCod, VM.ModuloCod),
                         new SqlParameter(clsModuloVM._ModuloDes, VM.ModuloDes),
@@ -357,7 +357,7 @@ namespace Contabilidad.Models.DAC
                 case UpdateFilters.All:
                     mstrStoreProcName = "segModuloUpdate";
                     moParameters = new SqlParameter[6] {
-                        new SqlParameter("UpdateFilter", mintUpdateFilter),
+                        new SqlParameter("@UpdateFilter", mintUpdateFilter),
                         new SqlParameter(clsModuloVM._ModuloId, VM.ModuloId),
                         new SqlParameter(clsModuloVM._ModuloCod, VM.ModuloCod),
                         new SqlParameter(clsModuloVM._ModuloDes, VM.ModuloDes),
@@ -374,7 +374,7 @@ namespace Contabilidad.Models.DAC
                 case DeleteFilters.All:
                     mstrStoreProcName = "segModuloDelete";
                     moParameters = new SqlParameter[2] {
-                        new SqlParameter("DeleteFilter", mintDeleteFilter),
+                        new SqlParameter("@DeleteFilter", mintDeleteFilter),
                         new SqlParameter(clsModuloVM._ModuloId, VM.ModuloId) };
                     break;
             }

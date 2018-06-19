@@ -24,33 +24,37 @@
                                         .ShowValidationSummary(true)
                                         .Items(items =>
                                         {
-                                            items.AddGroup()
-                                            .ColCount(2)
-                                            .Items(groupItems =>
-                                            {
-                                                groupItems.AddSimpleFor(m => m.VM.PlanGrupoCod).Editor(e => e.TextBox().Width("50%")).IsRequired(true);
-                                                groupItems.AddSimpleFor(m => m.VM.PlanGrupoDes).Editor(e => e.TextBox()).IsRequired(true);
-                                                groupItems.AddSimpleFor(m => m.VM.PlanGrupoEsp).Editor(e => e.TextBox()).ColSpan(2);
-                                                groupItems.AddSimpleFor(m => m.VM.PlanGrupoTipoId).Editor(e => e.SelectBox().ID("PlanGrupoTipo").DataSource(ViewBag.PlanGrupoTipoId).ValueExpr("PlanGrupoTipoId").DisplayExpr("PlanGrupoTipoDes").SearchEnabled(true).ShowClearButton(true).OnValueChanged("onValueChanged")).IsRequired(true);
-                                                groupItems.AddSimpleFor(m => m.VM.PlanGrupoTipoDetId).Editor(e => e.SelectBox().ID("PlanGrupoTipoDet").DataSource(ViewBag.PlanGrupoTipoDetId).ValueExpr("PlanGrupoTipoDetId").DisplayExpr("PlanGrupoTipoDetDes").SearchEnabled(true).ShowClearButton(true)).IsRequired(true);
-                                                groupItems.AddSimpleFor(m => m.VM.MonedaId).Editor(e => e.SelectBox().DataSource(ViewBag.MonedaId).ValueExpr("MonedaId").DisplayExpr("MonedaDes").SearchEnabled(true).ShowClearButton(true)).IsRequired(true);
-                                                groupItems.AddSimpleFor(m => m.VM.VerificaMto).Editor(e => e.CheckBox());
-                                                groupItems.AddSimpleFor(m => m.VM.EstadoId).Editor(e => e.SelectBox().DataSource(ViewBag.EstadoId).ValueExpr("EstadoId").DisplayExpr("EstadoDes").SearchEnabled(true).ShowClearButton(true)).IsRequired(true);
-                                            });
+                                        items.AddGroup()
+                                        .ColCount(2)
+                                        .Items(groupItems =>
+                                        {
+                                            groupItems.AddSimpleFor(m => m.VM.PlanGrupoCod).Editor(e => e.TextBox().Width("50%")).IsRequired(true);
+                                            groupItems.AddSimpleFor(m => m.VM.PlanGrupoDes).Editor(e => e.TextBox()).IsRequired(true);
+                                            groupItems.AddSimpleFor(m => m.VM.PlanGrupoEsp).Editor(e => e.TextBox()).ColSpan(2);
+                                            groupItems.AddSimpleFor(m => m.VM.PlanGrupoTipoId).Editor(e => e.SelectBox().ID("PlanGrupoTipo").DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("PlanGrupoTipoList").Key("PlanGrupoTipoId")).ValueExpr("PlanGrupoTipoId").DisplayExpr("PlanGrupoTipoDes").SearchEnabled(true).ShowClearButton(true).OnValueChanged("onValueChanged")).IsRequired(true);
+                                            groupItems.AddSimpleFor(m => m.VM.PlanGrupoTipoDetId).Editor(e => e.SelectBox().ID("PlanGrupoTipoDet").DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("PlanGrupoTipoDetList").Key("PlanGrupoTipoDetId")).ValueExpr("PlanGrupoTipoDetId").DisplayExpr("PlanGrupoTipoDetDes").SearchEnabled(true).ShowClearButton(true)).IsRequired(true);
 
-                                            items.AddEmpty();
+                                            groupItems.AddSimpleFor(m => m.VM.VerificaMto).Editor(e => e.CheckBox());
 
-                                            items.AddSimple().Template(@<text>
+                                            groupItems.AddSimpleFor(m => m.VM.MonedaId).Editor(e => e.SelectBox().DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("MonedaList").Key("MonedaId")).ValueExpr("MonedaId").DisplayExpr("MonedaDes").SearchEnabled(true).ShowClearButton(true).Disabled(false)).IsRequired(true);
+                                            groupItems.AddSimpleFor(m => m.VM.EstadoId).Editor(e => e.SelectBox().DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("EstadoList").Key("EstadoId")).ValueExpr("EstadoId").DisplayExpr("EstadoDes").SearchEnabled(true).ShowClearButton(true).Disabled(false)).IsRequired(true);
+
+
+                                        });
+
+                                        items.AddEmpty();
+
+                                        items.AddSimple().Template(@<text>
                                                 @(Html.DevExtreme().DataGrid<Contabilidad.Models.VM.clsPlanGrupoDetVM>()
                                                             .ID("grid")
                                                             .Paging(paging => paging.Enabled(false))
                                                             .Editing(editing =>
-                                                    {
-                                                        editing.Mode(GridEditMode.Row);
-                                                        editing.AllowAdding(true);
-                                                        editing.AllowDeleting(true);
-                                                        editing.AllowUpdating(true);
-                                                    })
+                                                            {
+                                                                editing.Mode(GridEditMode.Row);
+                                                                editing.AllowAdding(true);
+                                                                editing.AllowDeleting(true);
+                                                                editing.AllowUpdating(true);
+                                                            })
                                                             .DataSource(d => d.WebApi()
                                                                 .Controller("PlanGrupoDetVM")
                                                                 .Key("PlanGrupoDetId")
@@ -62,27 +66,27 @@
                                                             .ShowBorders(true)
                                                             .Columns(columns =>
                                                             {
-                                                        columns.AddFor(m => m.Orden).DataType(GridColumnDataType.Number).Width("10%").Alignment(HorizontalAlignment.Center);
-                                                        columns.AddFor(m => m.PlanGrupoDetDes).Width("20%");
-                                                        columns.AddFor(m => m.PlanId).Width("20%")
-                                                            .Lookup(lookup => lookup
-                                                                .DataSource(ViewBag.PlanId)
-                                                                .DisplayExpr("PlanDes")
-                                                                .ValueExpr("PlanId")
-                                                            );
-                                                        columns.AddFor(m => m.CenCosId).Width("20%")
-                                                            .Lookup(lookup => lookup
-                                                                .DataSource(ViewBag.CenCosId)
-                                                                .DisplayExpr("CenCosDes")
-                                                                .ValueExpr("CenCosId")
-                                                            );
-                                                        columns.AddFor(m => m.SucursalId).Width("20%")
-                                                            .Lookup(lookup => lookup
-                                                                .DataSource(ViewBag.SucursalId)
-                                                                .DisplayExpr("SucursalDes")
-                                                                .ValueExpr("SucursalId")
-                                                            );
-                                                    })
+                                                                columns.AddFor(m => m.Orden).DataType(GridColumnDataType.Number).Width("10%").Alignment(HorizontalAlignment.Center);
+                                                                columns.AddFor(m => m.PlanGrupoDetDes).Width("20%");
+                                                                columns.AddFor(m => m.PlanId).Width("20%")
+                                                                    .Lookup(lookup => lookup
+                                                                        .DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("PlanList").Key("PlanId"))
+                                                                        .DisplayExpr("PlanDes")
+                                                                        .ValueExpr("PlanId")
+                                                                    );
+                                                                columns.AddFor(m => m.CenCosId).Width("20%")
+                                                                    .Lookup(lookup => lookup
+                                                                        .DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("CenCosList").Key("CenCosId"))
+                                                                        .DisplayExpr("CenCosDes")
+                                                                        .ValueExpr("CenCosId")
+                                                                    );
+                                                                columns.AddFor(m => m.SucursalId).Width("20%")
+                                                                    .Lookup(lookup => lookup
+                                                                        .DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("SucursalList").Key("SucursalId"))
+                                                                        .DisplayExpr("SucursalDes")
+                                                                        .ValueExpr("SucursalId")
+                                                                    );
+                                                            })
                                                             //.OnContentReady("OnContentReady")
                                                             .OnCellPrepared("OnCellPrepared")
                                                             .OnInitNewRow("OnInitNewRow")
@@ -143,9 +147,9 @@
     }
 
     function OnInitNewRow(e) {
-        e.data.PlanGrupoId = 0;
+        e.data.PlanGrupoId = 1;
         e.data.PlanFlujoId = 0;
         e.data.CenCosId = 0;
-        e.data.EstadoId = 0;
+        e.data.EstadoId = 2;
     }
 </script>

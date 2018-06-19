@@ -279,7 +279,7 @@ namespace Contabilidad.Models.DAC
          strSQL += WhereFilterGet() + OrderByFilterGet();
 
          Array.Resize(ref moParameters, 1);
-         moParameters[0] = new SqlParameter("SQL", strSQL);
+         moParameters[0] = new SqlParameter("@SQL", strSQL);
       }
 
       private string WhereFilterGet()
@@ -337,8 +337,8 @@ namespace Contabilidad.Models.DAC
             case InsertFilters.All:
                mstrStoreProcName = "parTipoPersonaInsert";
                moParameters = new SqlParameter[6] {
-                        new SqlParameter("InsertFilter", mintInsertFilter),
-                        new SqlParameter("Id", SqlDbType.Int),
+                        new SqlParameter("@InsertFilter", mintInsertFilter),
+                        new SqlParameter("@Id", SqlDbType.Int),
                         new SqlParameter(clsTipoPersonaVM._TipoPersonaCod, VM.TipoPersonaCod),
                         new SqlParameter(clsTipoPersonaVM._TipoPersonaDes, VM.TipoPersonaDes),
                         new SqlParameter(clsTipoPersonaVM._TipoRelacionId, VM.TipoRelacionId),

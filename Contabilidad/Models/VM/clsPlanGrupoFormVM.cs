@@ -16,6 +16,11 @@ namespace Contabilidad.Models.VM
             PlanGrupoDetVM = new HashSet<clsPlanGrupoDetVM>();
             VM = new clsPlanGrupoVM();
         }
-        
+
+        public List<clsPlanGrupoDetVM> getListPlanGrupoDetVM() {
+            return (List<clsPlanGrupoDetVM>)PlanGrupoDetVM;
+        }
+
+
     }
 }

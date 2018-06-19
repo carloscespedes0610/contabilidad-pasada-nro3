@@ -56,7 +56,7 @@ namespace Contabilidad.Models.VM
 
         [Display(Name = "Cuenta Ajuste")]
         [Required(ErrorMessage = "{0} es Requerido")]
-        [Range(1, long.MaxValue, ErrorMessage = "{0} es Requerido")]
+        //[Range(1, long.MaxValue, ErrorMessage = "{0} es Requerido")]
         public long PlanAjusteId { get; set; }
 
         [Display(Name = "Capitulo")]

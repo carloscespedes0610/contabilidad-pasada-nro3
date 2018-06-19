@@ -275,7 +275,7 @@ namespace Contabilidad.Models.DAC
          strSQL += WhereFilterGet() + OrderByFilterGet();
 
          Array.Resize(ref moParameters, 1);
-         moParameters[0] = new SqlParameter("SQL", strSQL);
+         moParameters[0] = new SqlParameter("@SQL", strSQL);
       }
 
       private string WhereFilterGet()
@@ -333,8 +333,8 @@ namespace Contabilidad.Models.DAC
             case InsertFilters.All:
                mstrStoreProcName = "segTipoUsuarioInsert";
                moParameters = new SqlParameter[5] {
-                        new SqlParameter("InsertFilter", mintInsertFilter),
-                        new SqlParameter("Id", SqlDbType.Int),
+                        new SqlParameter("@InsertFilter", mintInsertFilter),
+                        new SqlParameter("@Id", SqlDbType.Int),
                         new SqlParameter(clsTipoUsuarioVM._TipoUsuarioCod, VM.TipoUsuarioCod),
                         new SqlParameter(clsTipoUsuarioVM._TipoUsuarioDes, VM.TipoUsuarioDes),
                         new SqlParameter(clsTipoUsuarioVM._EstadoId, VM.EstadoId)};
@@ -350,7 +350,7 @@ namespace Contabilidad.Models.DAC
             case UpdateFilters.All:
                mstrStoreProcName = "segTipoUsuarioUpdate";
                moParameters = new SqlParameter[5] {
-                        new SqlParameter("UpdateFilter", mintUpdateFilter),
+                        new SqlParameter("@UpdateFilter", mintUpdateFilter),
                         new SqlParameter(clsTipoUsuarioVM._TipoUsuarioId, VM.TipoUsuarioId),
                         new SqlParameter(clsTipoUsuarioVM._TipoUsuarioCod, VM.TipoUsuarioCod),
                         new SqlParameter(clsTipoUsuarioVM._TipoUsuarioDes, VM.TipoUsuarioDes),
@@ -366,7 +366,7 @@ namespace Contabilidad.Models.DAC
             case DeleteFilters.All:
                mstrStoreProcName = "segTipoUsuarioDelete";
                moParameters = new SqlParameter[2] {
-                        new SqlParameter("DeleteFilter", mintDeleteFilter),
+                        new SqlParameter("@DeleteFilter", mintDeleteFilter),
                         new SqlParameter(clsTipoUsuarioVM._TipoUsuarioId, VM.TipoUsuarioId)};
                break;
          }

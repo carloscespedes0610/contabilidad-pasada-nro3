@@ -284,7 +284,7 @@ namespace Contabilidad.Models.DAC
             strSQL += WhereFilterGet() + OrderByFilterGet();
 
             Array.Resize(ref moParameters, 1);
-            moParameters[0] = new SqlParameter("SQL", strSQL);
+            moParameters[0] = new SqlParameter("@SQL", strSQL);
         }
 
         private string WhereFilterGet()
@@ -345,8 +345,8 @@ namespace Contabilidad.Models.DAC
                 case InsertFilters.All:
                     mstrStoreProcName = "segAutorizaInsert";
                     moParameters = new SqlParameter[7] {
-                        new SqlParameter("InsertFilter", mintInsertFilter),
-                        new SqlParameter("Id", SqlDbType.Int),
+                        new SqlParameter("@InsertFilter", mintInsertFilter),
+                        new SqlParameter("@Id", SqlDbType.Int),
                         new SqlParameter(clsAutorizaVM._TipoUsuarioId,VM.TipoUsuarioId),
                         new SqlParameter(clsAutorizaVM._AutorizaDes,VM.AutorizaDes),
                         new SqlParameter(clsAutorizaVM._RegistroId,VM.RegistroId),
@@ -364,7 +364,7 @@ namespace Contabilidad.Models.DAC
                 case UpdateFilters.All:
                     mstrStoreProcName = "segAutorizaUpdate";
                     moParameters = new SqlParameter[7] {
-                        new SqlParameter("UpdateFilter", mintUpdateFilter),
+                        new SqlParameter("@UpdateFilter", mintUpdateFilter),
                         new SqlParameter(clsAutorizaVM._AutorizaId,VM.AutorizaId),
                         new SqlParameter(clsAutorizaVM._TipoUsuarioId,VM.TipoUsuarioId),
                         new SqlParameter(clsAutorizaVM._AutorizaDes,VM.AutorizaDes),
@@ -382,7 +382,7 @@ namespace Contabilidad.Models.DAC
                 case DeleteFilters.All:
                     mstrStoreProcName = "segAutorizaDelete";
                     moParameters = new SqlParameter[7] {
-                        new SqlParameter("DeleteFilter", mintDeleteFilter),
+                        new SqlParameter("@DeleteFilter", mintDeleteFilter),
                         new SqlParameter(clsAutorizaVM._AutorizaId,VM.AutorizaId),
                         new SqlParameter(clsAutorizaVM._TipoUsuarioId,VM.TipoUsuarioId),
                         new SqlParameter(clsAutorizaVM._AutorizaDes,VM.AutorizaDes),
@@ -394,7 +394,7 @@ namespace Contabilidad.Models.DAC
                 case DeleteFilters.TipoUsuarioAutorizaSel:
                     mstrStoreProcName = "segAutorizaDelete";
                     moParameters = new SqlParameter[7] {
-                        new SqlParameter("DeleteFilter", mintDeleteFilter),
+                        new SqlParameter("@DeleteFilter", mintDeleteFilter),
                         new SqlParameter(clsAutorizaVM._AutorizaId,VM.AutorizaId),
                         new SqlParameter(clsAutorizaVM._TipoUsuarioId,VM.TipoUsuarioId),
                         new SqlParameter(clsAutorizaVM._AutorizaDes,VM.AutorizaDes),

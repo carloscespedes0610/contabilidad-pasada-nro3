@@ -36,7 +36,7 @@
                                         groupItems.AddSimpleFor(m => m.CenCosCod).Editor(e => e.TextBox().ID("CenCosCod").Width("50%")).IsRequired(true);
                                         groupItems.AddSimpleFor(m => m.CenCosDes).Editor(e => e.TextBox()).IsRequired(true);
                                         groupItems.AddSimpleFor(m => m.CenCosEsp).Editor(e => e.TextBox());
-                                        groupItems.AddSimpleFor(m => m.EstadoId).Editor(e => e.SelectBox().DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("EstadoList").Key("EstadoId")).ValueExpr("EstadoId").DisplayExpr("EstadoDes").SearchEnabled(true).ShowClearButton(true).Disabled(true)).IsRequired(true);
+                                        groupItems.AddSimpleFor(m => m.EstadoId).Editor(e => e.SelectBox().DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("EstadoList").Key("EstadoId")).ValueExpr("EstadoId").DisplayExpr("EstadoDes").SearchEnabled(true).ShowClearButton(true).Disabled(false)).IsRequired(true);
                                         groupItems.AddEmpty();
                                     });
                                 })

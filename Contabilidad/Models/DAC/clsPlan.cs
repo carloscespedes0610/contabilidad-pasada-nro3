@@ -307,7 +307,7 @@ namespace Contabilidad.Models.DAC
             strSQL += WhereFilterGet() + OrderByFilterGet();
 
             Array.Resize(ref moParameters, 1);
-            moParameters[0] = new SqlParameter("SQL", strSQL);
+            moParameters[0] = new SqlParameter("@SQL", strSQL);
         }
 
         

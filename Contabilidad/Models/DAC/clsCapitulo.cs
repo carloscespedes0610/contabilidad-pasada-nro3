@@ -280,7 +280,7 @@ namespace Contabilidad.Models.DAC
             strSQL += WhereFilterGet() + OrderByFilterGet();
 
             Array.Resize(ref moParameters, 1);
-            moParameters[0] = new SqlParameter("SQL", strSQL);
+            moParameters[0] = new SqlParameter("@SQL", strSQL);
         }
 
         private string WhereFilterGet()
@@ -346,8 +346,8 @@ namespace Contabilidad.Models.DAC
                 case InsertFilters.All:
                     mstrStoreProcName = "ctbCapituloInsert";
                     moParameters = new SqlParameter[7] {
-                        new SqlParameter("InsertFilter", mintInsertFilter),
-                        new SqlParameter("Id", SqlDbType.Int),
+                        new SqlParameter("@InsertFilter", mintInsertFilter),
+                        new SqlParameter("@Id", SqlDbType.Int),
                         new SqlParameter(clsCapituloVM._TipoCapituloId, VM.TipoCapituloId),
                         new SqlParameter(clsCapituloVM._Orden, VM.Orden),
                         new SqlParameter(clsCapituloVM._CapituloCod, VM.CapituloCod),
@@ -365,7 +365,7 @@ namespace Contabilidad.Models.DAC
                 case UpdateFilters.All:
                     mstrStoreProcName = "ctbCapituloUpdate";
                     moParameters = new SqlParameter[7] {
-                        new SqlParameter("UpdateFilter", mintUpdateFilter),
+                        new SqlParameter("@UpdateFilter", mintUpdateFilter),
                         new SqlParameter(clsCapituloVM._CapituloId, VM.CapituloId),
                         new SqlParameter(clsCapituloVM._TipoCapituloId, VM.TipoCapituloId),
                         new SqlParameter(clsCapituloVM._Orden, VM.Orden),
@@ -383,7 +383,7 @@ namespace Contabilidad.Models.DAC
                 case DeleteFilters.All:
                     mstrStoreProcName = "ctbCapituloDelete";
                     moParameters = new SqlParameter[2] {
-                        new SqlParameter("DeleteFilter", mintDeleteFilter),
+                        new SqlParameter("@DeleteFilter", mintDeleteFilter),
                         new SqlParameter(clsCapituloVM._CapituloId, VM.CapituloId)};
                     break;
             }

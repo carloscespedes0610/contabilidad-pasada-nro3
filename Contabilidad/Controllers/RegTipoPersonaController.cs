@@ -22,9 +22,9 @@ namespace Contabilidad.Controllers
             {
                 this.GetDefaultData();
 
-                var lstPlanGrupo = TipoPersonaGrid();
+               // var lstPlanGrupo = TipoPersonaGrid();
 
-                return View(lstPlanGrupo);
+                return View();
             }
 
             catch (Exception exp)
@@ -52,11 +52,11 @@ namespace Contabilidad.Controllers
                     return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = "Índice no encontrado" });
                 }                
 
-                var strPlanGrupoId = PlanGrupoIdLoad(SysData.ToLong(id));
+                //var strPlanGrupoId = PlanGrupoIdLoad(SysData.ToLong(id));
 
-                ViewBag.TipoPersonaId = SysData.ToInteger(id);
-                ViewBag.TipoPersonaDes = "Clientes Locales";
-                ViewBag.strPlanGrupoId = strPlanGrupoId;
+                //ViewBag.TipoPersonaId = SysData.ToInteger(id);
+                //ViewBag.TipoPersonaDes = "Clientes Locales";
+                //ViewBag.strPlanGrupoId = strPlanGrupoId;
 
                 //ViewBagLoad();
                 return View(lstPlanGrupo);

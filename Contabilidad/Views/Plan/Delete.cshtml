@@ -33,11 +33,12 @@
                                                 groupItems.AddSimpleFor(m => m.PlanCod).Editor(e => e.NumberBox().Format("####").Width("50%").Disabled(true));
                                                 groupItems.AddSimpleFor(m => m.PlanDes).Editor(e => e.TextBox().Disabled(true));
                                                 groupItems.AddSimpleFor(m => m.PlanEsp).Editor(e => e.TextArea().Disabled(true));
-                                                groupItems.AddSimpleFor(m => m.TipoPlanId).Editor(e => e.SelectBox().DataSource(ViewBag.TipoPlanId).ValueExpr("TipoPlanId").DisplayExpr("TipoPlanDes").Disabled(true));
+                                                groupItems.AddSimpleFor(m => m.TipoPlanId).Editor(e => e.SelectBox().DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("TipoPlanList").Key("TipoPlanId")).ValueExpr("TipoPlanId").DisplayExpr("TipoPlanDes").SearchEnabled(true).ShowClearButton(true).Disabled(true)).IsRequired(true);
                                                 groupItems.AddSimpleFor(m => m.Orden).Editor(e => e.NumberBox().ShowSpinButtons(true).Step(1).Width("50%").Disabled(true));
-                                                groupItems.AddSimpleFor(m => m.MonedaId).Editor(e => e.SelectBox().DataSource(ViewBag.MonedaId).ValueExpr("MonedaId").DisplayExpr("MonedaDes").Disabled(true));
-                                                groupItems.AddSimpleFor(m => m.TipoAmbitoId).Editor(e => e.SelectBox().DataSource(ViewBag.TipoAmbitoId).ValueExpr("TipoAmbitoId").DisplayExpr("TipoAmbitoDes").Disabled(true));
-                                                groupItems.AddSimpleFor(m => m.EstadoId).Editor(e => e.SelectBox().DataSource(ViewBag.EstadoId).ValueExpr("EstadoId").DisplayExpr("EstadoDes").Disabled(true));
+                                                groupItems.AddSimpleFor(m => m.MonedaId).Editor(e => e.SelectBox().DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("MonedaList").Key("MonedaId")).ValueExpr("MonedaId").DisplayExpr("MonedaDes").SearchEnabled(true).ShowClearButton(true).Disabled(true)).IsRequired(true);
+                                                groupItems.AddSimpleFor(m => m.TipoAmbitoId).Editor(e => e.SelectBox().DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("TipoAmbitoList").Key("TipoAmbitoId")).ValueExpr("TipoAmbitoId").DisplayExpr("TipoAmbitoDes").SearchEnabled(true).ShowClearButton(true).Disabled(true)).IsRequired(true);
+                                                groupItems.AddSimpleFor(m => m.EstadoId).Editor(e => e.SelectBox().DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("EstadoList").Key("EstadoId")).ValueExpr("EstadoId").DisplayExpr("EstadoDes").SearchEnabled(true).ShowClearButton(true).Disabled(true)).IsRequired(true);
+
                                                 groupItems.AddEmpty();
                                             });
                                         })

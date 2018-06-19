@@ -282,7 +282,7 @@ namespace Contabilidad.Models.DAC
             strSQL += WhereFilterGet() + OrderByFilterGet();
 
             Array.Resize(ref moParameters, 1);
-            moParameters[0] = new SqlParameter("SQL", strSQL);
+            moParameters[0] = new SqlParameter("@SQL", strSQL);
         }
 
         private string WhereFilterGet()
@@ -335,8 +335,8 @@ namespace Contabilidad.Models.DAC
                 case InsertFilters.All:
                     mstrStoreProcName = "segAplicacionInsert";
                     moParameters = new SqlParameter[7] {
-                        new SqlParameter("InsertFilter", mintInsertFilter),
-                        new SqlParameter("Id", SqlDbType.Int),
+                        new SqlParameter("@InsertFilter", mintInsertFilter),
+                        new SqlParameter("@Id", SqlDbType.Int),
                         new SqlParameter(clsAplicacionVM._AplicacionCod, VM.AplicacionCod),
                         new SqlParameter(clsAplicacionVM._AplicacionDes, VM.AplicacionDes),
                         new SqlParameter(clsAplicacionVM._AplicacionEsp, VM.AplicacionEsp),
@@ -354,7 +354,7 @@ namespace Contabilidad.Models.DAC
                 case UpdateFilters.All:
                     mstrStoreProcName = "segAplicacionUpdate";
                     moParameters = new SqlParameter[7] {
-                        new SqlParameter("UpdateFilter", mintUpdateFilter),
+                        new SqlParameter("@UpdateFilter", mintUpdateFilter),
                         new SqlParameter(clsAplicacionVM._AplicacionId, VM.AplicacionId),
                         new SqlParameter(clsAplicacionVM._AplicacionCod, VM.AplicacionCod),
                         new SqlParameter(clsAplicacionVM._AplicacionDes, VM.AplicacionDes),
@@ -372,7 +372,7 @@ namespace Contabilidad.Models.DAC
                 case DeleteFilters.All:
                     mstrStoreProcName = "segAplicacionDelete";
                     moParameters = new SqlParameter[2] {
-                        new SqlParameter("DeleteFilter", mintDeleteFilter),
+                        new SqlParameter("@DeleteFilter", mintDeleteFilter),
                         new SqlParameter(clsAplicacionVM._AplicacionId, VM.AplicacionId)};
                     break;
             }

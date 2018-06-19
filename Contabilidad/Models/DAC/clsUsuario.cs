@@ -291,7 +291,7 @@ namespace Contabilidad.Models.DAC
             strSQL += WhereFilterGet() + OrderByFilterGet();
 
             Array.Resize(ref moParameters, 1);
-            moParameters[0] = new SqlParameter("SQL", strSQL);
+            moParameters[0] = new SqlParameter("@SQL", strSQL);
         }
 
         private string WhereFilterGet()
@@ -348,8 +348,8 @@ namespace Contabilidad.Models.DAC
                 case InsertFilters.All:
                     mstrStoreProcName = "segUsuarioInsert";
                     moParameters = new SqlParameter[9] {
-                        new SqlParameter("InsertFilter", mintInsertFilter),
-                        new SqlParameter("Id", SqlDbType.Int),
+                        new SqlParameter("@InsertFilter", mintInsertFilter),
+                        new SqlParameter("@Id", SqlDbType.Int),
                         new SqlParameter(clsUsuarioVM._UsuarioCod, VM.UsuarioCod),
                         new SqlParameter(clsUsuarioVM._UsuarioDes, VM.UsuarioDes),
                         new SqlParameter(clsUsuarioVM._TipoUsuarioId, VM.TipoUsuarioId),
@@ -369,7 +369,7 @@ namespace Contabilidad.Models.DAC
                 case UpdateFilters.All:
                     mstrStoreProcName = "segUsuarioUpdate";
                     moParameters = new SqlParameter[9] {
-                        new SqlParameter("UpdateFilter", mintUpdateFilter),
+                        new SqlParameter("@UpdateFilter", mintUpdateFilter),
                         new SqlParameter(clsUsuarioVM._UsuarioId, VM.UsuarioId),
                         new SqlParameter(clsUsuarioVM._UsuarioCod, VM.UsuarioCod),
                         new SqlParameter(clsUsuarioVM._UsuarioDes, VM.UsuarioDes),
@@ -383,7 +383,7 @@ namespace Contabilidad.Models.DAC
                 case UpdateFilters.ActualizarEstado:
                     mstrStoreProcName = "segUsuarioUpdate";
                     moParameters = new SqlParameter[9] {
-                        new SqlParameter("UpdateFilter", mintUpdateFilter),
+                        new SqlParameter("@UpdateFilter", mintUpdateFilter),
                         new SqlParameter(clsUsuarioVM._UsuarioId, VM.UsuarioId),
                         new SqlParameter(clsUsuarioVM._UsuarioCod, VM.UsuarioCod),
                         new SqlParameter(clsUsuarioVM._UsuarioDes, VM.UsuarioDes),
@@ -403,7 +403,7 @@ namespace Contabilidad.Models.DAC
                 case DeleteFilters.All:
                     mstrStoreProcName = "segUsuarioDelete";
                     moParameters = new SqlParameter[2] {
-                        new SqlParameter("DeleteFilter", mintDeleteFilter),
+                        new SqlParameter("@DeleteFilter", mintDeleteFilter),
                         new SqlParameter(clsUsuarioVM._UsuarioId, VM.UsuarioId)};
                     break;
             }

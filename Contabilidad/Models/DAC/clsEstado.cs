@@ -275,7 +275,7 @@ namespace Contabilidad.Models.DAC
             strSQL += WhereFilterGet() + OrderByFilterGet();
 
             Array.Resize(ref moParameters, 1);
-            moParameters[0] = new SqlParameter("SQL", strSQL);
+            moParameters[0] = new SqlParameter("@SQL", strSQL);
         }
 
         private string WhereFilterGet()
@@ -329,8 +329,8 @@ namespace Contabilidad.Models.DAC
                 case InsertFilters.All:
                     mstrStoreProcName = "parEstadoInsert";
                     moParameters = new SqlParameter[5] {
-                        new SqlParameter("InsertFilter", mintInsertFilter),
-                        new SqlParameter(clsEstadoVM._EstadoId, VM.EstadoId),
+                        new SqlParameter("@InsertFilter", mintInsertFilter),
+                        new SqlParameter("@Id", SqlDbType.Int),
                         new SqlParameter(clsEstadoVM._EstadoCod, VM.EstadoCod),
                         new SqlParameter(clsEstadoVM._EstadoDes, VM.EstadoDes),
                         new SqlParameter(clsEstadoVM._AplicacionId, VM.AplicacionId)};
@@ -346,7 +346,7 @@ namespace Contabilidad.Models.DAC
                 case UpdateFilters.All:
                     mstrStoreProcName = "parEstadoUpdate";
                     moParameters = new SqlParameter[5] {
-                        new SqlParameter("UpdateFilter", mintUpdateFilter),
+                        new SqlParameter("@UpdateFilter", mintUpdateFilter),
                         new SqlParameter(clsEstadoVM._EstadoId, VM.EstadoId),
                         new SqlParameter(clsEstadoVM._EstadoCod, VM.EstadoCod),
                         new SqlParameter(clsEstadoVM._EstadoDes, VM.EstadoDes),
@@ -362,7 +362,7 @@ namespace Contabilidad.Models.DAC
                 case DeleteFilters.All:
                     mstrStoreProcName = "parEstadoDelete";
                     moParameters = new SqlParameter[2] {
-                        new SqlParameter("DeleteFilter", mintDeleteFilter),
+                        new SqlParameter("@DeleteFilter", mintDeleteFilter),
                         new SqlParameter(clsEstadoVM._EstadoId, VM.EstadoId)};
                     break;
             }

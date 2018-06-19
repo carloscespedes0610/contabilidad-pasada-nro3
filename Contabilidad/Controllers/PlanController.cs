@@ -35,6 +35,7 @@ namespace Contabilidad.Controllers
             }
         }
 
+
         // GET: Plan/Create
         public ActionResult Create(int? id)
         {
@@ -55,6 +56,8 @@ namespace Contabilidad.Controllers
                     {
                         if (oPlanPadre.VM.Nivel >= 1)
                         {
+
+
                             PlanHijoNew(oPlanPadre, oPlanVM);
 
                             return View(oPlanVM);
@@ -102,34 +105,80 @@ namespace Contabilidad.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
-                    DataMove(oPlanVM, oPlan, false);
-
-                    if (oPlan.VM.TipoPlanId > 1)
+                    // el nivel minimo para crear nuevo planes es 2
+                    if (oPlanVM.Nivel > 1)
                     {
-                        if ((oPlanVM.MonedaId > 0) && (oPlanVM.TipoAmbitoId > 0))
+                        clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
+                        DataMove(oPlanVM, oPlan, false);
+
+
+                        //preguntamos por el tipo de plan a insertar
+                        if (oPlanVM.TipoPlanId == 1)
+                        {  // TipoPlan = Grupo
+
+                            // preguntamos si el PlanPadre tiene hijos
+                            if (CantidadHijos(oPlanVM.PlanPadreId) > 0)
+                            {
+                                //preguntamos si tiene hijo de tipo analitico
+                                clsPlanVM hijo = get_un_Hijo(oPlanVM.PlanPadreId);
+                                if (hijo.TipoPlanId == 2)
+                                {
+                                    strMsg += "Solo puede Insertar Planes de Tipo Analíticos" + Environment.NewLine;
+                                }
+
+                            }
+                        }
+                        else
+                        { // TipoPlan = Analiticos
+
+                            //Moneda y TipoAmbito son necesarios para los Analiticos
+                            if ((oPlanVM.MonedaId > 0) && (oPlanVM.TipoAmbitoId > 0))
+                            {
+                                // preguntamos si el PlanPadre tiene hijos
+                                if (CantidadHijos(oPlanVM.PlanPadreId) > 0)
+                                {
+                                    //preguntamos si tiene hijo de tipo Grupo
+                                    clsPlanVM hijo = get_un_Hijo(oPlanVM.PlanPadreId);
+                                    if (hijo.TipoPlanId == 1)
+                                    {
+                                        strMsg += "Solo puede Insertar Planes de Tipo Grupo" + Environment.NewLine;
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+                                strMsg += "Moneda es Requerido" + Environment.NewLine;
+                                strMsg += "Ambito es Requerido" + Environment.NewLine;
+                            }
+                        }
+
+
+                        //verificamos que no exista ningun error
+                        if (strMsg.Trim() == string.Empty)
                         {
+                            //preguntamos por el tipo de plan a insertar, si es Grupo, modificamos ciertas propiedades
+                            if (oPlanVM.TipoPlanId == 1)
+                            {
+
+                                oPlan.VM.MonedaId = 0;
+                                oPlan.VM.TipoAmbitoId = 0;
+                            }
+
                             if (oPlan.Insert())
                             {
                                 return RedirectToAction("Index");
                             }
-                        }
-                        else
-                        {
-                            strMsg += "Moneda es Requerido" + Environment.NewLine;
-                            strMsg += "Ambito es Requerido" + Environment.NewLine;
-                        }
-                    }
-                    else
-                    {
-                        oPlan.VM.MonedaId = 0;
-                        oPlan.VM.TipoAmbitoId = 0;
 
-                        if (oPlan.Insert())
-                        {
-                            return RedirectToAction("Index");
                         }
                     }
+                    else {
+                        strMsg += "Nivel Invalido para Crear Nuevos Plan, seleccione un Nivel mas profundo" + Environment.NewLine;
+                    }
+
+                }
+                else {
+                    strMsg += "Datos Incorrectos Revise y Vuelva a Intentar" + Environment.NewLine;
                 }
             }
 
@@ -185,58 +234,63 @@ namespace Contabilidad.Controllers
         public ActionResult Edit(clsPlanVM oPlanVM)
         {
             string strMsg = string.Empty;
+            clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
 
             try
             {
                 if (ModelState.IsValid)
                 {
-                    clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
+                    
                     DataMove(oPlanVM, oPlan, true);
 
-                    if (oPlan.VM.TipoPlanId > 1)
-                    {
-                        if ((oPlanVM.MonedaId > 0) && (oPlanVM.TipoAmbitoId > 0))
-                        {
-                            if (oPlan.Update())
-                            {
-                                return RedirectToAction("Index");
-                            }
-                        }
-                        else
-                        {
-                            strMsg += "Moneda es Requerido" + Environment.NewLine;
-                            strMsg += "Ambito es Requerido" + Environment.NewLine;
-                        }
+                    // obtenemos el TipoPlan original del Plan
+                    if (getTipoPlan(oPlanVM.PlanId) == 1)
+                    {    //TipoPlan = Grupo
+
+                        strMsg = Validar_Edit_TipoPlan_Grupo(oPlanVM);
                     }
                     else
-                    {
-                        oPlan.VM.MonedaId = 0;
-                        oPlan.VM.TipoAmbitoId = 0;
+                    {    //TipoPlan = Analitica
 
-                        if (oPlan.Update())
-                        {
-                            return RedirectToAction("Index");
-                        }
+                        strMsg = Validar_Edit_TipoPlan_Analitica(oPlanVM);
+
+                    }
+
+                }
+                else
+                {
+                    if (oPlanVM.PlanPadreId == -1) {
+                        strMsg += "Operacion Invalida: Nivel de Plan Inaccesible para realizar Cambios, porfavor elija otro Plan" + Environment.NewLine;
                     }
                 }
-            }
 
+                if (strMsg.Trim() != string.Empty)
+                {
+                    ViewBag.MessageErr = strMsg;
+                }
+                else
+                {
+                    if (oPlan.Update())
+                    {
+                        return RedirectToAction("Index");
+                    }
+
+                }
+
+                return View(oPlanVM);
+
+            }
             catch (Exception exp)
             {
                 ViewBag.MessageErr = exp.Message;
                 return View(oPlanVM);
             }
 
-            if (strMsg.Trim() != string.Empty)
-            {
-                ViewBag.MessageErr = strMsg;
-                return View(oPlanVM);
-            }
-            else
-            {
-                return View(oPlanVM);
-            }
+            
+
         }
+
+      
 
         // GET: Plan/Delete/5
         public ActionResult Delete(int? id)
@@ -272,6 +326,11 @@ namespace Contabilidad.Controllers
         [ValidateAntiForgeryToken()]
         public ActionResult DeleteConfirmed(int id)
         {
+            string strMsg = string.Empty;
+            clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
+            oPlan.WhereFilter = clsPlan.WhereFilters.PrimaryKey;
+            oPlan.VM.PlanId = id;
+
             try
             {
                 if (ReferenceEquals(id, null))
@@ -279,22 +338,47 @@ namespace Contabilidad.Controllers
                     return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = "Índice nulo o no encontrado" });
                 }
 
-                clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
+                // obtenemos el TipoPlan original del Plan
+                if (getTipoPlan(oPlan.VM.PlanId) == 1)
+                {    //TipoPlan = Grupo
 
-                oPlan.WhereFilter = clsPlan.WhereFilters.PrimaryKey;
-                oPlan.VM.PlanId = id;
+                    //preguntamos si tiene hijos
+                    if (CantidadHijos(oPlan.VM.PlanId) > 0)
+                    {
 
-                if (oPlan.Delete())
-                {
-                    return RedirectToAction("Index");
+                        strMsg += "Operacion Invalida: No puede cambiar el Tipo de Cuenta, ya que existen otros planes dependientes de este Grupo" + Environment.NewLine;
+                    }
+                }
+                else
+                {    //TipoPlan = Analitica
+
+                    // Debe agregarse la condicion que no tengan movimiento contable
+
                 }
 
-                return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = "Error al Eliminar el Registro" });
+
+                if (strMsg.Trim() != string.Empty)
+                {
+                    ViewBag.MessageErr = strMsg;
+                }
+                else
+                {
+                    if (oPlan.Delete())
+                    {
+                        return RedirectToAction("Index");
+                    }
+
+                }
+
+                return View(oPlan.VM.PlanId);
+
+
             }
 
             catch (Exception exp)
             {
-                return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = exp.Message });
+                ViewBag.MessageErr = exp.Message;
+                return View(oPlan.VM.PlanId);
             }
         }
 
@@ -317,6 +401,7 @@ namespace Contabilidad.Controllers
                     return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = "Índice no encontrado" });
                 }
 
+
                 return View(oPlanVM);
             }
 
@@ -327,7 +412,65 @@ namespace Contabilidad.Controllers
         }
 
 
-        
+        /// <summary>
+        /// Valida condiciones del plan que tengan almacenado TipoPlan = Grupo
+        /// </summary>
+        /// <param name="oPlanVM"></param>
+        /// <returns></returns>
+        private string Validar_Edit_TipoPlan_Grupo(clsPlanVM oPlanVM)
+        {
+            string strMsg = "";
+            clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
+
+            long lgnTipoPlanBD = getTipoPlan(oPlanVM.PlanId);    // obtenemos el tipo plan de ese plan, guardado en la BD
+
+            // preguntamos si quiere cambiar el TipoPlan(Tipo Cuenta)
+            if (oPlanVM.TipoPlanId != lgnTipoPlanBD)
+            {
+                //preguntamos si tiene hijos
+                if (CantidadHijos(oPlanVM.PlanId) > 0)
+                {
+
+                    strMsg += "Operacion Invalida: No puede cambiar el Tipo de Cuenta, ya que existen otros planes dependientes de este Grupo" + Environment.NewLine;
+                }
+
+            }
+
+            return strMsg;
+        }
+
+
+
+        /// <summary>
+        ///Valida condiciones del plan que tengan almacenado TipoPlan = Analitica
+        /// </summary>
+        /// <param name="oPlanVM"></param>
+        /// <returns></returns>
+        private string Validar_Edit_TipoPlan_Analitica(clsPlanVM oPlanVM)
+        {
+            string strMsg = "";
+            clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
+
+            long lgnTipoPlanBD = getTipoPlan(oPlanVM.PlanId);    // obtenemos el tipo plan de ese plan, guardado en la BD
+
+            // preguntamos si quiere cambiar el TipoPlan(Tipo Cuenta)
+            if (oPlanVM.TipoPlanId != lgnTipoPlanBD)
+            {
+                //preguntamos si quiere cambiar a TipoPlan = Grupo
+                if (oPlanVM.TipoPlanId == 1)
+                {
+                    //preguntamos si tiene hermanos analicos
+                    if (CantidadHijos(oPlanVM.PlanPadreId) > 1)
+                    {
+                        strMsg += "Operacion Invalida: No puede cambiar el Tipo de Cuenta, ya que existen otros planes del mismo Tipo(Analitica) dentro del Grupo" + Environment.NewLine;
+                    }
+                }
+
+            }
+
+            return strMsg;
+        }
+
 
         private void DataMove(clsPlanVM oPlanVM, clsPlan oPlan, bool boolEditing)
         {
@@ -435,6 +578,71 @@ namespace Contabilidad.Controllers
             }
         }
 
+        /// <summary>
+        /// Retorna el TipoPlanId actual de dicho Plan
+        /// </summary>
+        /// <param name="lngPlanId"></param>
+        /// <returns></returns>
+        private long getTipoPlan(long lngPlanId) {
+
+            clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
+            long returnValue = 0;
+
+            try
+            {
+                oPlan.VM.PlanId = lngPlanId;
+
+                if (oPlan.FindByPK())
+                {
+                    returnValue = oPlan.VM.TipoPlanId;
+                }
+            }
+
+            catch (Exception exp)
+            {
+                throw (exp);
+            }
+            finally
+            {
+                oPlan.Dispose();
+            }
+
+            return returnValue;
+        }
+
+        /// <summary>
+        /// Retorna la cantidad de Planes que contiene dicho Plan Padre
+        /// </summary>
+        /// <param name="lngPlanPadreId"></param>
+        /// <returns></returns>
+        private int CantidadHijos(long lngPlanPadreId) {
+            clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
+            int returnValue = 0;
+
+            try
+            {
+                oPlan.SelectFilter = clsPlan.SelectFilters.All;
+                oPlan.WhereFilter = clsPlan.WhereFilters.PlanPadreId;
+                oPlan.VM.PlanPadreId = lngPlanPadreId;
+
+                if (oPlan.FindOnly())
+                {
+                    returnValue = oPlan.getMintRowsCount();
+                }
+            }
+
+            catch (Exception exp)
+            {
+                throw (exp);
+            }
+            finally
+            {
+                oPlan.Dispose();
+            }
+
+            return returnValue;
+        }
+
         private bool TieneHijos(long lngPlanPadreId)
         {
             clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
@@ -504,6 +712,37 @@ namespace Contabilidad.Controllers
 
             return null;
         }
+
+        private clsPlanVM get_un_Hijo(long PlanPadreId) {
+
+            clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
+            clsPlanVM oPlanVM = new clsPlanVM();
+
+            try
+            {
+                oPlan.SelectFilter = clsPlan.SelectFilters.All;
+                oPlan.WhereFilter = clsPlan.WhereFilters.PlanPadreId;
+                oPlan.VM.PlanPadreId = PlanPadreId;
+
+                if (oPlan.Find()) {
+                    oPlanVM = oPlan.VM;
+
+                    return oPlanVM;
+                }
+
+            }
+            catch (Exception exp)
+            {
+                throw (exp);
+            }
+            finally
+            {
+                oPlan.Dispose();
+            }
+
+            return null;
+        }
+
 
         private void PlanHijoNew(clsPlan oPlanPadre, clsPlanVM oPlanVM)
         {

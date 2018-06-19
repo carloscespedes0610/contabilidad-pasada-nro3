@@ -26,5 +26,6 @@ namespace Contabilidad.Models.VM
         public static string _TipoPlanDes = nameof(TipoPlanDes);
         public static string _EstadoId = nameof(EstadoId);
         public static string _EstadoDes = nameof(EstadoDes);
+
     }
 }

@@ -577,5 +577,9 @@ namespace Contabilidad.Models.DAC
             //Call CloseConection()
         }
 
+        public int getMintRowsCount() {
+            return mintRowsCount;
+        }
+
     }
 }

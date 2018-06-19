@@ -43,7 +43,7 @@ namespace Contabilidad.Models.VM
 
         [Display(Name = "Moneda")]
         [Required(ErrorMessage = "{0} es Requerido")]
-        [Range(1, long.MaxValue, ErrorMessage = "{0} es Requerido")]
+        [Range(0, long.MaxValue, ErrorMessage = "{0} es Requerido")]
         public long MonedaId { get; set; }
 
         [Display(Name = "Moneda")]
@@ -51,12 +51,12 @@ namespace Contabilidad.Models.VM
 
         [Display(Name = "Ambito")]
         [Required(ErrorMessage = "{0} es Requerido")]
-        [Range(1, long.MaxValue, ErrorMessage = "{0} es Requerido")]
+        [Range(0, long.MaxValue, ErrorMessage = "{0} es Requerido")]
         public long TipoAmbitoId { get; set; }
 
         [Display(Name = "Cuenta Ajuste")]
         [Required(ErrorMessage = "{0} es Requerido")]
-        //[Range(1, long.MaxValue, ErrorMessage = "{0} es Requerido")]
+        [Range(0, long.MaxValue, ErrorMessage = "{0} es Requerido")]
         public long PlanAjusteId { get; set; }
 
         [Display(Name = "Capitulo")]

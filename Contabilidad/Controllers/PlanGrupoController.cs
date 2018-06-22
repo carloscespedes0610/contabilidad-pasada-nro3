@@ -77,8 +77,8 @@ namespace Contabilidad.Controllers
                     return RedirectToAction("EditCtaCteDeudor", new { id = lngPlanGrupoId });
 
                 case 5:
-                    return RedirectToAction("EditCtaCobrar", new { id = lngPlanGrupoId });
-
+                    //return RedirectToAction("EditCtaCobrar", new { id = lngPlanGrupoId }); todavia no esta implementado este controlador
+                    return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = "todavia no esta implementado esta Opcion en Controller; Carlos" });
                 case 6:
                     break;
 

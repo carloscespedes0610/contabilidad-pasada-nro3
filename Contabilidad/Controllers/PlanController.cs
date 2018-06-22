@@ -18,7 +18,7 @@ namespace Contabilidad.Controllers
         List<clsPlanVM> moPlanVM = new List<clsPlanVM>();
 
         // GET: Plan
-        public ActionResult Index(string MessageErr)
+        public ActionResult Index(string MessageErr, long? idPlan)
         {
             try
             {
@@ -26,6 +26,15 @@ namespace Contabilidad.Controllers
 
                 ViewBag.MessageErr = MessageErr;
                 ViewBag.PlanIdDef = -1;
+
+                long idTreeSelect = -1;
+                if (!ReferenceEquals(idPlan, null))
+                {
+                    idTreeSelect = SysData.ToLong(idPlan);
+                }
+
+                ViewBag.SelectId = idTreeSelect;
+                ViewBag.rutaListaId = CalcularCaminoListaId(idTreeSelect);
                 return View();
             }
 
@@ -40,22 +49,26 @@ namespace Contabilidad.Controllers
         public ActionResult Create(int? id)
         {
             string strMsg = string.Empty;
-          
-            try{
+
+            try
+            {
 
                 this.GetDefaultData();
 
-                if (ReferenceEquals(id, null)){
+                if (ReferenceEquals(id, null))
+                {
                     return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = "Índice nulo o no encontrado" });
                 }
 
                 clsPlan oPlanPadre = new clsPlan(clsAppInfo.Connection);
                 oPlanPadre.VM.PlanId = SysData.ToLong(id);
 
-                if (oPlanPadre.FindByPK()){
+                if (oPlanPadre.FindByPK())
+                {
                     strMsg += CheckPlanGetCreate(oPlanPadre);   // funcion que valida al plan
 
-                    if (String.IsNullOrEmpty(strMsg)) {
+                    if (String.IsNullOrEmpty(strMsg))
+                    {
 
                         clsPlanVM oPlanVM = new clsPlanVM();
                         PlanHijoNew(oPlanPadre, oPlanVM);
@@ -63,40 +76,57 @@ namespace Contabilidad.Controllers
                         return View(oPlanVM);
                     }
 
-                } else {
+                }
+                else
+                {
                     strMsg += "Cuenta Padre Inválida" + Environment.NewLine;
                 }
 
                 // mostramos mensaje de error
-                if (strMsg.Trim() != string.Empty){
+                if (strMsg.Trim() != string.Empty)
+                {
                     ViewBag.MessageErr = strMsg;
-                    return RedirectToAction("Index", new { MessageErr = strMsg });
+                    return RedirectToAction("Index", new { MessageErr = strMsg, idPlan = SysData.ToLong(id) });
 
-                } else {
-                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return RedirectToAction("Index", new { idPlan = SysData.ToLong(id) });
                 }
 
-            }catch (Exception exp) {
+            }
+            catch (Exception exp)
+            {
                 return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = exp.Message });
             }
 
-            
+
         }
 
-      
-        private string CheckPlanGetCreate(clsPlan oPlanPadre) {
+
+        private string CheckPlanGetCreate(clsPlan oPlanPadre)
+        {
 
             string strMsg = string.Empty;
             clsPlanVM oPlanVM = new clsPlanVM();
 
-            if (oPlanPadre.VM.Nivel >= 1) {
-                if (oPlanPadre.VM.Nivel >= 10) {
+            if (oPlanPadre.VM.Nivel >= 1)
+            {
+                if (oPlanPadre.VM.Nivel >= 10)
+                {
                     strMsg += "Nivel Maximo(10) Superado, seleccione un Nivel anterior y vuelva a Intentarlo" + Environment.NewLine;
                 }
-            } else {
+
+                if (oPlanPadre.VM.TipoPlanId > 1) // el padre no puede ser analitico
+                {
+                    strMsg += "Un Plan de Tipo Analítico no puede contener otros Planes";
+                }
+            }
+            else
+            {
                 strMsg += "Cuenta Padre Inválida" + Environment.NewLine;
             }
-               
+
             return strMsg;
         }
 
@@ -114,23 +144,27 @@ namespace Contabilidad.Controllers
                     clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
                     DataMove(oPlanVM, oPlan, false);
 
-                    strMsg += CheckPlanCreatePost(ref oPlan );
+                    strMsg += CheckPlanCreatePost(ref oPlan);
 
                     if (String.IsNullOrEmpty(strMsg))              // verificar si existe error
                     {
                         if (oPlan.Insert())
                         {
                             strMsg += "Plan Creado Correctamente";
+                            return RedirectToAction("Index", new { MessageErr = strMsg, idPlan = SysData.ToLong(oPlan.VM.PlanId) });
                         }
-                        else {
+                        else
+                        {
                             strMsg += "Ocurrio un Problema a Crear Plan Vuelva a Intentarlo";
+                            return RedirectToAction("Index", new { MessageErr = strMsg, idPlan = SysData.ToLong(oPlanVM.PlanPadreId) });
                         }
 
-                        return RedirectToAction("Index", new { MessageErr = strMsg });
+
 
                     }
                 }
-                else {
+                else
+                {
                     strMsg += "Datos Incorrectos Revise y Vuelva a Intentar" + Environment.NewLine;
                 }
             }
@@ -149,7 +183,8 @@ namespace Contabilidad.Controllers
             return View(oPlanVM);
         }
 
-        private string CheckPlanCreatePost(ref clsPlan oPlan) {
+        private string CheckPlanCreatePost(ref clsPlan oPlan)
+        {
             string strMsg = string.Empty;
 
             if (oPlan.VM.TipoPlanId == 1)
@@ -173,7 +208,8 @@ namespace Contabilidad.Controllers
             return strMsg;
         }
 
-        private string CheckPlanCreatePostGrupo(clsPlanVM oPlanVM) {
+        private string CheckPlanCreatePostGrupo(clsPlanVM oPlanVM)
+        {
             string strMsg = string.Empty;
 
             // preguntamos si el PlanPadre tiene hijos
@@ -239,7 +275,7 @@ namespace Contabilidad.Controllers
 
                 if (ReferenceEquals(oPlanVM, null))
                 {
-                    return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = "Índice no encontrado" });
+                    return RedirectToAction("Index", new { MessageErr = "Nivel Inválido", idPlan = -1});
                 }
 
                 // se pueden editar apartir del nivel 2
@@ -250,11 +286,12 @@ namespace Contabilidad.Controllers
                 else
                 {
                     strMsg += "El Plan no puede ser Editado, se encuentra en un nivel protegido, porfavor seleccione un Plan con Nivel mas profundo." + Environment.NewLine;
-                    return RedirectToAction("Index", new { MessageErr = strMsg });
+                    return RedirectToAction("Index", new { MessageErr = strMsg, idPlan = SysData.ToLong(id) });
                 }
 
             }
-            catch (Exception exp) {
+            catch (Exception exp)
+            {
                 ViewBag.MessageErr = exp.Message;
                 return View(oPlanVM);
             }
@@ -273,7 +310,7 @@ namespace Contabilidad.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    
+
                     DataMove(oPlanVM, oPlan, true);
 
                     strMsg += CheckPlanEditPost(oPlan);
@@ -285,7 +322,8 @@ namespace Contabilidad.Controllers
                     {
                         strMsg += "Operacion Invalida: Nivel de Plan Inaccesible para realizar Cambios, porfavor elija otro Plan" + Environment.NewLine;
                     }
-                    else {
+                    else
+                    {
                         strMsg += "Modelo Invalido" + Environment.NewLine;
                     }
                 }
@@ -298,7 +336,7 @@ namespace Contabilidad.Controllers
                 {
                     if (oPlan.Update())
                     {
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Index", new { idPlan = SysData.ToLong(oPlanVM.PlanId) });
                     }
 
                 }
@@ -314,7 +352,7 @@ namespace Contabilidad.Controllers
 
         }
 
-      
+
 
         // GET: Plan/Delete/5
         public ActionResult Delete(int? id, string mensajeError)
@@ -335,21 +373,21 @@ namespace Contabilidad.Controllers
 
                 if (ReferenceEquals(oPlanVM, null))
                 {
-                    return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = "Índice no encontrado" });
+                    //return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = "Índice no encontrado" });
+                    return RedirectToAction("Index", new { MessageErr = "Nivel Inválido", idPlan = -1 });
                 }
 
                 //preguntamos si proviene un mensaje de error desde el post delete
                 if (String.IsNullOrEmpty(mensajeError))
                 {
-
-                    // se pueden eliminar apartir del nivel 2
-                        if (oPlanVM.Nivel > 1)
+                    strMsg += CheckPlanDeleteGet(oPlanVM);
+                    if (String.IsNullOrEmpty(strMsg))
                     {
                         return View(oPlanVM);
                     }
                     else
                     {
-                        strMsg += "El Plan no puede ser Eliminado, se encuentra en un nivel protegido, porfavor seleccione un Plan con Nivel mas profundo." + Environment.NewLine;
+                        return RedirectToAction("Index",new { MessageErr = strMsg, idPlan = oPlanVM.PlanId});
                     }
                 }
                 else
@@ -376,6 +414,8 @@ namespace Contabilidad.Controllers
 
         }
 
+
+
         // POST: Plan/Delete/5
         [HttpPost()]
         [ActionName("Delete")]
@@ -394,39 +434,21 @@ namespace Contabilidad.Controllers
                     return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = "Índice nulo o no encontrado" });
                 }
 
-                // obtenemos el TipoPlan original del Plan
-                if (getTipoPlan(oPlan.VM.PlanId) == 1)
-                {    //TipoPlan = Grupo
+                oPlan.FindByPK();
 
-                    //preguntamos si tiene hijos
-                    if (CantidadHijos(oPlan.VM.PlanId) > 0)
-                    {
+                long idPadre = oPlan.VM.PlanPadreId;
+                strMsg += CheckPlanDeletePost(oPlan.VM);
 
-                        strMsg += "Operacion Invalida: No puede cambiar el Tipo de Cuenta, ya que existen otros planes dependientes de este Grupo" + Environment.NewLine;
-                    }
-                }
-                else
-                {    //TipoPlan = Analitica
-
-                    // Debe agregarse la condicion que no tengan movimiento contable
-
-                }
-
-
-                if (strMsg.Trim() != string.Empty)
-                {
-                    ViewBag.MessageErr = strMsg;
-                }
-                else
+                if (String.IsNullOrEmpty(strMsg))
                 {
                     if (oPlan.Delete())
                     {
-                        return RedirectToAction("Index");
-                    }
 
+                        return RedirectToAction("Index", new { idPlan = SysData.ToLong(idPadre) });
+                    }
                 }
 
-                return RedirectToAction("Delete", new { id = oPlan.VM.PlanId, mensajeError = strMsg } );
+                return RedirectToAction("Delete", new { id = oPlan.VM.PlanId, mensajeError = " Error al eliminar Plan" });
 
             }
 
@@ -456,7 +478,6 @@ namespace Contabilidad.Controllers
                     return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = "Índice no encontrado" });
                 }
 
-
                 return View(oPlanVM);
             }
 
@@ -467,26 +488,27 @@ namespace Contabilidad.Controllers
         }
 
 
-        private string CheckPlanEditPost(clsPlan oPlan) {
+        private string CheckPlanEditPost(clsPlan oPlan)
+        {
             string strMsg = string.Empty;
 
             // obtenemos el TipoPlan original del Plan
             if (getTipoPlan(oPlan.VM.PlanId) == 1)
             {    //TipoPlan = Grupo
 
-                strMsg = Validar_Edit_TipoPlan_Grupo(oPlan.VM);
+                strMsg = _CheckPlanEditPostGrupo(oPlan.VM);
             }
             else
             {    //TipoPlan = Analitica
 
-                strMsg = Validar_Edit_TipoPlan_Analitica(oPlan.VM);
+                strMsg = _CheckPlanEditPostAnalitica(oPlan.VM);
 
             }
 
             return strMsg;
         }
 
-        private string Validar_Edit_TipoPlan_Grupo(clsPlanVM oPlanVM)
+        private string _CheckPlanEditPostGrupo(clsPlanVM oPlanVM)
         {
             string strMsg = "";
             clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
@@ -499,26 +521,22 @@ namespace Contabilidad.Controllers
                 //preguntamos si tiene hijos
                 if (CantidadHijos(oPlanVM.PlanId) > 0)
                 {
-
                     strMsg += "Operacion Invalida: No puede cambiar el Tipo de Cuenta, ya que existen otros planes dependientes de este Grupo" + Environment.NewLine;
                 }
-                else {
-
+                else
+                {
                     //obtenemos la cantidad de hijos del planPadre
-                    if (CantidadHijos(oPlanVM.PlanPadreId) > 1) {       // sino tiene hermanos, puede cambiar a analitica tranquilamente
+                    if (CantidadHijos(oPlanVM.PlanPadreId) > 1)
+                    {       // sino tiene hermanos, puede cambiar a analitica tranquilamente
                         strMsg += "No puede cambiar de Tipo de Cuenta a Analitica, ya que existen planes de Tipo Grupo, dentro del mismo nivel" + Environment.NewLine;
                     }
-                    
                 }
-
             }
 
             return strMsg;
         }
 
-
-        
-        private string Validar_Edit_TipoPlan_Analitica(clsPlanVM oPlanVM)
+        private string _CheckPlanEditPostAnalitica(clsPlanVM oPlanVM)
         {
             string strMsg = "";
             clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
@@ -539,6 +557,31 @@ namespace Contabilidad.Controllers
             return strMsg;
         }
 
+        private string CheckPlanDeleteGet(clsPlanVM oPlanVM)
+        {
+            string strMsg = string.Empty;
+
+            // se pueden eliminar apartir del nivel 2
+            if (oPlanVM.Nivel < 2)
+            {
+                strMsg += "El Plan no puede ser Eliminado, se encuentra en un nivel protegido, porfavor seleccione un Plan con Nivel mas profundo." + Environment.NewLine;
+            }
+
+            // verficamos que no tenga hijos
+            if (CantidadHijos(oPlanVM.PlanId) > 0)
+            {
+                strMsg += "El Plan no puede ser elminado por que tiene Planes dependiente de el";
+            }
+
+            return strMsg;
+        }
+
+        private string CheckPlanDeletePost(clsPlanVM oPlanVM)
+        {
+            //hay que agregar condiciones como que no tenga movimientos
+
+            return string.Empty;
+        }
 
         private void DataMove(clsPlanVM oPlanVM, clsPlan oPlan, bool boolEditing)
         {
@@ -646,9 +689,9 @@ namespace Contabilidad.Controllers
             }
         }
 
-        
-        private long getTipoPlan(long lngPlanId) {
 
+        private long getTipoPlan(long lngPlanId)
+        {
             clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
             long returnValue = 0;
 
@@ -674,8 +717,9 @@ namespace Contabilidad.Controllers
             return returnValue;
         }
 
-        
-        private int CantidadHijos(long lngPlanPadreId) {
+
+        private int CantidadHijos(long lngPlanPadreId)
+        {
             clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
             int returnValue = 0;
 
@@ -773,7 +817,8 @@ namespace Contabilidad.Controllers
             return null;
         }
 
-        private clsPlanVM get_un_Hijo(long PlanPadreId) {   // devuelve el primer hijo de ese PlanPadre
+        private clsPlanVM get_un_Hijo(long PlanPadreId)
+        {   // devuelve el primer hijo de ese PlanPadre
 
             clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
             clsPlanVM oPlanVM = new clsPlanVM();
@@ -784,7 +829,8 @@ namespace Contabilidad.Controllers
                 oPlan.WhereFilter = clsPlan.WhereFilters.PlanPadreId;
                 oPlan.VM.PlanPadreId = PlanPadreId;
 
-                if (oPlan.Find()) {
+                if (oPlan.Find())
+                {
                     oPlanVM = oPlan.VM;
 
                     return oPlanVM;
@@ -807,7 +853,6 @@ namespace Contabilidad.Controllers
         private void PlanHijoNew(clsPlan oPlanPadre, clsPlanVM oPlanVM)
         {
             clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
-
             try
             {
                 oPlan.SelectFilter = clsPlan.SelectFilters.All;
@@ -828,7 +873,7 @@ namespace Contabilidad.Controllers
                 else
                 {
                     oPlanVM.PlanCod = oPlanPadre.VM.PlanCod;
-                   // oPlanVM.TipoPlanId = 0;
+                    // oPlanVM.TipoPlanId = 0;
                     oPlanVM.Nivel = oPlanPadre.VM.Nivel + 1;
                     oPlanVM.Orden = 1;
                     oPlanVM.CapituloId = oPlanPadre.VM.CapituloId;
@@ -854,6 +899,29 @@ namespace Contabilidad.Controllers
         public ActionResult PlanGrid_View(DataSourceLoadOptions loadOptions)
         {
             return Content(JsonConvert.SerializeObject(PlanGrid()), "application/json");
+        }
+
+        [HttpGet]
+        public List<long> CalcularCaminoListaId(long id)
+        {
+            List<long> ruta = new List<long>();
+            clsPlan clsPlan = new clsPlan(clsAppInfo.Connection);
+
+            clsPlan.VM.PlanId = id;
+            clsPlan.FindByPK();
+
+            while (clsPlan.VM.PlanId > 0)
+            {
+                ruta.Add(SysData.ToLong(clsPlan.VM.PlanId));
+                clsPlan.VM.PlanId = clsPlan.VM.PlanPadreId;
+                clsPlan.FindByPK();
+            }
+
+            ruta.Add(-1); // agregamos el nodo 0
+
+            ruta.Reverse();
+
+            return ruta;
         }
     }
 }

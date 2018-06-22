@@ -51,7 +51,7 @@
 
                             <div Class="box-footer">
                                 <Button type="submit" Class="btn btn-primary"><i Class="fa fa-floppy-o"></i></Button>
-                                <a href="@Url.Action("Index", "Plan")" Class="btn btn-default"><i Class="fa fa-reply"></i></a>
+                                <a href="@Url.Action("Index", "Plan", new { idPlan = Model.PlanPadreId })" Class="btn btn-default"><i Class="fa fa-reply"></i></a>
                             </div>
                         }
                     }

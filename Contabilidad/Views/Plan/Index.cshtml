@@ -41,8 +41,9 @@
             columns.Add().DataField("Delete").Caption("").Width(30).AllowFiltering(false).CellTemplate(Html.ActionLink(" ", "Delete", new { id = "PlanId" }, new { @class = "dx-icon-trash" }).ToHtmlString().Replace("PlanId", "<%= data.PlanId %>"));
             columns.Add().DataField("Details").Caption("").Width(30).AllowFiltering(false).CellTemplate(Html.ActionLink(" ", "Details", new { id = "PlanId" }, new { @class = "fa fa-info-circle" }).ToHtmlString().Replace("PlanId", "<%= data.PlanId %>"));
         })
-        .SelectedRowKeys(new[] { ViewBag.PlanIdDef })
-        .ExpandedRowKeys(new[] { ViewBag.PlanIdDef })
+        .SelectedRowKeys(new[] { ViewBag.SelectId })
+        .ExpandedRowKeys(ViewBag.rutaListaId)
+       // .ExpandedRowKeys(new[] { -1,1,9,10 })
     )
 </section>
 

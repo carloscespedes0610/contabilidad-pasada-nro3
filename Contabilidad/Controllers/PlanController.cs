@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -136,31 +137,42 @@ namespace Contabilidad.Controllers
         public ActionResult Create(clsPlanVM oPlanVM)
         {
             string strMsg = string.Empty;
+            clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
 
             try
             {
                 if (ModelState.IsValid)
                 {
-                    clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
+                    
                     DataMove(oPlanVM, oPlan, false);
-
                     strMsg += CheckPlanCreatePost(ref oPlan);
 
                     if (String.IsNullOrEmpty(strMsg))              // verificar si existe error
                     {
+                        List<clsPlanVM> hijos = get_Hijos(oPlan);
+                        oPlan.BeginTransaction();
+
                         if (oPlan.Insert())
                         {
-                            strMsg += "Plan Creado Correctamente";
-                            return RedirectToAction("Index", new { MessageErr = strMsg, idPlan = SysData.ToLong(oPlan.VM.PlanId) });
+                            if (ActualizarOrden(oPlan, hijos))
+                            {
+                                oPlan.Commit();
+                                strMsg += "Plan Creado Correctamente";
+                                return RedirectToAction("Index", new { MessageErr = strMsg, idPlan = SysData.ToLong(oPlan.VM.PlanId) });
+                            }
+                            else
+                            {
+                                oPlan.Rollback();
+                                strMsg += "Ocurrio un Problema a Crear(Problema a Actualizar los Orden) Plan Vuelva a Intentarlo";
+                                return RedirectToAction("Index", new { MessageErr = strMsg, idPlan = SysData.ToLong(oPlanVM.PlanPadreId) });
+                            }
                         }
                         else
                         {
+                            oPlan.Rollback();
                             strMsg += "Ocurrio un Problema a Crear Plan Vuelva a Intentarlo";
                             return RedirectToAction("Index", new { MessageErr = strMsg, idPlan = SysData.ToLong(oPlanVM.PlanPadreId) });
                         }
-
-
-
                     }
                 }
                 else
@@ -171,6 +183,7 @@ namespace Contabilidad.Controllers
 
             catch (Exception exp)
             {
+                oPlan.Rollback();
                 ViewBag.MessageErr = exp.Message;
                 return View(oPlanVM);
             }
@@ -334,10 +347,37 @@ namespace Contabilidad.Controllers
                 }
                 else
                 {
+                    // obtenemos el orden guardado en la BD, por si lo quiere modificar
+                    long ordenBD = getOrden(oPlan.VM.PlanId);
+                    List<clsPlanVM> hijos = new List<clsPlanVM>();
+
+                    if (ordenBD != oPlan.VM.Orden)
+                    {  // si quiere modificar el orden
+                        hijos = get_Hijos(oPlan);
+
+                        hijos.RemoveAll((x) => x.PlanId == oPlan.VM.PlanId); // eliminamos el plan que se esta actualizando
+                    }
+
+
+                    oPlan.BeginTransaction();
                     if (oPlan.Update())
                     {
+                        if (hijos.Count > 0)
+                        {  // si quiere modificar el orden
+
+                            if (!ActualizarOrden(oPlan, hijos))
+                            {
+                                oPlan.Rollback();
+                                ViewBag.MessageErr = "Error al Actualizar Orden de los demas Planes del mismo Grupo";
+                                return View(oPlanVM);
+                            }
+                        }
+
+                        oPlan.Commit();
                         return RedirectToAction("Index", new { idPlan = SysData.ToLong(oPlanVM.PlanId) });
                     }
+
+                    oPlan.Rollback();
 
                 }
 
@@ -346,6 +386,7 @@ namespace Contabilidad.Controllers
             }
             catch (Exception exp)
             {
+                oPlan.Rollback();
                 ViewBag.MessageErr = exp.Message;
                 return View(oPlanVM);
             }
@@ -475,8 +516,10 @@ namespace Contabilidad.Controllers
 
                 if (ReferenceEquals(oPlanVM, null))
                 {
-                    return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = "Índice no encontrado" });
+                    return RedirectToAction("Index", new { MessageErr = "Nivel Invalido", idPlan = -1 });
                 }
+
+                //ViewBag.Hijos = get_Hijos(oPlanVM.PlanId).Count;
 
                 return View(oPlanVM);
             }
@@ -647,7 +690,8 @@ namespace Contabilidad.Controllers
             {
                 oPlan.SelectFilter = clsPlan.SelectFilters.Grid;
                 oPlan.WhereFilter = clsPlan.WhereFilters.PlanPadreId;
-                oPlan.OrderByFilter = clsPlan.OrderByFilters.Grid;
+                //oPlan.OrderByFilter = clsPlan.OrderByFilters.Grid;
+                oPlan.OrderByFilter = clsPlan.OrderByFilters.Orden;
                 oPlan.VM.PlanPadreId = lngPlanPadreId;
 
                 if (oPlan.Open())
@@ -671,7 +715,7 @@ namespace Contabilidad.Controllers
                             EstadoDes = SysData.ToStr(dr[clsPlanVM._EstadoDes])
                         });
 
-                        if (TieneHijos(SysData.ToLong(dr[clsPlanVM._PlanId])))
+                        if (CantidadHijos(SysData.ToLong(dr[clsPlanVM._PlanId])) > 0)
                         {
                             PlanHijoLoad(SysData.ToLong(dr[clsPlanVM._PlanId]));
                         }
@@ -717,6 +761,33 @@ namespace Contabilidad.Controllers
             return returnValue;
         }
 
+        private long getOrden(long lngPlanId)
+        {
+            clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
+            long returnValue = 0;
+
+            try
+            {
+                oPlan.VM.PlanId = lngPlanId;
+
+                if (oPlan.FindByPK())
+                {
+                    returnValue = oPlan.VM.Orden;
+                }
+            }
+
+            catch (Exception exp)
+            {
+                throw (exp);
+            }
+            finally
+            {
+                oPlan.Dispose();
+            }
+
+            return returnValue;
+        }
+
 
         private int CantidadHijos(long lngPlanPadreId)
         {
@@ -747,7 +818,7 @@ namespace Contabilidad.Controllers
             return returnValue;
         }
 
-        private bool TieneHijos(long lngPlanPadreId)
+        /*private bool TieneHijos(long lngPlanPadreId)
         {
             clsPlan oPlan = new clsPlan(clsAppInfo.Connection);
             bool returnValue = false;
@@ -774,7 +845,7 @@ namespace Contabilidad.Controllers
             }
 
             return returnValue;
-        }
+        }*/
 
         private clsPlanVM PlanFind(long lngPlanId)
         {
@@ -849,6 +920,200 @@ namespace Contabilidad.Controllers
             return null;
         }
 
+
+
+        /*
+          * la lista debe contener los hijos menos el oplan a insertar o modificar
+          * oplan, es el nuevo hijo a insertar o modificar
+        */
+        private bool ActualizarOrden(clsPlan oplan, List<clsPlanVM> hijos)   
+        {
+            int bandera = 0;
+
+            if (hijos.Count > 0)
+            {
+                try
+                {
+                    for (int i = 0; i < hijos.Count; i++)
+                    {
+                        clsPlanVM hijo = hijos[i];
+
+                        if ( oplan.VM.Orden == i+1)
+                        {
+                            bandera = 1;
+                        }    
+
+                        if( !(hijo.Orden == i + bandera + 1))
+                        {
+                            hijo.Orden = i + bandera + 1;
+
+                            clsPlan auxplan = new clsPlan(clsAppInfo.Connection);
+                            auxplan.VM = hijos[i];
+                            auxplan.UpdateFilter = clsPlan.UpdateFilters.Orden;
+                            auxplan.Transaction = oplan.Transaction;
+                            
+
+                            if (!auxplan.Update())
+                            {  // error al actualizar
+                                return false;
+                            }
+
+                            auxplan.Dispose();  
+                        }
+
+                    }
+                }
+                catch (Exception exp) {
+                    throw (exp);
+                }
+
+            }
+
+            // preguntamos si el nuevo plan quiere ir al final
+            if (bandera == 0)
+            {
+                clsPlan auxplan = new clsPlan(clsAppInfo.Connection);
+                
+                //actualizamos el orden del nuevo plan
+                oplan.VM.Orden = hijos.Count + 1;
+                auxplan.VM = oplan.VM;
+
+                auxplan.UpdateFilter = clsPlan.UpdateFilters.Orden;
+                auxplan.Transaction = oplan.Transaction;
+
+
+                if (!auxplan.Update())
+                {  // error al actualizar
+                    return false;
+                }
+
+                auxplan.Dispose();
+            }
+
+            return true;
+
+        }
+
+        //private bool ActualizarOrdenEditar(clsPlan oplan, List<clsPlanVM> hijos)
+        //{
+        //    int bandera = 0;
+        //    long incrementadorOrden = 0;
+
+        //    if (hijos.Count > 0)
+        //    {
+        //        try
+        //        {
+        //            for (int i = 0; i < hijos.Count; i++)
+        //            {
+        //                incrementadorOrden++;
+
+        //                clsPlanVM hijo = hijos[i];
+
+        //                if (oplan.VM.Orden == i + 1)
+        //                {
+        //                    bandera = 1;
+
+        //                    hijo.Orden = i + bandera + 1;
+
+        //                    clsPlan auxplan = new clsPlan(clsAppInfo.Connection);
+        //                    auxplan.VM = hijos[i];
+        //                    auxplan.UpdateFilter = clsPlan.UpdateFilters.Orden;
+        //                    auxplan.Transaction = oplan.Transaction;
+
+
+        //                    if (!auxplan.Update())
+        //                    {  // error al actualizar
+        //                        return false;
+        //                    }
+
+        //                    auxplan.Dispose();
+        //                }
+        //                else
+        //                {
+        //                    if (!(hijo.Orden == i + bandera + 1))
+        //                    {
+        //                        hijo.Orden = i + bandera + 1;
+
+        //                        clsPlan auxplan = new clsPlan(clsAppInfo.Connection);
+        //                        auxplan.VM = hijos[i];
+        //                        auxplan.UpdateFilter = clsPlan.UpdateFilters.Orden;
+        //                        auxplan.Transaction = oplan.Transaction;
+
+
+        //                        if (!auxplan.Update())
+        //                        {  // error al actualizar
+        //                            return false;
+        //                        }
+
+        //                        auxplan.Dispose();
+        //                    }
+
+        //                }
+
+        //            }
+        //        }
+        //        catch (Exception exp)
+        //        {
+        //            throw (exp);
+        //        }
+
+        //    }
+
+        //    return true;
+
+        //}
+
+
+        private List<clsPlanVM> get_Hijos(clsPlan oPlan )
+        {   // devuelve todos hijos de ese PlanPadre
+
+            List<clsPlanVM> lista = new List<clsPlanVM>();
+
+            try
+            {
+                oPlan.SelectFilter = clsPlan.SelectFilters.All;
+                oPlan.WhereFilter = clsPlan.WhereFilters.PlanPadreId;
+                oPlan.OrderByFilter = clsPlan.OrderByFilters.Orden;
+
+                if (oPlan.Open())
+                {
+                    foreach (DataRow dr in oPlan.DataSet.Tables[oPlan.TableName].Rows)
+                    {
+                        lista.Add(new clsPlanVM()
+                        {
+                            PlanId = SysData.ToLong(dr[clsPlanVM._PlanId]),
+                            PlanCod = SysData.ToStr(dr[clsPlanVM._PlanCod]),
+                            PlanDes = SysData.ToStr(dr[clsPlanVM._PlanDes]),
+                            PlanEsp = SysData.ToStr(dr[clsPlanVM._PlanEsp]),
+                            TipoPlanId = SysData.ToLong(dr[clsPlanVM._TipoPlanId]),
+                            Orden = SysData.ToLong(dr[clsPlanVM._Orden]),
+                            Nivel = SysData.ToLong(dr[clsPlanVM._Nivel]),
+                            MonedaId = SysData.ToLong(dr[clsPlanVM._MonedaId]),
+                            TipoAmbitoId = SysData.ToLong(dr[clsPlanVM._TipoAmbitoId]),
+                            PlanAjusteId = SysData.ToLong(dr[clsPlanVM._PlanAjusteId]),
+                            CapituloId = SysData.ToLong(dr[clsPlanVM._CapituloId]),
+                            PlanPadreId = SysData.ToLong(dr[clsPlanVM._PlanPadreId]),
+                            EstadoId = SysData.ToLong(dr[clsPlanVM._EstadoId])
+
+                        });
+
+                    }
+                    return lista;
+
+                }
+
+            }
+            catch (Exception exp)
+            {
+                throw (exp);
+            }
+            finally
+            {
+                oPlan.Dispose();
+            }
+
+            return null;
+        }
 
         private void PlanHijoNew(clsPlan oPlanPadre, clsPlanVM oPlanVM)
         {

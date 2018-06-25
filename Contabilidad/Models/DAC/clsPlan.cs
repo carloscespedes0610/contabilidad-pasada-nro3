@@ -53,7 +53,8 @@ namespace Contabilidad.Models.DAC
 
         public enum UpdateFilters : byte
         {
-            All = 0
+            All = 0,
+            Orden = 1
         }
 
         public enum DeleteFilters : byte
@@ -434,6 +435,25 @@ namespace Contabilidad.Models.DAC
                         new SqlParameter(clsPlanVM._CapituloId, VM.CapituloId),
                         new SqlParameter(clsPlanVM._PlanPadreId, VM.PlanPadreId),
                         new SqlParameter(clsPlanVM._EstadoId, VM.EstadoId)};
+                    break;
+
+                case UpdateFilters.Orden:
+                    mstrStoreProcName = "ctbPlanUpdate";
+                    moParameters = new SqlParameter[14] {
+                        new SqlParameter("@UpdateFilter", mintUpdateFilter),  // la diferencia entre All, es aqui solo importa el PlanId y el Orden
+                        new SqlParameter(clsPlanVM._PlanId, VM.PlanId),
+                        new SqlParameter(clsPlanVM._PlanCod, Convert.ToString("")),
+                        new SqlParameter(clsPlanVM._PlanDes, Convert.ToString("")),
+                        new SqlParameter(clsPlanVM._PlanEsp, Convert.ToString("")),
+                        new SqlParameter(clsPlanVM._TipoPlanId, Convert.ToInt32(0)),
+                        new SqlParameter(clsPlanVM._Orden, VM.Orden),
+                        new SqlParameter(clsPlanVM._Nivel, Convert.ToInt32(0)),
+                        new SqlParameter(clsPlanVM._MonedaId, Convert.ToInt32(0)),
+                        new SqlParameter(clsPlanVM._TipoAmbitoId, Convert.ToInt32(0)),
+                        new SqlParameter(clsPlanVM._PlanAjusteId, Convert.ToInt32(0)),
+                        new SqlParameter(clsPlanVM._CapituloId, Convert.ToInt32(0)),
+                        new SqlParameter(clsPlanVM._PlanPadreId, Convert.ToInt32(0)),
+                        new SqlParameter(clsPlanVM._EstadoId, Convert.ToInt32(0))};
                     break;
             }
         }

@@ -650,7 +650,7 @@ namespace Contabilidad.Controllers
             oPlanGrupoDet.VM.PlanGrupoId = SysData.ToLong(oPlanGrupo.VM.PlanGrupoId);
             oPlanGrupoDet.VM.PlanGrupoDetDes = SysData.ToStr(oPlanGrupoDetVM.PlanGrupoDetDes);
             oPlanGrupoDet.VM.PlanId = SysData.ToLong(oPlanGrupoDetVM.PlanId);
-            oPlanGrupoDet.VM.PlanFlujoId = SysData.ToLong(oPlanGrupoDetVM.PlanFlujoId);
+            //oPlanGrupoDet.VM.PlanFlujoId = SysData.ToLong(oPlanGrupoDetVM.PlanFlujoId);
             oPlanGrupoDet.VM.SucursalId = SysData.ToLong(oPlanGrupoDetVM.SucursalId);
             oPlanGrupoDet.VM.CenCosId = SysData.ToLong(oPlanGrupoDetVM.CenCosId);
             oPlanGrupoDet.VM.Orden = SysData.ToLong(oPlanGrupoDetVM.Orden);
@@ -745,7 +745,7 @@ namespace Contabilidad.Controllers
                                 PlanGrupoId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanGrupoId]),
                                 PlanGrupoDetDes = SysData.ToStr(dr[clsPlanGrupoDetVM._PlanGrupoDetDes]),
                                 PlanId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanId]),
-                                PlanFlujoId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanFlujoId]),
+                                //PlanFlujoId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanFlujoId]),
                                 SucursalId = SysData.ToLong(dr[clsPlanGrupoDetVM._SucursalId]),
                                 CenCosId = SysData.ToLong(dr[clsPlanGrupoDetVM._CenCosId]),
                                 Orden = SysData.ToLong(dr[clsPlanGrupoDetVM._Orden]),

@@ -225,7 +225,7 @@ namespace Contabilidad.Models.DAC
             VM.PlanGrupoId = 0;
             VM.PlanGrupoDetDes = "";
             VM.PlanId = 0;
-            VM.PlanFlujoId = 0;
+            //VM.PlanFlujoId = 0;
             VM.SucursalId = 0;
             VM.CenCosId = 0;
             VM.Orden = 0;
@@ -251,7 +251,7 @@ namespace Contabilidad.Models.DAC
                            "    ctbPlanGrupoDet.PlanGrupoId , " +
                            "    ctbPlanGrupoDet.PlanGrupoDetDes , " +
                            "    ctbPlanGrupoDet.PlanId , " +
-                           "    ctbPlanGrupoDet.PlanFlujoId , " +
+                           //"    ctbPlanGrupoDet.PlanFlujoId , " +
                            "    ctbPlanGrupoDet.SucursalId , " +
                            "    ctbPlanGrupoDet.CenCosId , " +
                            "    ctbPlanGrupoDet.Orden , " +
@@ -279,7 +279,7 @@ namespace Contabilidad.Models.DAC
                            "    ctbPlanGrupoDet.PlanGrupoDetDes, " +
                            "    ctbPlan.PlanId,  " +
                            "    ctbPlan.PlanDes, " +
-                           "    ctbPlanGrupoDet.PlanFlujoId, " +
+                           //"    ctbPlanGrupoDet.PlanFlujoId, " +
                            "    ctbSucursal.SucursalId, " +
                            "    ctbSucursal.SucursalDes, " +
                            "    ctbCenCos.CenCosId, " +
@@ -368,13 +368,13 @@ namespace Contabilidad.Models.DAC
             {
                 case InsertFilters.All:
                     mstrStoreProcName = "ctbPlanGrupoDetInsert";
-                    moParameters = new SqlParameter[10] {
+                    moParameters = new SqlParameter[9] {
                         new SqlParameter("@InsertFilter", mintInsertFilter),
                         new SqlParameter("@Id", SqlDbType.Int),
                         new SqlParameter(clsPlanGrupoDetVM._PlanGrupoId, VM.PlanGrupoId),
                         new SqlParameter(clsPlanGrupoDetVM._PlanGrupoDetDes, VM.PlanGrupoDetDes),
                         new SqlParameter(clsPlanGrupoDetVM._PlanId, VM.PlanId),
-                        new SqlParameter(clsPlanGrupoDetVM._PlanFlujoId, VM.PlanFlujoId),
+                        //new SqlParameter(clsPlanGrupoDetVM._PlanFlujoId, VM.PlanFlujoId),
                         new SqlParameter(clsPlanGrupoDetVM._SucursalId, VM.SucursalId),
                         new SqlParameter(clsPlanGrupoDetVM._CenCosId, VM.CenCosId),
                         new SqlParameter(clsPlanGrupoDetVM._Orden, VM.Orden),
@@ -390,13 +390,13 @@ namespace Contabilidad.Models.DAC
             {
                 case UpdateFilters.All:
                     mstrStoreProcName = "ctbPlanGrupoDetUpdate";
-                    moParameters = new SqlParameter[10] {
+                    moParameters = new SqlParameter[9] {
                         new SqlParameter("@UpdateFilter", mintUpdateFilter),
                         new SqlParameter(clsPlanGrupoDetVM._PlanGrupoDetId, VM.PlanGrupoDetId),
                         new SqlParameter(clsPlanGrupoDetVM._PlanGrupoId, VM.PlanGrupoId),
                         new SqlParameter(clsPlanGrupoDetVM._PlanGrupoDetDes, VM.PlanGrupoDetDes),
                         new SqlParameter(clsPlanGrupoDetVM._PlanId, VM.PlanId),
-                        new SqlParameter(clsPlanGrupoDetVM._PlanFlujoId, VM.PlanFlujoId),
+                        //new SqlParameter(clsPlanGrupoDetVM._PlanFlujoId, VM.PlanFlujoId),
                         new SqlParameter(clsPlanGrupoDetVM._SucursalId, VM.SucursalId),
                         new SqlParameter(clsPlanGrupoDetVM._CenCosId, VM.CenCosId),
                         new SqlParameter(clsPlanGrupoDetVM._Orden, VM.Orden),
@@ -440,7 +440,7 @@ namespace Contabilidad.Models.DAC
                         VM.PlanGrupoId = SysData.ToLong(oDataRow[clsPlanGrupoDetVM._PlanGrupoId]);
                         VM.PlanGrupoDetDes = SysData.ToStr(oDataRow[clsPlanGrupoDetVM._PlanGrupoDetDes]);
                         VM.PlanId = SysData.ToLong(oDataRow[clsPlanGrupoDetVM._PlanId]);
-                        VM.PlanFlujoId = SysData.ToLong(oDataRow[clsPlanGrupoDetVM._PlanFlujoId]);
+                        //VM.PlanFlujoId = SysData.ToLong(oDataRow[clsPlanGrupoDetVM._PlanFlujoId]);
                         VM.SucursalId = SysData.ToLong(oDataRow[clsPlanGrupoDetVM._SucursalId]);
                         VM.CenCosId = SysData.ToLong(oDataRow[clsPlanGrupoDetVM._CenCosId]);
                         VM.Orden = SysData.ToLong(oDataRow[clsPlanGrupoDetVM._Orden]);

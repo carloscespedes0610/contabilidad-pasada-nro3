@@ -26,10 +26,10 @@ namespace Contabilidad.Models.VM
         [Required(ErrorMessage = "{0} es Requerido")]
         public long PlanId { get; set; }
 
-        [Display(Name = "Cuenta Flujo")]
-        [Range(0, long.MaxValue, ErrorMessage = "{0} es Requerido")]
-        [Required(ErrorMessage = "{0} es Requerido")]
-        public long PlanFlujoId { get; set; }
+        //[Display(Name = "Cuenta Flujo")]
+        //[Range(0, long.MaxValue, ErrorMessage = "{0} es Requerido")]
+        //[Required(ErrorMessage = "{0} es Requerido")]
+        //public long PlanFlujoId { get; set; }
 
         [Display(Name = "Sucursal")]
         [Required(ErrorMessage = "{0} es Requerido")]
@@ -58,7 +58,7 @@ namespace Contabilidad.Models.VM
         public static string _PlanGrupoId = nameof(PlanGrupoId);
         public static string _PlanGrupoDetDes = nameof(PlanGrupoDetDes);
         public static string _PlanId = nameof(PlanId);
-        public static string _PlanFlujoId = nameof(PlanFlujoId);
+        //public static string _PlanFlujoId = nameof(PlanFlujoId);
         public static string _SucursalId = nameof(SucursalId);
         public static string _CenCosId = nameof(CenCosId);
         public static string _Orden = nameof(Orden);

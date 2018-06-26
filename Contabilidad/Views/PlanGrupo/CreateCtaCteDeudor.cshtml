@@ -81,7 +81,6 @@
                                                                                     .ValueExpr("SucursalId")
                                                                                 );
                                                                     })
-                                                                            //.OnContentReady("OnContentReady")
                                                                             .OnCellPrepared("OnCellPrepared")
                                                                             .OnInitNewRow("OnInitNewRow")
                                                         )
@@ -142,7 +141,6 @@
 
     function OnInitNewRow(e) {
         e.data.PlanGrupoId = 1;
-        //e.data.PlanFlujoId = 0;
         e.data.CenCosId = 0;
         e.data.EstadoId = 2;
     }

@@ -332,6 +332,8 @@
     <Content Include="Views\CenCosGrupo\Edit.cshtml" />
     <Content Include="Views\CenCosGrupo\Delete.cshtml" />
     <Content Include="Views\CenCosGrupo\Details.cshtml" />
+    <Content Include="Views\PlanGrupo\CreateABM.cshtml" />
+    <Content Include="Views\PlanGrupo\EditABM.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -408,6 +410,7 @@
     <Compile Include="Models\VM\clsLoginVM.cs" />
     <Compile Include="Models\VM\clsModuloVM.cs" />
     <Compile Include="Models\VM\clsMonedaVM.cs" />
+    <Compile Include="Models\VM\clsPlanGrupoAbmVM.cs" />
     <Compile Include="Models\VM\clsPlanGrupoDetVM.cs" />
     <Compile Include="Models\VM\clsPlanGrupoFormVM.cs" />
     <Compile Include="Models\VM\clsPlanGrupoTipoDetVM.cs" />

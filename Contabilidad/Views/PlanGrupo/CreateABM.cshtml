@@ -1,0 +1,112 @@
+﻿@model Contabilidad.Models.VM.clsPlanGrupoAbmVM
+@{
+        Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Nuevo Grupo de Cuentas - @ViewBag.Titulo</h3>
+                </div>
+
+                <div class="box-body">
+                    @using (Html.BeginForm())
+                    {
+                        using (Html.DevExtreme().ValidationGroup())
+                        {
+                            @Html.AntiForgeryToken();
+
+                            @Html.HiddenFor(m => m.PlanGrupoVM.NroCuentas);
+                            @Html.HiddenFor(m => m.PlanGrupoDetVM.Orden);
+                            @Html.HiddenFor(m => m.PlanGrupoDetVM.EstadoId);
+                            @Html.HiddenFor(m => m.PlanGrupoDetVM.PlanGrupoId);
+
+                            @(Html.DevExtreme().Form<Contabilidad.Models.VM.clsPlanGrupoAbmVM>()
+                                                        .ShowValidationSummary(true)
+                                                        .Items(items =>
+                                                        {
+                                                            items.AddGroup()
+                                                                            .ColCount(2)
+                                                                            .Items(groupItems =>
+                                                                            {
+                                                                                groupItems.AddSimpleFor(m => m.PlanGrupoVM.PlanGrupoCod).Editor(e => e.TextBox().Width("50%")).IsRequired(true);
+                                                                                groupItems.AddSimpleFor(m => m.PlanGrupoVM.PlanGrupoDes).Editor(e => e.TextBox()).IsRequired(true);
+                                                                                groupItems.AddSimpleFor(m => m.PlanGrupoVM.PlanGrupoEsp).Editor(e => e.TextBox()).ColSpan(2);
+                                                                                groupItems.AddSimpleFor(m => m.PlanGrupoVM.PlanGrupoTipoId).Editor(e => e.SelectBox().ID("PlanGrupoTipo").DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("PlanGrupoTipoList").Key("PlanGrupoTipoId")).ValueExpr("PlanGrupoTipoId").DisplayExpr("PlanGrupoTipoDes").SearchEnabled(true).ShowClearButton(true).OnValueChanged("onValueChanged").Disabled(true)).IsRequired(true);
+                                                                                groupItems.AddSimpleFor(m => m.PlanGrupoVM.PlanGrupoTipoDetId).Editor(e => e.SelectBox().ID("PlanGrupoTipoDet").DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("PlanGrupoTipoDetList").Key("PlanGrupoTipoDetId")).ValueExpr("PlanGrupoTipoDetId").DisplayExpr("PlanGrupoTipoDetDes").SearchEnabled(true).ShowClearButton(true).Disabled(true)).IsRequired(true);
+                                                                                groupItems.AddSimpleFor(m => m.PlanGrupoVM.MonedaId).Editor(e => e.SelectBox().DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("MonedaList").Key("MonedaId")).ValueExpr("MonedaId").DisplayExpr("MonedaDes").SearchEnabled(true).ShowClearButton(true).Disabled(false)).IsRequired(true);
+                                                                                groupItems.AddSimpleFor(m => m.PlanGrupoVM.EstadoId).Editor(e => e.SelectBox().DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("EstadoList").Key("EstadoId")).ValueExpr("EstadoId").DisplayExpr("EstadoDes").SearchEnabled(true).ShowClearButton(true).Disabled(false)).IsRequired(true);
+
+                                                                                if (ViewBag.Tipo != 1)  //sino es tesoreria muestra el check
+                                                                                {
+                                                                                    groupItems.AddSimpleFor(m => m.PlanGrupoVM.VerificaMto).Editor(e => e.CheckBox());
+                                                                                }
+                                                                            });
+
+                                                            items.AddGroup()
+                                                                .ColCount(1)
+                                                                .Items(groupItems =>
+                                                                {
+                                                                    groupItems.AddSimpleFor(m => m.PlanGrupoDetVM.PlanId).Editor(e => e.SelectBox().DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("PlanList").Key("PlanId")).ValueExpr("PlanId").DisplayExpr("PlanDes").SearchEnabled(true).ShowClearButton(true)).IsRequired(true);
+                                                                    groupItems.AddSimpleFor(m => m.PlanGrupoDetVM.SucursalId).Editor(e => e.SelectBox().DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("SucursalList").Key("SucursalId")).ValueExpr("SucursalId").DisplayExpr("SucursalDes").SearchEnabled(true).ShowClearButton(true)).IsRequired(true);
+
+
+                                                                });
+
+
+                                                            items.AddEmpty();
+
+
+
+                                                        })
+                                                        .FormData(Model)
+                                    // .OnInitialized("onInitialized")
+                            )
+
+
+                            <div Class="box-footer">
+                                <Button type="submit" Class="btn btn-primary"><i Class="fa fa-floppy-o"></i></Button>
+                                <a href="@Url.Action("Index", "PlanGrupo")" Class="btn btn-default"><i Class="fa fa-reply"></i></a>
+                            </div>
+                        }
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@(Html.Partial("~/views/Error/InfoPopup.cshtml"))
+
+<script>
+    @*$(document).ready(function () {
+
+        $("#PlanGrupoTipo").dxSelectBox({ disabled: true, value: @TipoModel });
+        
+        if (@TipoModel == 1)  // Tesoreria
+        {
+            $("#PlanGrupoTipoDet").dxSelectBox({ disabled: true, value: 1 });
+        }
+        onValueChanged(@TipoModel);
+
+    });*@
+
+   
+
+    function onValueChanged(e) {
+        $("#PlanGrupoTipoDet").dxSelectBox("instance").getDataSource().filter(["PlanGrupoTipoId", "=", e.value]);
+        $("#PlanGrupoTipoDet").dxSelectBox("instance").getDataSource().reload();
+    }
+
+    //function OnInitNewRow(e) {
+    //    e.data.PlanGrupoId = 1;
+    //    e.data.CenCosId = 0;
+    //    e.data.EstadoId = 2;
+    //    e.data.NroCuentas = 1;
+    //}
+
+</script>
+

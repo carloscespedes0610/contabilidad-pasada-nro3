@@ -80,5 +80,6 @@ namespace Contabilidad.Models.VM
         public static string _VerificaMto = nameof(VerificaMto);
         public static string _EstadoId = nameof(EstadoId);
         public static string _EstadoDes = nameof(EstadoDes);
+
     }
 }

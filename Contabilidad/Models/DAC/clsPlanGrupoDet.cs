@@ -225,7 +225,6 @@ namespace Contabilidad.Models.DAC
             VM.PlanGrupoId = 0;
             VM.PlanGrupoDetDes = "";
             VM.PlanId = 0;
-            //VM.PlanFlujoId = 0;
             VM.SucursalId = 0;
             VM.CenCosId = 0;
             VM.Orden = 0;
@@ -251,7 +250,6 @@ namespace Contabilidad.Models.DAC
                            "    ctbPlanGrupoDet.PlanGrupoId , " +
                            "    ctbPlanGrupoDet.PlanGrupoDetDes , " +
                            "    ctbPlanGrupoDet.PlanId , " +
-                           //"    ctbPlanGrupoDet.PlanFlujoId , " +
                            "    ctbPlanGrupoDet.SucursalId , " +
                            "    ctbPlanGrupoDet.CenCosId , " +
                            "    ctbPlanGrupoDet.Orden , " +
@@ -279,7 +277,6 @@ namespace Contabilidad.Models.DAC
                            "    ctbPlanGrupoDet.PlanGrupoDetDes, " +
                            "    ctbPlan.PlanId,  " +
                            "    ctbPlan.PlanDes, " +
-                           //"    ctbPlanGrupoDet.PlanFlujoId, " +
                            "    ctbSucursal.SucursalId, " +
                            "    ctbSucursal.SucursalDes, " +
                            "    ctbCenCos.CenCosId, " +
@@ -374,7 +371,6 @@ namespace Contabilidad.Models.DAC
                         new SqlParameter(clsPlanGrupoDetVM._PlanGrupoId, VM.PlanGrupoId),
                         new SqlParameter(clsPlanGrupoDetVM._PlanGrupoDetDes, VM.PlanGrupoDetDes),
                         new SqlParameter(clsPlanGrupoDetVM._PlanId, VM.PlanId),
-                        //new SqlParameter(clsPlanGrupoDetVM._PlanFlujoId, VM.PlanFlujoId),
                         new SqlParameter(clsPlanGrupoDetVM._SucursalId, VM.SucursalId),
                         new SqlParameter(clsPlanGrupoDetVM._CenCosId, VM.CenCosId),
                         new SqlParameter(clsPlanGrupoDetVM._Orden, VM.Orden),
@@ -396,7 +392,6 @@ namespace Contabilidad.Models.DAC
                         new SqlParameter(clsPlanGrupoDetVM._PlanGrupoId, VM.PlanGrupoId),
                         new SqlParameter(clsPlanGrupoDetVM._PlanGrupoDetDes, VM.PlanGrupoDetDes),
                         new SqlParameter(clsPlanGrupoDetVM._PlanId, VM.PlanId),
-                        //new SqlParameter(clsPlanGrupoDetVM._PlanFlujoId, VM.PlanFlujoId),
                         new SqlParameter(clsPlanGrupoDetVM._SucursalId, VM.SucursalId),
                         new SqlParameter(clsPlanGrupoDetVM._CenCosId, VM.CenCosId),
                         new SqlParameter(clsPlanGrupoDetVM._Orden, VM.Orden),
@@ -440,7 +435,6 @@ namespace Contabilidad.Models.DAC
                         VM.PlanGrupoId = SysData.ToLong(oDataRow[clsPlanGrupoDetVM._PlanGrupoId]);
                         VM.PlanGrupoDetDes = SysData.ToStr(oDataRow[clsPlanGrupoDetVM._PlanGrupoDetDes]);
                         VM.PlanId = SysData.ToLong(oDataRow[clsPlanGrupoDetVM._PlanId]);
-                        //VM.PlanFlujoId = SysData.ToLong(oDataRow[clsPlanGrupoDetVM._PlanFlujoId]);
                         VM.SucursalId = SysData.ToLong(oDataRow[clsPlanGrupoDetVM._SucursalId]);
                         VM.CenCosId = SysData.ToLong(oDataRow[clsPlanGrupoDetVM._CenCosId]);
                         VM.Orden = SysData.ToLong(oDataRow[clsPlanGrupoDetVM._Orden]);
@@ -464,11 +458,6 @@ namespace Contabilidad.Models.DAC
         {
             bool returnValue = false;
             string strMsg = string.Empty;
-
-            //if (mstrPlanGrupoDetDes.Length == 0)
-            //{
-            //    strMsg += "Descipción del Tipo Usuario es Requerido" + Environment.NewLine;
-            //}
 
             if (strMsg.Trim() != string.Empty)
             {

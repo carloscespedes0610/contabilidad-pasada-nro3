@@ -33,17 +33,8 @@
                                             groupItems.AddSimpleFor(m => m.VM.PlanGrupoCod).Editor(e => e.TextBox().Width("50%")).IsRequired(true);
                                             groupItems.AddSimpleFor(m => m.VM.PlanGrupoDes).Editor(e => e.TextBox()).IsRequired(true);
                                             groupItems.AddSimpleFor(m => m.VM.PlanGrupoEsp).Editor(e => e.TextBox()).ColSpan(2);
-                                            // groupItems.AddSimpleFor(m => m.VM.PlanGrupoTipoId).Editor(e => e.SelectBox().ID("PlanGrupoTipo").DataSource(ViewBag.PlanGrupoTipoId).ValueExpr("PlanGrupoTipoId").DisplayExpr("PlanGrupoTipoDes").SearchEnabled(true).ShowClearButton(true).OnValueChanged("onValueChanged")).IsRequired(true);
                                             groupItems.AddSimpleFor(m => m.VM.PlanGrupoTipoId).Editor(e => e.SelectBox().ID("PlanGrupoTipo").DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("PlanGrupoTipoList").Key("PlanGrupoTipoId")).ValueExpr("PlanGrupoTipoId").DisplayExpr("PlanGrupoTipoDes").SearchEnabled(true).ShowClearButton(true).OnValueChanged("onValueChanged")).IsRequired(true);
-
-
-                                            //groupItems.AddSimpleFor(m => m.VM.PlanGrupoTipoDetId).Editor(e => e.SelectBox().ID("PlanGrupoTipoDet").DataSource(ViewBag.PlanGrupoTipoDetId).ValueExpr("PlanGrupoTipoDetId").DisplayExpr("PlanGrupoTipoDetDes").SearchEnabled(true).ShowClearButton(true)).IsRequired(true);
                                             groupItems.AddSimpleFor(m => m.VM.PlanGrupoTipoDetId).Editor(e => e.SelectBox().ID("PlanGrupoTipoDet").DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("PlanGrupoTipoDetList").Key("PlanGrupoTipoDetId")).ValueExpr("PlanGrupoTipoDetId").DisplayExpr("PlanGrupoTipoDetDes").SearchEnabled(true).ShowClearButton(true)).IsRequired(true);
-
-
-                                            //groupItems.AddSimpleFor(m => m.VM.MonedaId).Editor(e => e.SelectBox().DataSource(ViewBag.MonedaId).ValueExpr("MonedaId").DisplayExpr("MonedaDes").SearchEnabled(true).ShowClearButton(true)).IsRequired(true);
-                                            //groupItems.AddSimpleFor(m => m.VM.EstadoId).Editor(e => e.SelectBox().DataSource(ViewBag.EstadoId).ValueExpr("EstadoId").DisplayExpr("EstadoDes").SearchEnabled(true).ShowClearButton(true)).IsRequired(true);
-
                                             groupItems.AddSimpleFor(m => m.VM.MonedaId).Editor(e => e.SelectBox().DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("MonedaList").Key("MonedaId")).ValueExpr("MonedaId").DisplayExpr("MonedaDes").SearchEnabled(true).ShowClearButton(true).Disabled(false)).IsRequired(true);
                                             groupItems.AddSimpleFor(m => m.VM.EstadoId).Editor(e => e.SelectBox().DataSource(d => d.Mvc().Controller("ComboBox").LoadAction("EstadoList").Key("EstadoId")).ValueExpr("EstadoId").DisplayExpr("EstadoDes").SearchEnabled(true).ShowClearButton(true).Disabled(false)).IsRequired(true);
 
@@ -90,7 +81,6 @@
                                                                 .ValueExpr("SucursalId")
                                                             );
                                                     })
-                                                            //.OnContentReady("OnContentReady")
                                                             .OnCellPrepared("OnCellPrepared")
                                                             .OnInitNewRow("OnInitNewRow")
                                                 )
@@ -151,7 +141,6 @@
 
     function OnInitNewRow(e) {
         e.data.PlanGrupoId = 0;
-        //e.data.PlanFlujoId = 0;
         e.data.CenCosId = 0;
         e.data.EstadoId = 0;
     }

@@ -1,0 +1,3 @@
+ya hicimos el createABM para Tesoreria, ya esta editABM get pero falta el Post, 
+hay que modificar la estructura de la BD la tabla ctbPlanGrupoTipo y ctbPlanGrupoTipoDet sus Id no deben ser
+autoincrementables, ya que su rango se maneja desde codigo quemado.

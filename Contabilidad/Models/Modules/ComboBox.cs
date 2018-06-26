@@ -396,7 +396,6 @@ namespace Contabilidad.Models.Modules
                 oPlanGrupoDet.SelectFilter = clsPlanGrupoDet.SelectFilters.All;
                 oPlanGrupoDet.WhereFilter = clsPlanGrupoDet.WhereFilters.None;
                 oPlanGrupoDet.OrderByFilter = clsPlanGrupoDet.OrderByFilters.Orden;
-                //oPlanGrupoDet.VM.PlanGrupoId = lngPlanGrupoId;
 
                 if (oPlanGrupoDet.Open())
                 {
@@ -408,7 +407,6 @@ namespace Contabilidad.Models.Modules
                             PlanGrupoId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanGrupoId]),
                             PlanGrupoDetDes = SysData.ToStr(dr[clsPlanGrupoDetVM._PlanGrupoDetDes]),
                             PlanId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanId]),
-                            //PlanFlujoId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanFlujoId]),
                             SucursalId = SysData.ToLong(dr[clsPlanGrupoDetVM._SucursalId]),
                             CenCosId = SysData.ToLong(dr[clsPlanGrupoDetVM._CenCosId]),
                             Orden = SysData.ToLong(dr[clsPlanGrupoDetVM._Orden]),
@@ -453,7 +451,6 @@ namespace Contabilidad.Models.Modules
                             PlanGrupoId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanGrupoId]),
                             PlanGrupoDetDes = SysData.ToStr(dr[clsPlanGrupoDetVM._PlanGrupoDetDes]),
                             PlanId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanId]),
-                            //PlanFlujoId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanFlujoId]),
                             SucursalId = SysData.ToLong(dr[clsPlanGrupoDetVM._SucursalId]),
                             CenCosId = SysData.ToLong(dr[clsPlanGrupoDetVM._CenCosId]),
                             Orden = SysData.ToLong(dr[clsPlanGrupoDetVM._Orden]),

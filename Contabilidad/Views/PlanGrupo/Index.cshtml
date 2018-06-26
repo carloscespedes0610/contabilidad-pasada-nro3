@@ -57,6 +57,7 @@
                     columns.AddFor(m => m.VerificaMto);
                     columns.AddFor(m => m.EstadoDes);
 
+                    //columns.Add().DataField("Edit").Caption("").Width(30).AllowFiltering(false).CellTemplate(Html.ActionLink(" ", "EditMain", new { id = "PlanGrupoId", TipoDetId = "PlanGrupoTipoDetId" }, new { @class = "dx-icon-edit" }).ToHtmlString().Replace("PlanGrupoId", "<%= data.PlanGrupoId %>").Replace("PlanGrupoTipoDetId", "<%= data.PlanGrupoTipoDetId %>"));
                     columns.Add().DataField("Edit").Caption("").Width(30).AllowFiltering(false).CellTemplate(Html.ActionLink(" ", "EditMain", new { id = "PlanGrupoId", TipoDetId = "PlanGrupoTipoDetId" }, new { @class = "dx-icon-edit" }).ToHtmlString().Replace("PlanGrupoId", "<%= data.PlanGrupoId %>").Replace("PlanGrupoTipoDetId", "<%= data.PlanGrupoTipoDetId %>"));
                     columns.Add().DataField("Delete").Caption("").Width(30).AllowFiltering(false).CellTemplate(Html.ActionLink(" ", "Delete", new { id = "PlanGrupoId" }, new { @class = "dx-icon-trash" }).ToHtmlString().Replace("PlanGrupoId", "<%= data.PlanGrupoId %>"));
                     columns.Add().DataField("Details").Caption("").Width(30).AllowFiltering(false).CellTemplate(Html.ActionLink(" ", "Details", new { id = "PlanGrupoId" }, new { @class = "fa fa-info-circle" }).ToHtmlString().Replace("PlanGrupoId", "<%= data.PlanGrupoId %>"));

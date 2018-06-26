@@ -40,7 +40,7 @@ namespace Contabilidad.Controllers
             switch (lngPlanGrupoTipoDetId)
             {
                 case 1:
-                    return RedirectToAction("Create");
+                    return RedirectToAction("Create");   // Tesoreria
 
                 case 4:
                     return RedirectToAction("CreateCtaCteDeudor");
@@ -68,7 +68,7 @@ namespace Contabilidad.Controllers
             long lngPlanGrupoId = SysData.ToLong(id);
             long lngPlanGrupoTipoDetId = SysData.ToLong(TipoDetId);
 
-            switch (lngPlanGrupoTipoDetId)
+            /*switch (lngPlanGrupoTipoDetId)
             {
                 case 1:
                     return RedirectToAction("Edit", new { id = lngPlanGrupoId });
@@ -84,6 +84,11 @@ namespace Contabilidad.Controllers
 
                 case 7:
                     break;
+            }*/
+
+            if (lngPlanGrupoTipoDetId >= 1 && lngPlanGrupoTipoDetId <= 3)  // tesoreria
+            {
+                return RedirectToAction("EditABM", new { id = lngPlanGrupoId });
             }
 
 
@@ -111,6 +116,46 @@ namespace Contabilidad.Controllers
                 return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = exp.Message });
             }
         }
+
+        // GET
+        // tipo: 1 = tesoreria
+        [HttpGet]
+        public ActionResult CreateABM(long? PlanGrupoDetId)  
+        {
+            this.GetDefaultData();
+
+            clsPlanGrupoAbmVM abmVM = new clsPlanGrupoAbmVM();
+
+            if ( !ReferenceEquals(PlanGrupoDetId, null) )
+            {
+                string titulo = "Sin Definir";
+
+                if (PlanGrupoDetId >= 1  && PlanGrupoDetId <= 3)  // Grupo Tesoreria
+                {
+                    titulo = "Tesorería";
+                    abmVM.PlanGrupoVM.PlanGrupoTipoId = 1;
+                    
+                }
+
+                abmVM.PlanGrupoVM.PlanGrupoTipoDetId = SysData.ToLong(PlanGrupoDetId);
+
+                abmVM.PlanGrupoDetVM.Orden = 1;
+                abmVM.PlanGrupoDetVM.EstadoId = 1;  // luego se actualiza dependiendo de PlanGrupo
+                abmVM.PlanGrupoDetVM.PlanGrupoId = 1; // luego se actualiza, cuando se inserte PlanGrupo
+
+                abmVM.PlanGrupoVM.NroCuentas = 1;
+
+                ViewBag.Titulo = titulo;
+                ViewBag.Tipo = abmVM.PlanGrupoVM.PlanGrupoTipoId;
+                return View(abmVM);
+            }
+
+            return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = "Debe elegir una opcion para crear un plan grupo"});
+        }
+
+
+        
+
 
         // POST: PlanGrupo/Create
         [HttpPost()]
@@ -166,6 +211,47 @@ namespace Contabilidad.Controllers
             }
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken()]
+        public ActionResult CreateABM(clsPlanGrupoAbmVM abmVM)
+        {
+            clsPlanGrupo oPlanGrupo = new clsPlanGrupo(clsAppInfo.Connection);
+            clsPlanGrupoDet oPlanGrupoDet = new clsPlanGrupoDet(clsAppInfo.Connection);
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    DataMoveABM(abmVM, oPlanGrupo, false);
+
+                    oPlanGrupo.BeginTransaction();
+                    if (oPlanGrupo.Insert())
+                    {
+                        DataMoveDet(oPlanGrupo,abmVM.PlanGrupoDetVM,oPlanGrupoDet,false);
+
+                        oPlanGrupoDet.Transaction = oPlanGrupo.Transaction;
+
+                        if (oPlanGrupoDet.Insert())
+                        {
+                            oPlanGrupoDet.Commit();
+                            return RedirectToAction("Index");
+                        }
+
+                    }
+
+                    oPlanGrupo.Rollback();
+                }
+
+                return View(abmVM);
+            }
+            catch (Exception exp)
+            {
+                oPlanGrupo.Rollback();
+                return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = exp.Message });
+            }
+        }
+
+
         // GET: PlanGrupo/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -194,6 +280,44 @@ namespace Contabilidad.Controllers
             {
                 return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = exp.Message });
             }
+        }
+
+        // GET
+        // tipo: 1 = tesoreria
+        [HttpGet]
+        public ActionResult EditABM(long? id)
+        {
+            this.GetDefaultData();
+
+            clsPlanGrupoAbmVM abmVM = new clsPlanGrupoAbmVM();
+
+            if (ReferenceEquals(id, null))
+            {
+                return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = "Indice Nulo" });
+            }
+
+            abmVM = PlanGrupoAbmVMFind(SysData.ToLong(id));
+
+            if (ReferenceEquals(abmVM, null))
+            {
+                return RedirectToAction("httpErrorMsg", "Error", new { MessageErr = "Indice no Encontrado" });
+            }
+
+            string titulo = "Sin Definir";
+
+            if (abmVM.PlanGrupoVM.PlanGrupoTipoId  == 1)  // Tesoreria
+            {
+                titulo = "Tesorería";
+               // abmVM.PlanGrupoVM.PlanGrupoTipoId = 1;
+               // abmVM.PlanGrupoVM.PlanGrupoTipoDetId = 1;
+            }
+
+
+            ViewBag.Titulo = titulo;
+            ViewBag.Tipo = abmVM.PlanGrupoVM.PlanGrupoTipoId;
+            return View(abmVM);
+
+
         }
 
         // POST: PlanGrupo/Edit/5
@@ -640,6 +764,24 @@ namespace Contabilidad.Controllers
             oPlanGrupo.VM.EstadoId = SysData.ToLong(oPlanGrupoFormVM.VM.EstadoId);
         }
 
+        private void DataMoveABM(clsPlanGrupoAbmVM oPlanGrupoFormVM, clsPlanGrupo oPlanGrupo, bool boolEditing)
+        {
+            if (boolEditing)
+            {
+                oPlanGrupo.VM.PlanGrupoId = SysData.ToLong(oPlanGrupoFormVM.PlanGrupoVM.PlanGrupoId);
+            }
+
+            oPlanGrupo.VM.PlanGrupoCod = SysData.ToStr(oPlanGrupoFormVM.PlanGrupoVM.PlanGrupoCod);
+            oPlanGrupo.VM.PlanGrupoDes = SysData.ToStr(oPlanGrupoFormVM.PlanGrupoVM.PlanGrupoDes);
+            oPlanGrupo.VM.PlanGrupoEsp = SysData.ToStr(oPlanGrupoFormVM.PlanGrupoVM.PlanGrupoEsp);
+            oPlanGrupo.VM.PlanGrupoTipoId = SysData.ToLong(oPlanGrupoFormVM.PlanGrupoVM.PlanGrupoTipoId);
+            oPlanGrupo.VM.PlanGrupoTipoDetId = SysData.ToLong(oPlanGrupoFormVM.PlanGrupoVM.PlanGrupoTipoDetId);
+            oPlanGrupo.VM.NroCuentas = SysData.ToLong(oPlanGrupoFormVM.PlanGrupoVM.NroCuentas);
+            oPlanGrupo.VM.MonedaId = SysData.ToLong(oPlanGrupoFormVM.PlanGrupoVM.MonedaId);
+            oPlanGrupo.VM.VerificaMto = SysData.ToBoolean(oPlanGrupoFormVM.PlanGrupoVM.VerificaMto);
+            oPlanGrupo.VM.EstadoId = SysData.ToLong(oPlanGrupoFormVM.PlanGrupoVM.EstadoId);
+        }
+
         private void DataMoveDet(clsPlanGrupo oPlanGrupo, clsPlanGrupoDetVM oPlanGrupoDetVM, clsPlanGrupoDet oPlanGrupoDet, bool boolEditing)
         {
             if (boolEditing)
@@ -656,6 +798,7 @@ namespace Contabilidad.Controllers
             oPlanGrupoDet.VM.Orden = SysData.ToLong(oPlanGrupoDetVM.Orden);
             oPlanGrupoDet.VM.EstadoId = SysData.ToLong(oPlanGrupo.VM.EstadoId);
         }
+
 
         public List<clsPlanGrupoVM> PlanGrupoGrid()
         {
@@ -745,7 +888,6 @@ namespace Contabilidad.Controllers
                                 PlanGrupoId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanGrupoId]),
                                 PlanGrupoDetDes = SysData.ToStr(dr[clsPlanGrupoDetVM._PlanGrupoDetDes]),
                                 PlanId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanId]),
-                                //PlanFlujoId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanFlujoId]),
                                 SucursalId = SysData.ToLong(dr[clsPlanGrupoDetVM._SucursalId]),
                                 CenCosId = SysData.ToLong(dr[clsPlanGrupoDetVM._CenCosId]),
                                 Orden = SysData.ToLong(dr[clsPlanGrupoDetVM._Orden]),
@@ -755,6 +897,73 @@ namespace Contabilidad.Controllers
 
                         oPlanGrupoFormVM.PlanGrupoDetVM = (ICollection<clsPlanGrupoDetVM>)oPlanGrupoDetVM;
                         return oPlanGrupoFormVM;
+                    }
+                }
+            }
+
+            catch (Exception exp)
+            {
+                throw (exp);
+            }
+            finally
+            {
+                oPlanGrupo.Dispose();
+            }
+
+            return null;
+        }
+
+        private clsPlanGrupoAbmVM PlanGrupoAbmVMFind(long lngPlanGrupoId)
+        {
+            clsPlanGrupo oPlanGrupo = new clsPlanGrupo(clsAppInfo.Connection);
+            clsPlanGrupoDet oPlanGrupoDet = new clsPlanGrupoDet(clsAppInfo.Connection);
+            clsPlanGrupoAbmVM oplanGrupoABM = new clsPlanGrupoAbmVM();
+
+            try
+            {
+                oPlanGrupo.VM.PlanGrupoId = lngPlanGrupoId;
+
+                if (oPlanGrupo.FindByPK())
+                {
+                    //oplanGrupoABM.PlanGrupoVM.PlanGrupoId = oPlanGrupo.VM.PlanGrupoId;
+                    //oplanGrupoABM.PlanGrupoVM.PlanGrupoCod = oPlanGrupo.VM.PlanGrupoCod;
+                    //oplanGrupoABM.PlanGrupoVM.PlanGrupoDes = oPlanGrupo.VM.PlanGrupoDes;
+                    //oplanGrupoABM.PlanGrupoVM.PlanGrupoEsp = oPlanGrupo.VM.PlanGrupoEsp;
+                    //oplanGrupoABM.PlanGrupoVM.PlanGrupoTipoId = oPlanGrupo.VM.PlanGrupoTipoId;
+                    //oplanGrupoABM.PlanGrupoVM.PlanGrupoTipoDetId = oPlanGrupo.VM.PlanGrupoTipoDetId;
+                    //oplanGrupoABM.PlanGrupoVM.NroCuentas = oPlanGrupo.VM.NroCuentas;
+                    //oplanGrupoABM.PlanGrupoVM.MonedaId = oPlanGrupo.VM.MonedaId;
+                    //oplanGrupoABM.PlanGrupoVM.VerificaMto = oPlanGrupo.VM.VerificaMto;
+                    //oplanGrupoABM.PlanGrupoVM.EstadoId = oPlanGrupo.VM.EstadoId;
+
+                    oplanGrupoABM.PlanGrupoVM = oPlanGrupo.VM;
+
+                    oPlanGrupoDet.SelectFilter = clsPlanGrupoDet.SelectFilters.All;
+                    oPlanGrupoDet.WhereFilter = clsPlanGrupoDet.WhereFilters.PlanGrupoId;
+                    oPlanGrupoDet.OrderByFilter = clsPlanGrupoDet.OrderByFilters.Orden;
+                    oPlanGrupoDet.VM.PlanGrupoId = lngPlanGrupoId;
+
+                    if (oPlanGrupoDet.Find())
+                    {
+
+                        oplanGrupoABM.PlanGrupoDetVM = oPlanGrupoDet.VM;
+
+                        //foreach (DataRow dr in oPlanGrupoDet.DataSet.Tables[oPlanGrupoDet.TableName].Rows)
+                        //{
+                        //    oplanGrupoABM.PlanGrupoDetVM = new clsPlanGrupoDetVM()
+                        //    {
+                        //        PlanGrupoDetId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanGrupoDetId]),
+                        //        PlanGrupoId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanGrupoId]),
+                        //        PlanGrupoDetDes = SysData.ToStr(dr[clsPlanGrupoDetVM._PlanGrupoDetDes]),
+                        //        PlanId = SysData.ToLong(dr[clsPlanGrupoDetVM._PlanId]),
+                        //        SucursalId = SysData.ToLong(dr[clsPlanGrupoDetVM._SucursalId]),
+                        //        CenCosId = SysData.ToLong(dr[clsPlanGrupoDetVM._CenCosId]),
+                        //        Orden = SysData.ToLong(dr[clsPlanGrupoDetVM._Orden]),
+                        //        EstadoId = SysData.ToLong(dr[clsPlanGrupoDetVM._EstadoId])
+                        //    });
+                        //}
+
+                        return oplanGrupoABM;
                     }
                 }
             }
